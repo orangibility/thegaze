@@ -428,31 +428,31 @@
 
 <script type="module">
   // ============================================================
-  // FIREBASE SETUP (Firestore only — no Storage)
-  // 1. Create a project at https://console.firebase.google.com
-  // 2. Add a Web App to it, copy the config object it gives you,
-  //    and paste it below in place of the placeholder values.
-  // 3. Enable "Firestore Database" in the Firebase console
-  //    (Build > Firestore Database > Create database).
-  // 4. Photos are stored as base64 strings directly inside each
-  //    Firestore document — no Storage bucket needed. Firestore
-  //    caps a document at 1MB, so this comfortably fits small/
-  //    medium photos but will reject very large, uncompressed
-  //    images. See the note in chat about that limit.
-  // 5. See the security-rules note in the accompanying message —
+  // FIREBASE SETUP (Realtime Database)
+  // 1. Your Realtime Database is already created at:
+  //    https://thegaze-d8e86-default-rtdb.europe-west1.firebasedatabase.app/
+  // 2. In the Firebase console, go to Project settings > General,
+  //    scroll to "Your apps", add/open a Web App, and copy its
+  //    config object into firebaseConfig below (apiKey, appId, etc).
+  //    Make sure databaseURL below matches your database's URL —
+  //    it's already filled in for you.
+  // 3. Photos are stored as base64 strings directly inside each
+  //    Realtime Database record — no Storage bucket needed. Kept
+  //    to a conservative size cap below so syncing stays fast.
+  // 4. See the security-rules note in the accompanying message —
   //    test-mode rules are OPEN so this demo works out of the box,
   //    but you should lock them down before sharing the site widely.
   // ============================================================
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import {
-    getFirestore, collection, addDoc, deleteDoc, doc,
-    onSnapshot, query, orderBy, serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    getDatabase, ref, push, remove, onValue, query, orderByChild, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
+    authDomain: "thegaze-d8e86.firebaseapp.com",
+    databaseURL: "https://thegaze-d8e86-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "thegaze-d8e86",
     messagingSenderId: "YOUR_SENDER_ID",
     appId: "YOUR_APP_ID"
   };
@@ -460,7 +460,7 @@
   let db, firebaseReady = false;
   try {
     const app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
+    db = getDatabase(app);
     firebaseReady = firebaseConfig.apiKey !== "YOUR_API_KEY";
   } catch (e) {
     console.error("Firebase failed to initialize:", e);
@@ -539,7 +539,7 @@
     return div.innerHTML;
   }
 
-  const MAX_BYTES = 900 * 1024; // stay under Firestore's 1MB document cap
+  const MAX_BYTES = 4 * 1024 * 1024; // conservative cap so records sync quickly
 
   async function uploadPhoto(){
     const file = photoInput.files[0];
@@ -549,7 +549,7 @@
       return;
     }
     if (file.size > MAX_BYTES) {
-      statusEl.textContent = "That photo is too large (limit ~900KB since it's stored in Firestore). Try a smaller or compressed image.";
+      statusEl.textContent = "That photo is too large (limit ~4MB). Try a smaller or compressed image.";
       return;
     }
     uploadBtn.disabled = true;
@@ -557,7 +557,7 @@
     try {
       const dataUrl = await fileToBase64(file);
 
-      await addDoc(collection(db, "photos"), {
+      await push(ref(db, "photos"), {
         url: dataUrl,
         caption: captionInput.value.trim(),
         createdAt: serverTimestamp()
@@ -579,7 +579,7 @@
   async function deletePhoto(p){
     if (!confirm("Delete this photo?")) return;
     try {
-      await deleteDoc(doc(db, "photos", p.id));
+      await remove(ref(db, "photos/" + p.id));
     } catch (err) {
       console.error(err);
       alert("Could not delete photo — check console.");
@@ -589,13 +589,17 @@
   uploadBtn.addEventListener("click", uploadPhoto);
 
   if (firebaseReady) {
-    const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
-    onSnapshot(q, snap => {
-      const photos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const photosQuery = query(ref(db, "photos"), orderByChild("createdAt"));
+    onValue(photosQuery, snap => {
+      const photos = [];
+      snap.forEach(child => {
+        photos.push({ id: child.key, ...child.val() });
+      });
+      photos.reverse(); // newest first
       renderPhotos(photos);
     }, err => {
       console.error(err);
-      statusEl.textContent = "Couldn't load gallery — check Firestore rules/config.";
+      statusEl.textContent = "Couldn't load gallery — check Realtime Database rules/config.";
     });
   } else {
     emptyState.style.display = "block";
