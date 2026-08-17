@@ -4,2050 +4,1391 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>Tim — The Observer</title>
-
+<title>Tim — After Dark</title>
 <meta
   name="description"
-  content="An underground archive of photographs, graffiti, music, writing and things found between the visible lines."
+  content="A personal archive of photographs, graffiti, music, writing and things found after dark."
 />
 
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link
-  href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
   rel="stylesheet"
 >
 
 <style>
 
-  /* ============================================================
-     ROOT
-     ============================================================ */
+:root {
+  --void: #050609;
+  --void-2: #080b10;
+  --surface: rgba(12, 16, 23, .72);
+  --surface-solid: #0d1118;
 
-  :root{
+  --white: #e9edf2;
+  --muted: #7f8997;
+  --faint: #414957;
 
-    --ink:#07090d;
-    --ink-2:#0d1117;
-    --ink-3:#121821;
+  --line: rgba(151, 164, 181, .16);
+  --line-bright: rgba(185, 198, 215, .28);
 
-    --line:#202a35;
-    --line-soft:#17202a;
+  --violet: #8276ff;
+  --violet-soft: #5f57bb;
+  --blue: #617eff;
 
-    --paper:#e9edf0;
-    --paper-dim:#87939e;
-    --paper-faint:#56616b;
+  --acid: #c6ff5b;
+  --red: #ff4f68;
 
-    --brass:#c9a35e;
-    --brass-bright:#dfbd7b;
-    --brass-dim:#75603a;
+  --sans: "Inter", sans-serif;
+  --display: "Space Grotesk", sans-serif;
+  --mono: "DM Mono", monospace;
 
-    --red:#9d554e;
-    --blue:#667f8d;
+  --max: 1180px;
+}
 
-    --serif:'Fraunces', Georgia, serif;
-    --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-    --maxw:1160px;
+/* =========================================================
+   RESET
+========================================================= */
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--void);
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(
+      ellipse at 50% -20%,
+      rgba(70, 68, 150, .18),
+      transparent 55%
+    ),
+    var(--void);
+
+  color: var(--white);
+  font-family: var(--sans);
+
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body::selection {
+  background: var(--acid);
+  color: #050609;
+}
+
+a {
+  color: inherit;
+}
+
+
+/* =========================================================
+   SPACE CANVAS
+========================================================= */
+
+#space {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  width: 100%;
+  height: 100%;
+
+  pointer-events: none;
+}
+
+
+/* subtle film grain */
+
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 2;
+
+  pointer-events: none;
+
+  opacity: .055;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+
+  animation: grainMove .18s steps(2) infinite;
+}
+
+@keyframes grainMove {
+  0% {
+    transform: translate(0, 0);
   }
 
-
-  /* ============================================================
-     RESET
-     ============================================================ */
-
-  *{
-    box-sizing:border-box;
+  25% {
+    transform: translate(2%, -1%);
   }
 
-  html{
-    scroll-behavior:smooth;
-    background:var(--ink);
+  50% {
+    transform: translate(-1%, 2%);
   }
 
-  body{
-    margin:0;
+  75% {
+    transform: translate(1%, 1%);
+  }
+
+  100% {
+    transform: translate(-2%, -1%);
+  }
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 50;
+
+  border-bottom: 1px solid var(--line);
+
+  background: rgba(5, 6, 9, .58);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.nav {
+  max-width: var(--max);
+  margin: auto;
+
+  min-height: 70px;
+
+  padding: 0 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  text-decoration: none;
+
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 600;
+
+  letter-spacing: -.03em;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 9px;
+  height: 9px;
+
+  background: var(--acid);
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 12px rgba(198, 255, 91, .8);
+}
+
+.logo-meta {
+  color: var(--muted);
+
+  font-family: var(--mono);
+  font-size: .58rem;
+
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.nav-links a {
+  position: relative;
+
+  padding: 10px 12px;
+
+  text-decoration: none;
+
+  font-family: var(--mono);
+  font-size: .65rem;
+
+  text-transform: uppercase;
+  letter-spacing: .08em;
+
+  color: var(--muted);
+
+  transition:
+    color .25s ease,
+    background .25s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--white);
+}
+
+.nav-links a.active::after {
+  content: "";
+
+  position: absolute;
+
+  left: 12px;
+  right: 12px;
+  bottom: 3px;
+
+  height: 1px;
+
+  background: var(--acid);
+
+  box-shadow:
+    0 0 8px rgba(198, 255, 91, .55);
+}
+
+.nav-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-family: var(--mono);
+  font-size: .6rem;
+
+  color: var(--faint);
+}
+
+.nav-time-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: var(--violet);
+
+  box-shadow:
+    0 0 8px rgba(130, 118, 255, .8);
+
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .3;
+  }
+}
+
+.mobile-toggle {
+  display: none;
+
+  background: none;
+  border: 1px solid var(--line);
+
+  color: var(--white);
+
+  padding: 9px 11px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main {
+  position: relative;
+  z-index: 5;
+}
+
+.container {
+  width: min(var(--max), calc(100% - 48px));
+  margin: auto;
+}
+
+
+/* =========================================================
+   CONTINUOUS SECTIONS
+========================================================= */
+
+.section {
+  position: relative;
+
+  min-height: 100vh;
+
+  padding:
+    150px 0
+    120px;
+
+  display: flex;
+  align-items: center;
+
+  border-bottom: 1px solid var(--line);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+  min-height: 100vh;
+
+  padding-top: 160px;
+
+  display: flex;
+  align-items: center;
+}
+
+.hero-content {
+  width: 100%;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 28px;
+
+  color: var(--acid);
+
+  font-family: var(--mono);
+  font-size: .65rem;
+
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.kicker-line {
+  width: 42px;
+  height: 1px;
+
+  background: var(--acid);
+
+  box-shadow:
+    0 0 8px rgba(198, 255, 91, .45);
+}
+
+.hero h1 {
+  margin: 0;
+
+  max-width: 850px;
+
+  font-family: var(--display);
+
+  font-size: clamp(4rem, 10vw, 9rem);
+
+  line-height: .84;
+
+  letter-spacing: -.075em;
+
+  font-weight: 600;
+}
+
+.hero h1 span {
+  display: block;
+}
+
+.hero h1 .ghost {
+  color: transparent;
+
+  -webkit-text-stroke: 1px rgba(233, 237, 242, .45);
+
+  margin-left: 8vw;
+}
+
+.hero-description {
+  max-width: 550px;
+
+  margin-top: 48px;
+  margin-left: 8vw;
+
+  color: var(--muted);
+
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.hero-meta {
+  margin-top: 70px;
+
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  font-family: var(--mono);
+  font-size: .62rem;
+
+  color: var(--faint);
+
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.scroll-indicator {
+  position: absolute;
+
+  bottom: 38px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--faint);
+
+  font-family: var(--mono);
+  font-size: .55rem;
+
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.scroll-arrow {
+  width: 1px;
+  height: 48px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent,
+      var(--acid)
+    );
+
+  animation: scrollArrow 2s ease-in-out infinite;
+}
+
+@keyframes scrollArrow {
+  50% {
+    height: 65px;
+    opacity: .45;
+  }
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section-header {
+  display: grid;
+
+  grid-template-columns:
+    minmax(180px, .5fr)
+    minmax(0, 1.5fr);
+
+  gap: 60px;
+
+  margin-bottom: 70px;
+}
+
+.section-number {
+  font-family: var(--mono);
+
+  color: var(--violet);
+
+  font-size: .62rem;
+
+  letter-spacing: .12em;
+}
+
+.section-label {
+  margin-top: 8px;
+
+  color: var(--muted);
+
+  font-family: var(--mono);
+
+  font-size: .6rem;
+
+  text-transform: uppercase;
+
+  letter-spacing: .12em;
+}
+
+.section-title {
+  margin: 0;
+
+  font-family: var(--display);
+
+  font-size: clamp(3rem, 6vw, 6rem);
+
+  line-height: .9;
+
+  letter-spacing: -.06em;
+}
+
+.section-intro {
+  max-width: 570px;
+
+  margin-top: 25px;
+
+  color: var(--muted);
+
+  line-height: 1.8;
+}
+
+
+/* =========================================================
+   GRAFFITI
+========================================================= */
+
+.graffiti-section {
+  background:
+    radial-gradient(
+      ellipse at 70% 40%,
+      rgba(111, 83, 255, .09),
+      transparent 50%
+    );
+}
+
+.graffiti-wall {
+  display: grid;
+
+  grid-template-columns:
+    1.3fr
+    .7fr;
+
+  gap: 18px;
+}
+
+.graffiti-card {
+  position: relative;
+
+  min-height: 520px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--line);
+
+  background:
+    linear-gradient(
+      135deg,
+      #131820,
+      #090b0f
+    );
+
+  transition:
+    transform .5s ease,
+    border-color .4s ease;
+}
+
+.graffiti-card:hover {
+  transform: translateY(-6px);
+
+  border-color: var(--line-bright);
+}
+
+.graffiti-card.large {
+  min-height: 650px;
+}
+
+.graffiti-card::before {
+  content: "ARCHIVE / 001";
+
+  position: absolute;
+
+  top: 18px;
+  left: 20px;
+
+  z-index: 3;
+
+  font-family: var(--mono);
+
+  font-size: .58rem;
+
+  color: rgba(255,255,255,.5);
+
+  letter-spacing: .1em;
+}
+
+.graffiti-art {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.graffiti-word {
+  font-family: var(--display);
+
+  font-weight: 700;
+
+  font-size: clamp(4rem, 10vw, 10rem);
+
+  line-height: .7;
+
+  letter-spacing: -.1em;
+
+  color: transparent;
+
+  -webkit-text-stroke:
+    2px rgba(198, 255, 91, .7);
+
+  transform: rotate(-7deg);
+
+  text-shadow:
+    8px 12px 0 rgba(130,118,255,.25),
+    -10px 4px 0 rgba(255,79,104,.12);
+
+  transition:
+    transform .7s cubic-bezier(.2,.8,.2,1);
+}
+
+.graffiti-card:hover .graffiti-word {
+  transform:
+    rotate(-3deg)
+    scale(1.08);
+}
+
+.graffiti-spray {
+  position: absolute;
+
+  width: 340px;
+  height: 340px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(130,118,255,.22),
+      transparent 65%
+    );
+
+  filter: blur(18px);
+}
+
+.graffiti-info {
+  position: absolute;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  padding: 28px;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(5,6,9,.95),
+      transparent
+    );
+}
+
+.graffiti-info h3 {
+  margin: 0 0 6px;
+
+  font-family: var(--display);
+  font-size: 1.2rem;
+}
+
+.graffiti-info p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-family: var(--mono);
+  font-size: .62rem;
+}
+
+
+/* =========================================================
+   PHOTOGRAPHY
+========================================================= */
+
+.photo-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(12, 1fr);
+
+  gap: 14px;
+}
+
+.photo-card {
+  position: relative;
+
+  min-height: 260px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--line);
+
+  background: var(--surface-solid);
+}
+
+.photo-card:nth-child(1) {
+  grid-column: span 7;
+  min-height: 430px;
+}
+
+.photo-card:nth-child(2) {
+  grid-column: span 5;
+}
+
+.photo-card:nth-child(3) {
+  grid-column: span 4;
+}
+
+.photo-card:nth-child(4) {
+  grid-column: span 4;
+}
+
+.photo-card:nth-child(5) {
+  grid-column: span 4;
+}
+
+.photo-card img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+
+  filter:
+    grayscale(.35)
+    contrast(1.08)
+    brightness(.72);
+
+  transition:
+    transform .8s cubic-bezier(.2,.8,.2,1),
+    filter .5s ease;
+}
+
+.photo-card:hover img {
+  transform: scale(1.055);
+
+  filter:
+    grayscale(0)
+    contrast(1.08)
+    brightness(.85);
+}
+
+.photo-overlay {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(5,6,9,.88),
+      transparent 55%
+    );
+}
+
+.photo-label {
+  position: absolute;
+
+  bottom: 16px;
+  left: 17px;
+
+  font-family: var(--mono);
+
+  font-size: .6rem;
+
+  color: var(--white);
+
+  letter-spacing: .08em;
+}
+
+
+/* =========================================================
+   MUSIC
+========================================================= */
+
+.music-section {
+  background:
+    radial-gradient(
+      ellipse at 30% 50%,
+      rgba(130,118,255,.09),
+      transparent 55%
+    );
+}
+
+.music-player {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.track {
+  display: grid;
+
+  grid-template-columns:
+    60px
+    1fr
+    180px
+    100px;
+
+  gap: 20px;
+
+  align-items: center;
+
+  min-height: 100px;
+
+  border-bottom: 1px solid var(--line);
+
+  transition:
+    background .3s ease;
+}
+
+.track:last-child {
+  border-bottom: none;
+}
+
+.track:hover {
+  background: rgba(255,255,255,.025);
+}
+
+.track-number {
+  color: var(--faint);
+
+  font-family: var(--mono);
+  font-size: .65rem;
+
+  padding-left: 10px;
+}
+
+.track-title {
+  font-family: var(--display);
+
+  font-size: 1rem;
+}
+
+.track-artist {
+  margin-top: 5px;
+
+  color: var(--muted);
+
+  font-family: var(--mono);
+  font-size: .58rem;
+
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.track-year {
+  color: var(--faint);
+
+  font-family: var(--mono);
+  font-size: .58rem;
+}
+
+.play-button {
+  justify-self: end;
+
+  width: 35px;
+  height: 35px;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  border: 1px solid var(--line-bright);
+
+  color: var(--white);
+
+  cursor: pointer;
+
+  transition:
+    background .2s ease,
+    color .2s ease;
+}
+
+.play-button:hover {
+  background: var(--acid);
+  color: var(--void);
+}
+
+
+/* =========================================================
+   WRITING
+========================================================= */
+
+.writing-list {
+  border-top: 1px solid var(--line);
+}
+
+.post {
+  display: grid;
+
+  grid-template-columns:
+    150px
+    1fr
+    90px;
+
+  gap: 30px;
+
+  padding: 32px 0;
+
+  border-bottom: 1px solid var(--line);
+
+  text-decoration: none;
+
+  transition:
+    padding .35s ease,
+    background .35s ease;
+}
+
+.post:hover {
+  padding-left: 18px;
+  padding-right: 18px;
+
+  background: rgba(255,255,255,.02);
+}
+
+.post-date {
+  color: var(--faint);
+
+  font-family: var(--mono);
+  font-size: .58rem;
+
+  text-transform: uppercase;
+}
+
+.post-title {
+  font-family: var(--display);
+
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+
+  letter-spacing: -.03em;
+}
+
+.post-excerpt {
+  margin-top: 8px;
+
+  color: var(--muted);
+
+  font-size: .85rem;
+
+  line-height: 1.6;
+}
+
+.post-arrow {
+  align-self: center;
+
+  color: var(--faint);
+
+  font-size: 1.2rem;
+
+  transition:
+    transform .3s ease,
+    color .3s ease;
+}
+
+.post:hover .post-arrow {
+  transform: translateX(8px);
+
+  color: var(--acid);
+}
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 100px;
+}
+
+.about-big {
+  font-family: var(--display);
+
+  font-size: clamp(2rem, 4vw, 4rem);
+
+  line-height: 1;
+
+  letter-spacing: -.055em;
+}
+
+.about-big em {
+  color: var(--violet);
+
+  font-style: normal;
+}
+
+.about-copy {
+  color: var(--muted);
+
+  line-height: 1.9;
+
+  font-size: .95rem;
+}
+
+.about-facts {
+  margin-top: 50px;
+
+  border-top: 1px solid var(--line);
+}
+
+.fact {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 15px 0;
+
+  border-bottom: 1px solid var(--line);
+
+  font-family: var(--mono);
+  font-size: .62rem;
+}
+
+.fact span:first-child {
+  color: var(--faint);
+
+  text-transform: uppercase;
+}
+
+.fact span:last-child {
+  color: var(--white);
+}
+
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.contact-section {
+  min-height: 80vh;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(130,118,255,.1),
+      transparent 60%
+    );
+}
+
+.contact-content {
+  width: 100%;
+}
+
+.contact-title {
+  max-width: 900px;
+
+  font-family: var(--display);
+
+  font-size: clamp(4rem, 9vw, 9rem);
+
+  line-height: .85;
+
+  letter-spacing: -.075em;
+}
+
+.contact-title span {
+  color: transparent;
+
+  -webkit-text-stroke:
+    1px rgba(233,237,242,.35);
+}
+
+.contact-email {
+  display: inline-block;
+
+  margin-top: 60px;
+
+  font-family: var(--mono);
+
+  font-size: .75rem;
+
+  color: var(--acid);
+
+  text-decoration: none;
+
+  border-bottom: 1px solid rgba(198,255,91,.4);
+
+  padding-bottom: 8px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+  position: relative;
+
+  z-index: 5;
+
+  border-top: 1px solid var(--line);
+
+  padding: 35px 0;
+
+  font-family: var(--mono);
+
+  font-size: .58rem;
+
+  color: var(--faint);
+
+  text-transform: uppercase;
+
+  letter-spacing: .08em;
+}
+
+.footer-inner {
+  width: min(var(--max), calc(100% - 48px));
+
+  margin: auto;
+
+  display: flex;
+
+  justify-content: space-between;
+}
+
+
+/* =========================================================
+   REVEAL ANIMATION
+========================================================= */
+
+.reveal {
+  opacity: 0;
+
+  transform:
+    translateY(35px);
+
+  transition:
+    opacity .9s cubic-bezier(.2,.8,.2,1),
+    transform .9s cubic-bezier(.2,.8,.2,1);
+}
+
+.reveal.visible {
+  opacity: 1;
+
+  transform: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .nav {
+    padding: 0 20px;
+  }
+
+  .nav-time {
+    display: none;
+  }
+
+  .mobile-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: 70px;
+
+    display: none;
+
+    flex-direction: column;
+    align-items: stretch;
+
+    padding: 12px 20px 18px;
 
     background:
-      radial-gradient(
-        ellipse at 50% -20%,
-        #141c25 0%,
-        var(--ink) 55%
-      );
+      rgba(8,11,16,.96);
 
-    color:var(--paper);
-
-    font-family:var(--sans);
-
-    -webkit-font-smoothing:antialiased;
-
-    overflow-x:hidden;
+    border-bottom: 1px solid var(--line);
   }
 
-  ::selection{
-    background:var(--brass);
-    color:var(--ink);
+  .nav-links.open {
+    display: flex;
   }
 
-  button,
-  input{
-    font:inherit;
+  .nav-links a {
+    padding: 14px 4px;
   }
 
-  button{
-    -webkit-tap-highlight-color:transparent;
+  .hero h1 {
+    font-size: clamp(3.5rem, 17vw, 7rem);
   }
 
-  a{
-    color:inherit;
+  .hero h1 .ghost {
+    margin-left: 0;
   }
 
-
-  /* ============================================================
-     FILM GRAIN
-     ============================================================ */
-
-  body::before{
-
-    content:"";
-
-    position:fixed;
-    inset:0;
-
-    pointer-events:none;
-
-    z-index:100;
-
-    opacity:.035;
-
-    background-image:
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
-
-    mix-blend-mode:screen;
-
+  .hero-description {
+    margin-left: 0;
   }
 
-
-  /* ============================================================
-     CELESTIAL BACKGROUND
-     ============================================================ */
-
-  .celestial-background{
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:0;
-
-    pointer-events:none;
-
-    overflow:hidden;
-
-    background:
-      radial-gradient(
-        ellipse at 50% 40%,
-        rgba(35,48,61,.13) 0%,
-        rgba(5,7,10,0) 58%
-      );
-
-  }
-
-
-  #celestialCanvas{
-
-    position:absolute;
-
-    inset:0;
-
-    width:100%;
-    height:100%;
-
-    display:block;
-
-  }
-
-
-  /* ------------------------------------------------------------
-     NEBULA
-     ------------------------------------------------------------ */
-
-  .nebula{
-
-    position:absolute;
-
-    width:55vw;
-    height:55vw;
-
-    max-width:850px;
-    max-height:850px;
-
-    border-radius:50%;
-
-    filter:blur(80px);
-
-    opacity:.18;
-
-    mix-blend-mode:screen;
-
-  }
-
-  .nebula-one{
-
-    left:-20vw;
-    top:15vh;
-
-    background:
-      radial-gradient(
-        circle,
-        rgba(73,91,106,.22) 0%,
-        rgba(42,57,68,.12) 35%,
-        transparent 70%
-      );
-
-    animation:
-      nebulaDriftOne 35s ease-in-out infinite alternate;
-
-  }
-
-  .nebula-two{
-
-    right:-25vw;
-    bottom:-10vh;
-
-    background:
-      radial-gradient(
-        circle,
-        rgba(111,76,55,.13) 0%,
-        rgba(56,64,70,.08) 38%,
-        transparent 70%
-      );
-
-    animation:
-      nebulaDriftTwo 48s ease-in-out infinite alternate;
-
-  }
-
-  @keyframes nebulaDriftOne{
-
-    from{
-      transform:
-        translate3d(-2%,-2%,0)
-        scale(1);
-    }
-
-    to{
-      transform:
-        translate3d(8%,5%,0)
-        scale(1.12);
-    }
-
-  }
-
-  @keyframes nebulaDriftTwo{
-
-    from{
-      transform:
-        translate3d(2%,5%,0)
-        scale(1);
-    }
-
-    to{
-      transform:
-        translate3d(-8%,-3%,0)
-        scale(1.16);
-    }
-
-  }
-
-
-  /* ------------------------------------------------------------
-     ZODIAC
-     ------------------------------------------------------------ */
-
-  .zodiac-orbit{
-
-    position:absolute;
-
-    width:min(70vw,850px);
-    height:min(70vw,850px);
-
-    right:-18vw;
-    top:8vh;
-
-    opacity:.075;
-
-    transform:
-      translate3d(
-        var(--zodiac-x,0px),
-        var(--zodiac-y,0px),
-        0
-      );
-
-    transition:
-      transform 1.4s cubic-bezier(.2,.7,.2,1);
-
-    animation:
-      zodiacFloat 18s ease-in-out infinite alternate;
-
-  }
-
-  @keyframes zodiacFloat{
-
-    from{
-      margin-top:-8px;
-    }
-
-    to{
-      margin-top:8px;
-    }
-
-  }
-
-  .zodiac-ring{
-
-    position:absolute;
-
-    inset:0;
-
-    border-radius:50%;
-
-    border:1px solid rgba(183,149,88,.55);
-
-  }
-
-  .zodiac-ring-outer{
-    transform:rotate(3deg);
-  }
-
-  .zodiac-ring-inner{
-
-    inset:12%;
-
-    border-color:rgba(217,221,217,.2);
-
-  }
-
-  .zodiac-symbols{
-
-    position:absolute;
-
-    inset:0;
-
-    animation:
-      zodiacRotate 90s linear infinite;
-
-  }
-
-  .zodiac-symbols span{
-
-    position:absolute;
-
-    top:50%;
-    left:50%;
-
-    width:40px;
-    height:40px;
-
-    margin:-20px;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    color:var(--brass);
-
-    font-family:
-      Georgia,
-      "Times New Roman",
-      serif;
-
-    font-size:1.1rem;
-
-    transform:
-      rotate(calc(var(--angle) * 1deg))
-      translateY(calc(min(35vw,425px) * -1))
-      rotate(calc(var(--angle) * -1deg));
-
-  }
-
-  .zodiac-symbols span:nth-child(1){--angle:0;}
-  .zodiac-symbols span:nth-child(2){--angle:30;}
-  .zodiac-symbols span:nth-child(3){--angle:60;}
-  .zodiac-symbols span:nth-child(4){--angle:90;}
-  .zodiac-symbols span:nth-child(5){--angle:120;}
-  .zodiac-symbols span:nth-child(6){--angle:150;}
-  .zodiac-symbols span:nth-child(7){--angle:180;}
-  .zodiac-symbols span:nth-child(8){--angle:210;}
-  .zodiac-symbols span:nth-child(9){--angle:240;}
-  .zodiac-symbols span:nth-child(10){--angle:270;}
-  .zodiac-symbols span:nth-child(11){--angle:300;}
-  .zodiac-symbols span:nth-child(12){--angle:330;}
-
-  @keyframes zodiacRotate{
-
-    from{
-      transform:rotate(0deg);
-    }
-
-    to{
-      transform:rotate(360deg);
-    }
-
-  }
-
-
-  /* ------------------------------------------------------------
-     SMALL CELESTIAL CROSSES
-     ------------------------------------------------------------ */
-
-  .celestial-cross{
-
-    position:absolute;
-
-    width:14px;
-    height:14px;
-
-    opacity:.16;
-
-    transform:
-      translate3d(
-        var(--cross-x,0px),
-        var(--cross-y,0px),
-        0
-      );
-
-    transition:
-      transform 1.8s cubic-bezier(.2,.7,.2,1);
-
-  }
-
-  .celestial-cross::before,
-  .celestial-cross::after{
-
-    content:"";
-
-    position:absolute;
-
-    background:var(--brass);
-
-  }
-
-  .celestial-cross::before{
-
-    width:1px;
-    height:100%;
-
-    left:50%;
-    top:0;
-
-  }
-
-  .celestial-cross::after{
-
-    width:100%;
-    height:1px;
-
-    left:0;
-    top:50%;
-
-  }
-
-  .celestial-cross-one{
-
-    left:17%;
-    top:27%;
-
-  }
-
-  .celestial-cross-two{
-
-    right:28%;
-    top:67%;
-
-    transform:scale(.7);
-
-    opacity:.1;
-
-  }
-
-
-  /* ============================================================
-     HEADER
-     ============================================================ */
-
-  header{
-
-    position:sticky;
-
-    top:0;
-
-    z-index:40;
-
-    background:
-      rgba(7,9,13,.78);
-
-    backdrop-filter:
-      blur(18px);
-
-    -webkit-backdrop-filter:
-      blur(18px);
-
-    border-bottom:
-      1px solid rgba(32,42,53,.8);
-
-  }
-
-  .nav-inner{
-
-    max-width:var(--maxw);
-
-    margin:0 auto;
-
+  .section {
     padding:
-      17px 24px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
+      120px 0
+      90px;
   }
 
-  .brand{
+  .section-header {
+    grid-template-columns: 1fr;
 
-    font-family:var(--serif);
+    gap: 20px;
 
-    font-weight:600;
-
-    font-size:1.3rem;
-
-    letter-spacing:.01em;
-
-    text-decoration:none;
-
-    display:flex;
-
-    align-items:baseline;
-
-    gap:9px;
-
+    margin-bottom: 45px;
   }
 
-  .brand small{
-
-    font-family:var(--mono);
-
-    font-size:.58rem;
-
-    color:var(--brass);
-
-    letter-spacing:.14em;
-
-    text-transform:uppercase;
-
+  .graffiti-wall {
+    grid-template-columns: 1fr;
   }
 
-
-  /* ------------------------------------------------------------
-     NAVIGATION
-     ------------------------------------------------------------ */
-
-  nav.menu{
-
-    display:flex;
-
-    gap:2px;
-
-    font-family:var(--mono);
-
-    font-size:.72rem;
-
-    letter-spacing:.08em;
-
-    text-transform:uppercase;
-
+  .graffiti-card,
+  .graffiti-card.large {
+    min-height: 420px;
   }
 
-  nav.menu button{
+  .photo-grid {
+    display: grid;
 
-    background:none;
-
-    border:none;
-
-    color:var(--paper-dim);
-
-    padding:
-      9px 13px;
-
-    cursor:pointer;
-
-    position:relative;
-
-    transition:
-      color .2s ease;
-
+    grid-template-columns: 1fr 1fr;
   }
 
-  nav.menu button:hover{
+  .photo-card:nth-child(n) {
+    grid-column: span 1;
 
-    color:var(--paper);
-
+    min-height: 240px;
   }
 
-  nav.menu button.active{
+  .photo-card:nth-child(1) {
+    grid-column: span 2;
 
-    color:var(--brass);
-
+    min-height: 350px;
   }
 
-  nav.menu button.active::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:13px;
-    right:13px;
-    bottom:1px;
-
-    height:1px;
-
-    background:var(--brass);
-
-    box-shadow:
-      0 0 8px
-      rgba(201,163,94,.35);
-
-  }
-
-
-  .nav-toggle{
-
-    display:none;
-
-    background:none;
-
-    border:
-      1px solid var(--line);
-
-    color:var(--paper);
-
-    border-radius:5px;
-
-    padding:
-      8px 10px;
-
-    cursor:pointer;
-
-  }
-
-
-  /* ============================================================
-     MAIN
-     ============================================================ */
-
-  main{
-
-    position:relative;
-
-    z-index:2;
-
-    max-width:var(--maxw);
-
-    margin:0 auto;
-
-    padding:
-      0 24px;
-
-  }
-
-
-  /* ============================================================
-     VIEWS
-     ============================================================ */
-
-  section.view{
-
-    display:none;
-
-    min-height:
-      calc(100vh - 76px);
-
-    padding:
-      100px 0 120px;
-
-    animation:
-      fadeIn .55s ease;
-
-  }
-
-  section.view.active{
-    display:block;
-  }
-
-  @keyframes fadeIn{
-
-    from{
-      opacity:0;
-      transform:translateY(10px);
-    }
-
-    to{
-      opacity:1;
-      transform:none;
-    }
-
-  }
-
-
-  /* ============================================================
-     TYPOGRAPHY
-     ============================================================ */
-
-  .eyebrow{
-
-    font-family:var(--mono);
-
-    font-size:.67rem;
-
-    letter-spacing:.2em;
-
-    text-transform:uppercase;
-
-    color:var(--brass);
-
-    margin:
-      0 0 16px;
-
-  }
-
-  h1{
-
-    font-family:var(--serif);
-
-    font-weight:500;
-
-    font-size:
-      clamp(3rem,7vw,6.4rem);
-
-    line-height:.97;
-
-    letter-spacing:-.025em;
-
-    margin:
-      0 0 30px;
-
-    max-width:11ch;
-
-  }
-
-  h2{
-
-    font-family:var(--serif);
-
-    font-weight:500;
-
-    font-size:
-      clamp(2rem,4vw,3.5rem);
-
-    line-height:1;
-
-    letter-spacing:-.02em;
-
-    margin:
-      0 0 20px;
-
-  }
-
-  h3{
-
-    font-family:var(--serif);
-
-    font-weight:500;
-
-  }
-
-  p.lede{
-
-    font-size:
-      clamp(1rem,1.5vw,1.12rem);
-
-    line-height:1.8;
-
-    color:var(--paper-dim);
-
-    max-width:60ch;
-
-  }
-
-
-  /* ============================================================
-     HOME
-     ============================================================ */
-
-  .home-layout{
-
-    min-height:
-      calc(100vh - 200px);
-
-    display:grid;
-
+  .track {
     grid-template-columns:
-      minmax(0,1.4fr)
-      minmax(260px,.6fr);
-
-    gap:80px;
-
-    align-items:center;
-
+      40px
+      1fr
+      40px;
   }
 
-  .home-copy{
-
-    position:relative;
-
+  .track-year {
+    display: none;
   }
 
-  .home-copy::before{
+  .about-grid {
+    grid-template-columns: 1fr;
 
-    content:"";
-
-    position:absolute;
-
-    left:-35px;
-
-    top:8px;
-
-    width:1px;
-
-    height:190px;
-
-    background:
-      linear-gradient(
-        to bottom,
-        var(--brass),
-        transparent
-      );
-
-    opacity:.45;
-
+    gap: 60px;
   }
 
-  .home-meta{
-
-    align-self:end;
-
-    padding-bottom:40px;
-
-  }
-
-  .home-meta-label{
-
-    font-family:var(--mono);
-
-    font-size:.64rem;
-
-    letter-spacing:.15em;
-
-    color:var(--paper-faint);
-
-    text-transform:uppercase;
-
-    margin-bottom:12px;
-
-  }
-
-  .home-meta p{
-
-    color:var(--paper-dim);
-
-    font-size:.86rem;
-
-    line-height:1.7;
-
-    margin:0;
-
-    max-width:30ch;
-
-  }
-
-  .home-index{
-
-    margin-top:38px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    font-family:var(--mono);
-
-    font-size:.68rem;
-
-    color:var(--paper-faint);
-
-    letter-spacing:.08em;
-
-  }
-
-  .home-index-line{
-
-    width:50px;
-
-    height:1px;
-
-    background:var(--brass-dim);
-
-  }
-
-
-  /* ============================================================
-     BUTTONS
-     ============================================================ */
-
-  .actions{
-
-    margin-top:36px;
-
-    display:flex;
-
-    gap:12px;
-
-    flex-wrap:wrap;
-
-  }
-
-  .btn{
-
-    font-family:var(--mono);
-
-    font-size:.7rem;
-
-    letter-spacing:.08em;
-
-    text-transform:uppercase;
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:9px;
-
-    background:var(--brass);
-
-    color:var(--ink);
-
-    border:none;
-
-    padding:
-      13px 19px;
-
-    border-radius:3px;
-
-    cursor:pointer;
-
-    transition:
-      transform .15s ease,
-      background .2s ease,
-      box-shadow .2s ease;
-
-  }
-
-  .btn:hover{
-
-    background:var(--brass-bright);
-
-    transform:translateY(-1px);
-
-    box-shadow:
-      0 8px 25px
-      rgba(201,163,94,.12);
-
-  }
-
-  .btn.ghost{
-
-    background:transparent;
-
-    color:var(--paper);
-
-    border:
-      1px solid var(--line);
-
-  }
-
-  .btn.ghost:hover{
-
-    border-color:var(--brass);
-
-    color:var(--brass);
-
-    box-shadow:none;
-
-  }
-
-  .btn:disabled{
-
-    opacity:.45;
-
-    cursor:not-allowed;
-
-    transform:none;
-
-    box-shadow:none;
-
-  }
-
-
-  /* ============================================================
-     SECTION HEADER
-     ============================================================ */
-
-  .section-head{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:flex-end;
-
-    gap:30px;
-
-    margin-bottom:55px;
-
-    padding-bottom:22px;
-
-    border-bottom:
-      1px solid var(--line);
-
-  }
-
-  .section-number{
-
-    font-family:var(--mono);
-
-    color:var(--paper-faint);
-
-    font-size:.65rem;
-
-    letter-spacing:.1em;
-
-  }
-
-
-  /* ============================================================
-     CONTINUOUS CONTENT STRIP
-     ============================================================ */
-
-  .archive-intro{
-
-    display:grid;
-
+  .post {
     grid-template-columns:
-      1fr 1fr;
+      1fr
+      40px;
 
-    gap:40px;
-
-    margin-bottom:70px;
-
+    gap: 15px;
   }
 
-  .archive-intro p{
-
-    margin:0;
-
-    color:var(--paper-dim);
-
-    line-height:1.8;
-
-    font-size:.9rem;
-
+  .post-date {
+    grid-column: span 2;
   }
 
-  .archive-rule{
+  .footer-inner {
+    flex-direction: column;
 
-    margin-top:22px;
+    gap: 10px;
+  }
+}
 
-    width:100%;
 
-    height:1px;
+@media (max-width: 500px) {
 
-    background:
-      linear-gradient(
-        90deg,
-        var(--brass-dim),
-        transparent
-      );
-
+  .container {
+    width: min(
+      var(--max),
+      calc(100% - 32px)
+    );
   }
 
-
-  /* ============================================================
-     GALLERY
-     ============================================================ */
-
-  .upload-panel{
-
-    border:
-      1px solid var(--line);
-
-    background:
-      rgba(13,17,23,.72);
-
-    border-radius:5px;
-
-    padding:17px;
-
-    margin-bottom:35px;
-
-    display:flex;
-
-    gap:10px;
-
-    flex-wrap:wrap;
-
-    align-items:center;
-
-  }
-
-  .upload-panel input[type="text"]{
-
-    flex:1;
-
-    min-width:180px;
-
-    background:
-      rgba(7,9,13,.8);
-
-    border:
-      1px solid var(--line);
-
-    color:var(--paper);
-
+  .section {
     padding:
-      11px 12px;
-
-    border-radius:3px;
-
-    font-family:var(--sans);
-
-    font-size:.86rem;
-
-    outline:none;
-
+      110px 0
+      75px;
   }
 
-  .upload-panel input[type="text"]:focus{
-
-    border-color:
-      var(--brass-dim);
-
+  .hero {
+    padding-top: 120px;
   }
 
-  .upload-panel input[type="text"]::placeholder{
-
-    color:var(--paper-faint);
-
+  .hero h1 {
+    font-size: 4rem;
   }
 
-  .file-label{
+  .hero-meta {
+    flex-direction: column;
+    align-items: flex-start;
 
-    font-family:var(--mono);
-
-    font-size:.68rem;
-
-    text-transform:uppercase;
-
-    letter-spacing:.06em;
-
-    border:
-      1px dashed var(--line);
-
-    padding:
-      11px 15px;
-
-    border-radius:3px;
-
-    cursor:pointer;
-
-    color:var(--paper-dim);
-
-    transition:
-      border-color .2s,
-      color .2s;
-
+    gap: 10px;
   }
 
-  .file-label:hover{
-
-    border-color:var(--brass);
-
-    color:var(--brass);
-
+  .photo-grid {
+    grid-template-columns: 1fr;
   }
 
-  .file-label input{
-    display:none;
+  .photo-card:nth-child(n) {
+    grid-column: span 1;
   }
 
-  .file-name{
-
-    font-family:var(--mono);
-
-    font-size:.7rem;
-
-    color:var(--brass);
-
+  .photo-card:nth-child(1) {
+    grid-column: span 1;
   }
 
-  #upload-status{
+  .graffiti-word {
+    font-size: 4rem;
+  }
+}
 
-    font-family:var(--mono);
 
-    font-size:.68rem;
+/* accessibility */
 
-    color:var(--paper-dim);
+@media (prefers-reduced-motion: reduce) {
 
-    width:100%;
-
+  html {
+    scroll-behavior: auto;
   }
 
-
-  /* ------------------------------------------------------------
-     GALLERY GRID
-     ------------------------------------------------------------ */
-
-  .grid{
-
-    display:grid;
-
-    grid-template-columns:
-      repeat(auto-fill,minmax(220px,1fr));
-
-    gap:13px;
-
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
   }
-
-  figure.card{
-
-    margin:0;
-
-    position:relative;
-
-    border-radius:3px;
-
-    overflow:hidden;
-
-    border:
-      1px solid var(--line);
-
-    background:var(--ink-2);
-
-    aspect-ratio:4/5;
-
-  }
-
-  figure.card:nth-child(3n+1){
-
-    aspect-ratio:4/5;
-
-  }
-
-  figure.card:nth-child(3n+2){
-
-    aspect-ratio:1/1;
-
-  }
-
-  figure.card:nth-child(5n){
-
-    aspect-ratio:5/6;
-
-  }
-
-  figure.card img{
-
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
-
-    display:block;
-
-    filter:
-      saturate(.82)
-      contrast(1.05)
-      brightness(.88);
-
-    transition:
-      transform .7s cubic-bezier(.2,.7,.2,1),
-      filter .5s ease;
-
-  }
-
-  figure.card:hover img{
-
-    transform:scale(1.045);
-
-    filter:
-      saturate(.98)
-      contrast(1.04)
-      brightness(.98);
-
-  }
-
-  figcaption{
-
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    padding:
-      42px 13px 13px;
-
-    background:
-      linear-gradient(
-        to top,
-        rgba(5,7,10,.94),
-        rgba(5,7,10,0)
-      );
-
-    font-family:var(--mono);
-
-    font-size:.68rem;
-
-    color:var(--paper);
-
-    opacity:0;
-
-    transform:
-      translateY(7px);
-
-    transition:
-      opacity .25s ease,
-      transform .25s ease;
-
-  }
-
-  figure.card:hover figcaption{
-
-    opacity:1;
-
-    transform:none;
-
-  }
-
-  .card-delete{
-
-    position:absolute;
-
-    top:8px;
-    right:8px;
-
-    background:
-      rgba(5,7,10,.78);
-
-    border:
-      1px solid var(--line);
-
-    color:var(--paper-dim);
-
-    width:27px;
-    height:27px;
-
-    border-radius:3px;
-
-    cursor:pointer;
-
-    font-size:.72rem;
-
-    line-height:1;
-
-    opacity:0;
-
-    transition:
-      opacity .2s ease,
-      color .2s ease,
-      border-color .2s ease;
-
-  }
-
-  figure.card:hover .card-delete{
-
-    opacity:1;
-
-  }
-
-  .card-delete:hover{
-
-    color:#d8796d;
-
-    border-color:#8d4c45;
-
-  }
-
-
-  .empty-state{
-
-    border:
-      1px dashed var(--line);
-
-    border-radius:4px;
-
-    padding:
-      60px 24px;
-
-    text-align:center;
-
-    color:var(--paper-faint);
-
-    font-family:var(--mono);
-
-    font-size:.72rem;
-
-  }
-
-
-  /* ============================================================
-     UNDERGROUND ARCHIVE CARDS
-     ============================================================ */
-
-  .archive-grid{
-
-    display:grid;
-
-    grid-template-columns:
-      repeat(3,1fr);
-
-    gap:13px;
-
-  }
-
-  .archive-card{
-
-    min-height:260px;
-
-    border:
-      1px solid var(--line);
-
-    background:
-      linear-gradient(
-        145deg,
-        rgba(18,24,33,.8),
-        rgba(8,11,15,.85)
-      );
-
-    padding:25px;
-
-    position:relative;
-
-    overflow:hidden;
-
-    transition:
-      border-color .3s ease,
-      transform .3s ease;
-
-  }
-
-  .archive-card::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:100px;
-    height:100px;
-
-    right:-45px;
-    top:-45px;
-
-    border:
-      1px solid
-      rgba(201,163,94,.15);
-
-    border-radius:50%;
-
-  }
-
-  .archive-card::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    top:0;
-
-    width:2px;
-    height:0;
-
-    background:var(--brass);
-
-    transition:
-      height .35s ease;
-
-  }
-
-  .archive-card:hover{
-
-    border-color:
-      #34404d;
-
-    transform:
-      translateY(-3px);
-
-  }
-
-  .archive-card:hover::after{
-
-    height:100%;
-
-  }
-
-  .archive-index{
-
-    font-family:var(--mono);
-
-    color:var(--brass-dim);
-
-    font-size:.62rem;
-
-    letter-spacing:.12em;
-
-    margin-bottom:45px;
-
-  }
-
-  .archive-card h3{
-
-    font-size:1.55rem;
-
-    margin:
-      0 0 13px;
-
-  }
-
-  .archive-card p{
-
-    color:var(--paper-dim);
-
-    font-size:.8rem;
-
-    line-height:1.7;
-
-    margin:0;
-
-  }
-
-
-  /* ============================================================
-     ABOUT
-     ============================================================ */
-
-  .about-layout{
-
-    display:grid;
-
-    grid-template-columns:
-      minmax(0,1.2fr)
-      minmax(260px,.8fr);
-
-    gap:90px;
-
-  }
-
-  .about-statement{
-
-    font-family:var(--serif);
-
-    font-size:
-      clamp(1.6rem,3vw,2.4rem);
-
-    line-height:1.3;
-
-    color:var(--paper);
-
-    margin:
-      0 0 35px;
-
-  }
-
-  .about-copy{
-
-    color:var(--paper-dim);
-
-    line-height:1.85;
-
-    font-size:.9rem;
-
-    max-width:60ch;
-
-  }
-
-  .kv-list{
-
-    list-style:none;
-
-    padding:0;
-
-    margin:0;
-
-    display:grid;
-
-    gap:0;
-
-  }
-
-  .kv-list li{
-
-    display:flex;
-
-    gap:14px;
-
-    font-family:var(--mono);
-
-    font-size:.72rem;
-
-    color:var(--paper-dim);
-
-    border-top:
-      1px solid var(--line);
-
-    padding:
-      14px 0;
-
-  }
-
-  .kv-list li:last-child{
-
-    border-bottom:
-      1px solid var(--line);
-
-  }
-
-  .kv-list li b{
-
-    color:var(--paper);
-
-    min-width:85px;
-
-    font-weight:400;
-
-  }
-
-
-  /* ============================================================
-     CONTACT
-     ============================================================ */
-
-  .contact-layout{
-
-    display:grid;
-
-    grid-template-columns:
-      1.2fr .8fr;
-
-    gap:90px;
-
-  }
-
-  .contact-big{
-
-    font-family:var(--serif);
-
-    font-size:
-      clamp(2.4rem,5vw,5rem);
-
-    line-height:1;
-
-    margin:0;
-
-    max-width:10ch;
-
-  }
-
-  .contact-list{
-
-    display:grid;
-
-    align-content:start;
-
-    gap:0;
-
-  }
-
-  .contact-item{
-
-    border-top:
-      1px solid var(--line);
-
-    padding:
-      17px 0;
-
-  }
-
-  .contact-item:last-child{
-
-    border-bottom:
-      1px solid var(--line);
-
-  }
-
-  .contact-label{
-
-    display:block;
-
-    font-family:var(--mono);
-
-    font-size:.62rem;
-
-    text-transform:uppercase;
-
-    letter-spacing:.12em;
-
-    color:var(--paper-faint);
-
-    margin-bottom:7px;
-
-  }
-
-  .contact-value{
-
-    font-size:.9rem;
-
-    color:var(--paper);
-
-    text-decoration:none;
-
-  }
-
-  .contact-value:hover{
-
-    color:var(--brass);
-
-  }
-
-
-  /* ============================================================
-     SPROCKET DIVIDER
-     ============================================================ */
-
-  .sprockets{
-
-    position:relative;
-
-    z-index:2;
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:10px;
-
-    padding:
-      28px 0;
-
-    opacity:.5;
-
-  }
-
-  .sprockets span{
-
-    width:5px;
-    height:5px;
-
-    border-radius:1px;
-
-    background:var(--line);
-
-  }
-
-
-  /* ============================================================
-     FOOTER
-     ============================================================ */
-
-  footer{
-
-    position:relative;
-
-    z-index:2;
-
-    border-top:
-      1px solid var(--line);
-
-    padding:
-      25px 24px;
-
-    text-align:center;
-
-    font-family:var(--mono);
-
-    font-size:.62rem;
-
-    color:var(--paper-faint);
-
-    letter-spacing:.07em;
-
-  }
-
-  .footer-mark{
-
-    color:var(--brass-dim);
-
-  }
-
-
-  /* ============================================================
-     RESPONSIVE
-     ============================================================ */
-
-  @media(max-width:850px){
-
-    nav.menu{
-
-      display:none;
-
-      position:absolute;
-
-      top:100%;
-      left:0;
-      right:0;
-
-      flex-direction:column;
-
-      background:
-        rgba(13,17,23,.97);
-
-      border-bottom:
-        1px solid var(--line);
-
-      padding:
-        8px 24px 15px;
-
-    }
-
-    nav.menu.open{
-      display:flex;
-    }
-
-    nav.menu button{
-
-      text-align:left;
-
-      padding:
-        12px 6px;
-
-    }
-
-    nav.menu button.active::after{
-
-      left:6px;
-      right:auto;
-
-      width:30px;
-
-    }
-
-    .nav-toggle{
-      display:inline-block;
-    }
-
-
-    .home-layout{
-
-      grid-template-columns:1fr;
-
-      gap:55px;
-
-      align-items:start;
-
-      padding-top:50px;
-
-    }
-
-    .home-meta{
-
-      align-self:auto;
-
-      padding-bottom:0;
-
-    }
-
-
-    .archive-intro{
-
-      grid-template-columns:1fr;
-
-      gap:20px;
-
-    }
-
-
-    .archive-grid{
-
-      grid-template-columns:1fr;
-
-    }
-
-
-    .about-layout,
-    .contact-layout{
-
-      grid-template-columns:1fr;
-
-      gap:55px;
-
-    }
-
-
-    .zodiac-orbit{
-
-      width:100vw;
-      height:100vw;
-
-      right:-45vw;
-      top:10vh;
-
-      opacity:.045;
-
-    }
-
-    .zodiac-symbols span{
-
-      transform:
-        rotate(calc(var(--angle) * 1deg))
-        translateY(-47vw)
-        rotate(calc(var(--angle) * -1deg));
-
-    }
-
-
-    .nebula{
-
-      filter:blur(55px);
-
-      opacity:.1;
-
-    }
-
-  }
-
-
-  @media(max-width:560px){
-
-    main{
-
-      padding:
-        0 18px;
-
-    }
-
-    .nav-inner{
-
-      padding:
-        15px 18px;
-
-    }
-
-    section.view{
-
-      padding:
-        75px 0 90px;
-
-    }
-
-    h1{
-
-      font-size:
-        clamp(2.8rem,14vw,4.2rem);
-
-    }
-
-    .home-copy::before{
-
-      left:-15px;
-
-      height:130px;
-
-    }
-
-    .grid{
-
-      grid-template-columns:
-        repeat(2,1fr);
-
-      gap:7px;
-
-    }
-
-    figure.card,
-    figure.card:nth-child(3n+2),
-    figure.card:nth-child(5n){
-
-      aspect-ratio:4/5;
-
-    }
-
-    .upload-panel{
-
-      align-items:stretch;
-
-    }
-
-    .upload-panel .btn{
-
-      width:100%;
-
-    }
-
-    .file-label{
-
-      width:100%;
-
-      text-align:center;
-
-    }
-
-  }
-
-
-  /* ============================================================
-     REDUCED MOTION
-     ============================================================ */
-
-  @media(prefers-reduced-motion:reduce){
-
-    html{
-      scroll-behavior:auto;
-    }
-
-    .nebula,
-    .zodiac-symbols,
-    .zodiac-orbit{
-
-      animation:none !important;
-
-    }
-
-    section.view{
-
-      animation:none;
-
-    }
-
-  }
+}
 
 </style>
 </head>
@@ -2055,297 +1396,371 @@
 
 <body>
 
+<!-- =========================================================
+     CONTINUOUS SPACE BACKGROUND
+========================================================= -->
 
-<!-- ============================================================
-     CELESTIAL BACKGROUND
-     ============================================================ -->
-
-<div class="celestial-background" aria-hidden="true">
-
-  <canvas id="celestialCanvas"></canvas>
-
-  <div class="nebula nebula-one"></div>
-  <div class="nebula nebula-two"></div>
-
-  <div class="zodiac-orbit">
-
-    <div class="zodiac-ring zodiac-ring-outer"></div>
-    <div class="zodiac-ring zodiac-ring-inner"></div>
-
-    <div class="zodiac-symbols">
-
-      <span>♈</span>
-      <span>♉</span>
-      <span>♊</span>
-      <span>♋</span>
-      <span>♌</span>
-      <span>♍</span>
-      <span>♎</span>
-      <span>♏</span>
-      <span>♐</span>
-      <span>♑</span>
-      <span>♒</span>
-      <span>♓</span>
-
-    </div>
-
-  </div>
-
-  <div class="celestial-cross celestial-cross-one"></div>
-  <div class="celestial-cross celestial-cross-two"></div>
-
-</div>
+<canvas id="space"></canvas>
+<div class="grain"></div>
 
 
-<!-- ============================================================
-     HEADER
-     ============================================================ -->
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
 
 <header class="site-header">
 
-  <div class="nav-inner">
+  <div class="nav">
 
-    <a href="#home" class="brand">
+    <a href="#top" class="logo">
 
-      Tim
+      <span class="logo-mark"></span>
 
-      <small>
-        The Observer
-      </small>
+      TIM
+
+      <span class="logo-meta">
+        / after dark
+      </span>
 
     </a>
 
 
     <button
-      class="nav-toggle"
-      id="navToggle"
-      aria-label="Toggle menu"
-      aria-expanded="false"
+      class="mobile-toggle"
+      id="mobileToggle"
+      aria-label="Open navigation"
     >
       ☰
     </button>
 
 
-    <nav class="menu" id="navMenu">
+    <nav class="nav-links" id="navLinks">
 
-      <button
-        data-view="home"
-        class="active"
-      >
-        Home
-      </button>
+      <a href="#graffiti">Graffiti</a>
 
-      <button data-view="gallery">
-        Photographs
-      </button>
+      <a href="#photographs">Photos</a>
 
-      <button data-view="archive">
-        Archive
-      </button>
+      <a href="#music">Music</a>
 
-      <button data-view="about">
-        About
-      </button>
+      <a href="#writing">Writing</a>
 
-      <button data-view="contact">
-        Contact
-      </button>
+      <a href="#about">About</a>
 
     </nav>
+
+
+    <div class="nav-time">
+
+      <span class="nav-time-dot"></span>
+
+      TRANSMISSION ACTIVE
+
+    </div>
 
   </div>
 
 </header>
 
 
-<!-- ============================================================
-     MAIN
-     ============================================================ -->
 
-<main>
+<!-- =========================================================
+     MAIN CONTINUOUS JOURNEY
+========================================================= -->
 
-
-  <!-- ==========================================================
-       HOME
-       ========================================================== -->
-
-  <section
-    class="view active"
-    id="view-home"
-  >
-
-    <div class="home-layout">
+<main id="top">
 
 
-      <div class="home-copy">
+<!-- =========================================================
+     HERO
+========================================================= -->
 
-        <p class="eyebrow">
-          Transmission / 001
-        </p>
+<section class="hero section">
 
+  <div class="container">
 
-        <h1>
-          Things are
-          hiding in
-          plain sight.
-        </h1>
+    <div class="hero-content reveal">
 
+      <div class="kicker">
 
-        <p class="lede">
+        <span class="kicker-line"></span>
 
-          Photographs, graffiti, records, fragments and
-          thoughts collected from the darker side of the
-          visible world.
-
-          <br><br>
-
-          This isn't a portfolio.
-
-          It's an archive.
-
-        </p>
-
-
-        <div class="actions">
-
-          <button
-            class="btn"
-            data-view="gallery"
-          >
-            Enter the archive
-            →
-          </button>
-
-
-          <button
-            class="btn ghost"
-            data-view="about"
-          >
-            About the observer
-          </button>
-
-        </div>
-
-
-        <div class="home-index">
-
-          <span>
-            CURRENT POSITION
-          </span>
-
-          <span class="home-index-line"></span>
-
-          <span>
-            IST / 41°N
-          </span>
-
-        </div>
+        Personal archive / Istanbul
 
       </div>
 
 
-      <div class="home-meta">
+      <h1>
 
-        <div class="home-meta-label">
-          FIELD NOTE
-        </div>
+        <span>Things</span>
 
-        <p>
+        <span class="ghost">
+          found
+        </span>
 
-          Somewhere between a street corner,
-          a basement speaker, a forgotten wall
-          and a photograph nobody else stopped
-          to take.
+        <span>after dark.</span>
 
-        </p>
+      </h1>
 
-        <div class="archive-rule"></div>
 
-        <div
-          class="home-meta-label"
-          style="margin-top:22px;"
-        >
-          STATUS
-        </div>
+      <p class="hero-description">
 
-        <p>
-          Observing.
-          Collecting.
-          Still looking.
-        </p>
+        Photographs, walls, sounds, fragments and stories
+        collected from the places that don't usually make it
+        into the daylight.
+
+      </p>
+
+
+      <div class="hero-meta">
+
+        <span>01 — ENTER</span>
+
+        <span>∞ — KEEP LOOKING</span>
+
+        <span>↓ — DESCEND</span>
 
       </div>
 
     </div>
 
-  </section>
+  </div>
 
 
-  <!-- ==========================================================
-       PHOTOGRAPHS
-       ========================================================== -->
+  <div class="scroll-indicator">
 
-  <section
-    class="view"
-    id="view-gallery"
-  >
+    scroll
 
-    <div class="section-head">
+    <span class="scroll-arrow"></span>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     GRAFFITI
+========================================================= -->
+
+<section
+  class="section graffiti-section"
+  id="graffiti"
+>
+
+  <div class="container">
+
+    <div class="section-header reveal">
 
       <div>
 
-        <p class="eyebrow">
-          Visual Archive
-        </p>
+        <div class="section-number">
+          02 / 06
+        </div>
 
-        <h2>
-          Photographs
-        </h2>
+        <div class="section-label">
+          Walls / marks / territory
+        </div>
 
       </div>
 
-      <span class="section-number">
-        IMG / 001—∞
-      </span>
+
+      <div>
+
+        <h2 class="section-title">
+          The walls<br>
+          remember.
+        </h2>
+
+        <p class="section-intro">
+          Pieces disappear. Paint gets covered. Buildings get
+          demolished. The camera remembers what the city
+          decided to forget.
+        </p>
+
+      </div>
 
     </div>
 
 
-    <div class="archive-intro">
+    <div class="graffiti-wall reveal">
 
-      <p>
 
-        Walls, faces, shadows, accidental compositions,
-        pieces of cities and things that disappear
-        when nobody is looking.
+      <article class="graffiti-card large">
 
-      </p>
+        <div class="graffiti-art">
 
-      <p>
+          <div class="graffiti-spray"></div>
 
-        The archive grows slowly.
-        There is no algorithm here.
-        Just things worth keeping.
+          <div class="graffiti-word">
+            VOID
+          </div>
 
-      </p>
+        </div>
 
+
+        <div class="graffiti-info">
+
+          <h3>
+            Concrete language
+          </h3>
+
+          <p>
+            NIGHT / INDUSTRIAL DISTRICT / 2026
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article class="graffiti-card">
+
+        <div class="graffiti-art">
+
+          <div
+            class="graffiti-spray"
+            style="
+              background:
+              radial-gradient(
+                circle,
+                rgba(255,79,104,.18),
+                transparent 65%
+              );
+            "
+          ></div>
+
+          <div
+            class="graffiti-word"
+            style="
+              color: var(--violet);
+              -webkit-text-stroke: 0;
+              transform: rotate(8deg);
+            "
+          >
+            LOST
+          </div>
+
+        </div>
+
+
+        <div class="graffiti-info">
+
+          <h3>
+            No permission needed.
+          </h3>
+
+          <p>
+            FOUND / 03:17 AM
+          </p>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     PHOTOGRAPHS
+========================================================= -->
+
+<section
+  class="section"
+  id="photographs"
+>
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+
+        <div class="section-number">
+          03 / 06
+        </div>
+
+        <div class="section-label">
+          Photography / field notes
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <h2 class="section-title">
+          Light<br>
+          leaks.
+        </h2>
+
+        <p class="section-intro">
+          A collection of places, people and moments
+          photographed while moving through the city.
+          Nothing staged. Nothing polished.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="photo-grid reveal"
+      id="galleryGrid"
+    >
+
+      <!-- Firebase photos will be inserted here -->
+
+    </div>
+
+
+    <div
+      id="emptyState"
+      style="
+        display:none;
+        padding:50px 0;
+        color:var(--faint);
+        font-family:var(--mono);
+        font-size:.65rem;
+      "
+    >
+      No photographs archived yet.
     </div>
 
 
     <!-- Firebase upload -->
 
-    <div class="upload-panel">
+    <div
+      style="
+        margin-top:40px;
+        border-top:1px solid var(--line);
+        padding-top:25px;
+      "
+    >
 
-      <label class="file-label">
+      <label
+        style="
+          font-family:var(--mono);
+          font-size:.6rem;
+          color:var(--muted);
+          text-transform:uppercase;
+          letter-spacing:.1em;
+          cursor:pointer;
+        "
+      >
 
-        <span id="fileLabelText">
-          Choose photo
-        </span>
+        + Add photograph
 
         <input
           type="file"
           id="photoInput"
           accept="image/*"
+          style="display:none"
         >
 
       </label>
@@ -2354,2178 +1769,1816 @@
       <input
         type="text"
         id="captionInput"
-        placeholder="Caption / location / fragment..."
+        placeholder="Caption..."
+        style="
+          margin-left:20px;
+          max-width:300px;
+          background:transparent;
+          border:none;
+          border-bottom:1px solid var(--line);
+          color:var(--white);
+          padding:8px 4px;
+          outline:none;
+          font-family:var(--mono);
+          font-size:.65rem;
+        "
       >
 
 
       <button
-        class="btn"
         id="uploadBtn"
+        style="
+          margin-left:15px;
+          background:var(--acid);
+          color:var(--void);
+          border:0;
+          padding:9px 14px;
+          font-family:var(--mono);
+          font-size:.6rem;
+          text-transform:uppercase;
+          cursor:pointer;
+        "
       >
-        Add to archive
+        Archive
       </button>
 
 
-      <div id="upload-status"></div>
+      <div
+        id="upload-status"
+        style="
+          margin-top:12px;
+          color:var(--muted);
+          font-family:var(--mono);
+          font-size:.6rem;
+        "
+      ></div>
 
     </div>
 
+  </div>
 
-    <div
-      class="grid"
-      id="galleryGrid"
-    >
-      <!-- Firebase photos injected here -->
-    </div>
+</section>
 
 
-    <div
-      class="empty-state"
-      id="emptyState"
-      style="display:none; margin-top:16px;"
-    >
-      No photographs have been archived yet.
-    </div>
 
-  </section>
+<!-- =========================================================
+     MUSIC
+========================================================= -->
 
+<section
+  class="section music-section"
+  id="music"
+>
 
-  <!-- ==========================================================
-       ARCHIVE
-       ========================================================== -->
+  <div class="container">
 
-  <section
-    class="view"
-    id="view-archive"
-  >
-
-    <div class="section-head">
+    <div class="section-header reveal">
 
       <div>
 
-        <p class="eyebrow">
-          Underground / 002
+        <div class="section-number">
+          04 / 06
+        </div>
+
+        <div class="section-label">
+          Sound / frequencies
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <h2 class="section-title">
+          Sounds from<br>
+          below.
+        </h2>
+
+        <p class="section-intro">
+          Music for empty streets, last trains,
+          cigarette smoke and walking home at 4AM.
         </p>
 
-        <h2>
-          The Archive
+      </div>
+
+    </div>
+
+
+    <div class="music-player reveal">
+
+
+      <div class="track">
+
+        <div class="track-number">
+          001
+        </div>
+
+        <div>
+
+          <div class="track-title">
+            Concrete Dreams
+          </div>
+
+          <div class="track-artist">
+            Tim / Field Recording
+          </div>
+
+        </div>
+
+        <div class="track-year">
+          2026
+        </div>
+
+        <button
+          class="play-button"
+          data-audio=""
+          aria-label="Play"
+        >
+          ▶
+        </button>
+
+      </div>
+
+
+      <div class="track">
+
+        <div class="track-number">
+          002
+        </div>
+
+        <div>
+
+          <div class="track-title">
+            03:42 AM
+          </div>
+
+          <div class="track-artist">
+            Night Transmission
+          </div>
+
+        </div>
+
+        <div class="track-year">
+          2025
+        </div>
+
+        <button
+          class="play-button"
+          data-audio=""
+          aria-label="Play"
+        >
+          ▶
+        </button>
+
+      </div>
+
+
+      <div class="track">
+
+        <div class="track-number">
+          003
+        </div>
+
+        <div>
+
+          <div class="track-title">
+            Under the Overpass
+          </div>
+
+          <div class="track-artist">
+            Unknown Frequency
+          </div>
+
+        </div>
+
+        <div class="track-year">
+          2024
+        </div>
+
+        <button
+          class="play-button"
+          data-audio=""
+          aria-label="Play"
+        >
+          ▶
+        </button>
+
+      </div>
+
+
+      <div class="track">
+
+        <div class="track-number">
+          004
+        </div>
+
+        <div>
+
+          <div class="track-title">
+            Static / Istanbul
+          </div>
+
+          <div class="track-artist">
+            Field Notes
+          </div>
+
+        </div>
+
+        <div class="track-year">
+          2026
+        </div>
+
+        <button
+          class="play-button"
+          data-audio=""
+          aria-label="Play"
+        >
+          ▶
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     WRITING
+========================================================= -->
+
+<section
+  class="section"
+  id="writing"
+>
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+
+        <div class="section-number">
+          05 / 06
+        </div>
+
+        <div class="section-label">
+          Writing / observations
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <h2 class="section-title">
+          Notes from<br>
+          the edge.
+        </h2>
+
+        <p class="section-intro">
+          Short observations about cities, music,
+          people, photography and everything that
+          happens between destinations.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="writing-list reveal">
+
+
+      <a href="#" class="post">
+
+        <div class="post-date">
+          AUG 14 / 26
+        </div>
+
+        <div>
+
+          <div class="post-title">
+            Why empty streets feel louder
+          </div>
+
+          <div class="post-excerpt">
+            There is a particular silence that only appears
+            after the city has gone home.
+          </div>
+
+        </div>
+
+        <div class="post-arrow">
+          →
+        </div>
+
+      </a>
+
+
+      <a href="#" class="post">
+
+        <div class="post-date">
+          JUL 28 / 26
+        </div>
+
+        <div>
+
+          <div class="post-title">
+            Photographing things before they disappear
+          </div>
+
+          <div class="post-excerpt">
+            Some places exist for decades. Some exist
+            for a single night.
+          </div>
+
+        </div>
+
+        <div class="post-arrow">
+          →
+        </div>
+
+      </a>
+
+
+      <a href="#" class="post">
+
+        <div class="post-date">
+          JUN 09 / 26
+        </div>
+
+        <div>
+
+          <div class="post-title">
+            The city has its own soundtrack
+          </div>
+
+          <div class="post-excerpt">
+            Trains, generators, footsteps, distant bass,
+            metal shutters closing.
+          </div>
+
+        </div>
+
+        <div class="post-arrow">
+          →
+        </div>
+
+      </a>
+
+
+      <a href="#" class="post">
+
+        <div class="post-date">
+          MAY 17 / 26
+        </div>
+
+        <div>
+
+          <div class="post-title">
+            Nobody owns the night
+          </div>
+
+          <div class="post-excerpt">
+            A few thoughts about public space,
+            anonymity and disappearing into a crowd.
+          </div>
+
+        </div>
+
+        <div class="post-arrow">
+          →
+        </div>
+
+      </a>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ABOUT
+========================================================= -->
+
+<section
+  class="section"
+  id="about"
+>
+
+  <div class="container">
+
+    <div class="section-header reveal">
+
+      <div>
+
+        <div class="section-number">
+          06 / 06
+        </div>
+
+        <div class="section-label">
+          Person / signal
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <h2 class="section-title">
+          Who is<br>
+          behind this?
         </h2>
 
       </div>
 
-      <span class="section-number">
-        SIGNAL / FOUND
-      </span>
-
     </div>
 
 
-    <div class="archive-intro">
-
-      <p>
-
-        Not everything needs to become a category.
-        Some things are better left slightly undefined.
-
-      </p>
-
-      <p>
-
-        Music, graffiti, writing, photographs,
-        references and whatever else survives
-        long enough to become interesting.
-
-      </p>
-
-    </div>
+    <div class="about-grid reveal">
 
 
-    <div class="archive-grid">
+      <div>
 
+        <div class="about-big">
 
-      <article class="archive-card">
-
-        <div class="archive-index">
-          001 / WALLS
-        </div>
-
-        <h3>
-          Graffiti
-        </h3>
-
-        <p>
-
-          Paint on concrete.
-          Names without biographies.
-          Messages that weren't meant
-          for everyone.
-
-        </p>
-
-      </article>
-
-
-      <article class="archive-card">
-
-        <div class="archive-index">
-          002 / SOUND
-        </div>
-
-        <h3>
-          Music
-        </h3>
-
-        <p>
-
-          Records, mixes, artists,
-          strange sounds and the music
-          that belongs to certain nights.
-
-        </p>
-
-      </article>
-
-
-      <article class="archive-card">
-
-        <div class="archive-index">
-          003 / NOTES
-        </div>
-
-        <h3>
-          Field Notes
-        </h3>
-
-        <p>
-
-          Observations from streets,
-          rooms, trains, photographs
-          and places that don't need
-          to be named.
-
-        </p>
-
-      </article>
-
-
-      <article class="archive-card">
-
-        <div class="archive-index">
-          004 / TEXT
-        </div>
-
-        <h3>
-          Writing
-        </h3>
-
-        <p>
-
-          Short essays, unfinished
-          thoughts, fragments and
-          things that refuse to become
-          conventional blog posts.
-
-        </p>
-
-      </article>
-
-
-      <article class="archive-card">
-
-        <div class="archive-index">
-          005 / SIGNAL
-        </div>
-
-        <h3>
-          References
-        </h3>
-
-        <p>
-
-          Films, books, images, artists,
-          places and other pieces of
-          culture worth following.
-
-        </p>
-
-      </article>
-
-
-      <article class="archive-card">
-
-        <div class="archive-index">
-          006 / UNKNOWN
-        </div>
-
-        <h3>
-          Unclassified
-        </h3>
-
-        <p>
-
-          Things found without a
-          category yet.
+          I'm Tim.
 
           <br><br>
 
-          Maybe that's the point.
-
-        </p>
-
-      </article>
-
-
-    </div>
-
-  </section>
-
-
-  <!-- ==========================================================
-       ABOUT
-       ========================================================== -->
-
-  <section
-    class="view"
-    id="view-about"
-  >
-
-    <div class="section-head">
-
-      <div>
-
-        <p class="eyebrow">
-          The Observer
-        </p>
-
-        <h2>
-          About
-        </h2>
-
-      </div>
-
-      <span class="section-number">
-        PERSON / 001
-      </span>
-
-    </div>
-
-
-    <div class="about-layout">
-
-
-      <div>
-
-        <p class="about-statement">
-
-          I like looking at the things most people
-          walk past.
-
-        </p>
-
-
-        <p class="about-copy">
-
-          This site is a personal space for collecting
-          the things that catch my attention.
-
-          <br><br>
-
-          Photography, graffiti, music, underground
-          culture, places, people and ideas.
-
-          <br><br>
-
-          There is no particular order to it.
-
-          The archive is supposed to feel like walking
-          through a city at night — you turn a corner
-          without knowing what you'll find.
-
-        </p>
-
-      </div>
-
-
-      <div>
-
-        <ul class="kv-list">
-
-          <li>
-            <b>Based in</b>
-            Istanbul
-          </li>
-
-          <li>
-            <b>Focus</b>
-            Photography / Software
-          </li>
-
-          <li>
-            <b>Interest</b>
-            Underground culture
-          </li>
-
-          <li>
-            <b>Currently</b>
-            Looking around
-          </li>
-
-          <li>
-            <b>Status</b>
-            Unclassified
-          </li>
-
-        </ul>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ==========================================================
-       CONTACT
-       ========================================================== -->
-
-  <section
-    class="view"
-    id="view-contact"
-  >
-
-    <div class="section-head">
-
-      <div>
-
-        <p class="eyebrow">
-          Open Channel
-        </p>
-
-        <h2>
-          Contact
-        </h2>
-
-      </div>
-
-      <span class="section-number">
-        SIGNAL / OPEN
-      </span>
-
-    </div>
-
-
-    <div class="contact-layout">
-
-
-      <div>
-
-        <p class="contact-big">
-
-          Send something
-          into the dark.
-
-        </p>
-
-      </div>
-
-
-      <div class="contact-list">
-
-
-        <div class="contact-item">
-
-          <span class="contact-label">
-            Email
-          </span>
-
-          <a
-            class="contact-value"
-            href="mailto:you@example.com"
-          >
-            you@example.com
-          </a>
+          I collect
+          <em>strange things.</em>
 
         </div>
 
+      </div>
 
-        <div class="contact-item">
 
-          <span class="contact-label">
-            GitHub
-          </span>
+      <div>
 
-          <a
-            class="contact-value"
-            href="https://github.com/yourhandle"
-            target="_blank"
-            rel="noopener"
-          >
-            github.com/yourhandle
-          </a>
+        <div class="about-copy">
+
+          <p>
+            This isn't really a portfolio.
+          </p>
+
+          <p>
+            It's an archive of things I don't want
+            to forget — photographs, music, places,
+            graffiti, ideas and conversations that
+            happen when the rest of the city is asleep.
+          </p>
+
+          <p>
+            Think of this place as a small window
+            into the things I find interesting.
+          </p>
+
+
+          <div class="about-facts">
+
+            <div class="fact">
+
+              <span>Location</span>
+
+              <span>Istanbul</span>
+
+            </div>
+
+
+            <div class="fact">
+
+              <span>Currently</span>
+
+              <span>Looking around</span>
+
+            </div>
+
+
+            <div class="fact">
+
+              <span>Interested in</span>
+
+              <span>Images / sound / cities</span>
+
+            </div>
+
+
+            <div class="fact">
+
+              <span>Status</span>
+
+              <span>Still searching</span>
+
+            </div>
+
+          </div>
 
         </div>
-
-
-        <div class="contact-item">
-
-          <span class="contact-label">
-            Instagram
-          </span>
-
-          <a
-            class="contact-value"
-            href="#"
-          >
-            @yourhandle
-          </a>
-
-        </div>
-
 
       </div>
 
+
     </div>
 
-  </section>
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CONTACT
+========================================================= -->
+
+<section
+  class="section contact-section"
+  id="contact"
+>
+
+  <div class="container">
+
+    <div class="contact-content reveal">
+
+      <div class="kicker">
+
+        <span class="kicker-line"></span>
+
+        End of transmission
+
+      </div>
+
+
+      <h2 class="contact-title">
+
+        <span>Keep in</span>
+
+        <br>
+
+        touch.
+
+      </h2>
+
+
+      <a
+        class="contact-email"
+        href="mailto:you@example.com"
+      >
+        you@example.com →
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
 
 
 </main>
 
 
-<!-- ============================================================
-     DIVIDER
-     ============================================================ -->
 
-<div class="sprockets">
-
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-
-</div>
-
-
-<!-- ============================================================
+<!-- =========================================================
      FOOTER
-     ============================================================ -->
+========================================================= -->
 
-<footer class="site-footer">
+<footer>
 
-  <span class="footer-mark">
-    ◌
-  </span>
+  <div class="footer-inner">
 
-  &nbsp;
+    <span>
+      TIM / AFTER DARK
+    </span>
 
-  THE OBSERVER / ARCHIVE ACTIVE
+    <span>
+      NOTHING HERE IS FINISHED
+    </span>
 
-  &nbsp;
+    <span>
+      © 2026
+    </span>
 
-  <span class="footer-mark">
-    ◌
-  </span>
+  </div>
 
 </footer>
 
 
-<!-- ============================================================
-     FIREBASE + SITE LOGIC
-     ============================================================ -->
 
-<script type="module">
+<!-- =========================================================
+     SPACE / STARS / FALLING STARS / CONSTELLATIONS
+========================================================= -->
 
+<script>
 
-  /* ==========================================================
-     FIREBASE SETUP
-     ========================================================== */
+const canvas = document.getElementById("space");
+const ctx = canvas.getContext("2d");
 
-  import {
-    initializeApp
-  }
-  from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+let width;
+let height;
+let dpr;
 
+let stars = [];
+let shootingStars = [];
+let constellationStars = [];
 
-  import {
+function resizeCanvas() {
 
-    getDatabase,
-    ref,
-    push,
-    remove,
-    onValue,
-    query,
-    orderByChild,
-    serverTimestamp
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-  }
-  from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  width = window.innerWidth;
+  height = window.innerHeight;
 
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
 
-  const firebaseConfig = {
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
 
-    apiKey:
-      "YOUR_API_KEY",
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    authDomain:
-      "thegaze-d8e86.firebaseapp.com",
+  createStars();
+  createConstellation();
 
-    databaseURL:
-      "https://thegaze-d8e86-default-rtdb.europe-west1.firebasedatabase.app",
+}
 
-    projectId:
-      "thegaze-d8e86",
+window.addEventListener("resize", resizeCanvas);
 
-    messagingSenderId:
-      "YOUR_SENDER_ID",
 
-    appId:
-      "YOUR_APP_ID"
+/* ---------------------------------------------------------
+   NORMAL STARS
+--------------------------------------------------------- */
 
-  };
+function createStars() {
 
+  stars = [];
 
-  let db;
+  const amount = Math.min(
+    380,
+    Math.floor(
+      (width * height) / 6500
+    )
+  );
 
-  let firebaseReady =
-    false;
+  for (let i = 0; i < amount; i++) {
 
+    stars.push({
 
-  try{
+      x: Math.random() * width,
 
-    const app =
-      initializeApp(
-        firebaseConfig
-      );
+      y: Math.random() * height,
 
+      radius:
+        Math.random() < .85
+          ? Math.random() * 1.1
+          : Math.random() * 1.8,
 
-    db =
-      getDatabase(app);
+      alpha:
+        .15 +
+        Math.random() * .65,
 
+      twinkle:
+        .004 +
+        Math.random() * .012,
 
-    firebaseReady =
-      firebaseConfig.apiKey !==
-      "YOUR_API_KEY";
+      phase:
+        Math.random() * Math.PI * 2
 
-
-  }catch(error){
-
-    console.error(
-      "Firebase failed to initialize:",
-      error
-    );
-
-  }
-
-
-  /* ==========================================================
-     FILE -> BASE64
-     ========================================================== */
-
-  function fileToBase64(file){
-
-    return new Promise(
-      (resolve,reject)=>{
-
-        const reader =
-          new FileReader();
-
-
-        reader.onload =
-          () =>
-            resolve(
-              reader.result
-            );
-
-
-        reader.onerror =
-          reject;
-
-
-        reader.readAsDataURL(
-          file
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ==========================================================
-     NAVIGATION
-     ========================================================== */
-
-  const views =
-    document.querySelectorAll(
-      ".view"
-    );
-
-
-  const navMenu =
-    document.getElementById(
-      "navMenu"
-    );
-
-
-  const navToggle =
-    document.getElementById(
-      "navToggle"
-    );
-
-
-  function showView(name){
-
-    views.forEach(
-      view => {
-
-        view.classList.toggle(
-          "active",
-          view.id ===
-            "view-" + name
-        );
-
-      }
-    );
-
-
-    document
-      .querySelectorAll(
-        "[data-view]"
-      )
-      .forEach(
-        button => {
-
-          if(
-            button.tagName ===
-              "BUTTON" &&
-            button.closest("nav")
-          ){
-
-            button.classList.toggle(
-              "active",
-              button.dataset.view ===
-                name
-            );
-
-          }
-
-        }
-      );
-
-
-    navMenu.classList.remove(
-      "open"
-    );
-
-
-    navToggle.setAttribute(
-      "aria-expanded",
-      "false"
-    );
-
-
-    window.scrollTo({
-      top:0,
-      behavior:"smooth"
     });
 
-
-    history.replaceState(
-      null,
-      "",
-      "#" + name
-    );
-
   }
 
+}
 
-  document
-    .querySelectorAll(
-      "[data-view]"
-    )
-    .forEach(
-      element => {
 
-        element.addEventListener(
-          "click",
-          () => {
+/* ---------------------------------------------------------
+   CONSTELLATION
+--------------------------------------------------------- */
 
-            showView(
-              element.dataset.view
-            );
+function createConstellation() {
 
-          }
-        );
+  constellationStars = [];
 
-      }
-    );
+  const count = 14;
 
+  for (let i = 0; i < count; i++) {
 
-  navToggle.addEventListener(
-    "click",
-    () => {
-
-      const open =
-        navMenu.classList.toggle(
-          "open"
-        );
-
-
-      navToggle.setAttribute(
-        "aria-expanded",
-        String(open)
-      );
-
-    }
-  );
-
-
-  const initialView =
-    location.hash
-      .replace("#","") ||
-      "home";
-
-
-  if(
-    [
-      "home",
-      "gallery",
-      "archive",
-      "about",
-      "contact"
-    ].includes(initialView)
-  ){
-
-    showView(
-      initialView
-    );
-
-  }
-
-
-  /* ==========================================================
-     GALLERY
-     ========================================================== */
-
-  const grid =
-    document.getElementById(
-      "galleryGrid"
-    );
-
-
-  const emptyState =
-    document.getElementById(
-      "emptyState"
-    );
-
-
-  const photoInput =
-    document.getElementById(
-      "photoInput"
-    );
-
-
-  const fileLabelText =
-    document.getElementById(
-      "fileLabelText"
-    );
-
-
-  const captionInput =
-    document.getElementById(
-      "captionInput"
-    );
-
-
-  const uploadBtn =
-    document.getElementById(
-      "uploadBtn"
-    );
-
-
-  const statusEl =
-    document.getElementById(
-      "upload-status"
-    );
-
-
-  photoInput.addEventListener(
-    "change",
-    () => {
-
-      fileLabelText.textContent =
-        photoInput.files[0]?.name ||
-        "Choose photo";
-
-    }
-  );
-
-
-  /* ==========================================================
-     HTML ESCAPE
-     ========================================================== */
-
-  function escapeHtml(str){
-
-    const div =
-      document.createElement(
-        "div"
-      );
-
-
-    div.textContent =
-      str;
-
-
-    return div.innerHTML;
-
-  }
-
-
-  /* ==========================================================
-     RENDER PHOTOS
-     ========================================================== */
-
-  function renderPhotos(
-    photos
-  ){
-
-    grid.innerHTML = "";
-
-
-    emptyState.style.display =
-      photos.length
-        ? "none"
-        : "block";
-
-
-    photos.forEach(
-      photo => {
-
-        const figure =
-          document.createElement(
-            "figure"
-          );
-
-
-        figure.className =
-          "card";
-
-
-        const image =
-          document.createElement(
-            "img"
-          );
-
-
-        image.src =
-          photo.url;
-
-
-        image.alt =
-          photo.caption
-            ? photo.caption
-            : "Archived photograph";
-
-
-        image.loading =
-          "lazy";
-
-
-        figure.appendChild(
-          image
-        );
-
-
-        if(photo.caption){
-
-          const caption =
-            document.createElement(
-              "figcaption"
-            );
-
-
-          caption.textContent =
-            photo.caption;
-
-
-          figure.appendChild(
-            caption
-          );
-
-        }
-
-
-        const deleteButton =
-          document.createElement(
-            "button"
-          );
-
-
-        deleteButton.className =
-          "card-delete";
-
-
-        deleteButton.title =
-          "Delete photograph";
-
-
-        deleteButton.textContent =
-          "✕";
-
-
-        deleteButton.addEventListener(
-          "click",
-          event => {
-
-            event.stopPropagation();
-
-            deletePhoto(
-              photo
-            );
-
-          }
-        );
-
-
-        figure.appendChild(
-          deleteButton
-        );
-
-
-        grid.appendChild(
-          figure
-        );
-
-      }
-    );
-
-  }
-
-
-  /* ==========================================================
-     UPLOAD
-     ========================================================== */
-
-  const MAX_BYTES =
-    4 * 1024 * 1024;
-
-
-  async function uploadPhoto(){
-
-    const file =
-      photoInput.files[0];
-
-
-    if(!file){
-
-      statusEl.textContent =
-        "Choose a photograph first.";
-
-      return;
-
-    }
-
-
-    if(!firebaseReady){
-
-      statusEl.textContent =
-        "Firebase isn't configured yet — add your project keys.";
-
-      return;
-
-    }
-
-
-    if(
-      file.size >
-      MAX_BYTES
-    ){
-
-      statusEl.textContent =
-        "That photograph is too large. Maximum size is about 4MB.";
-
-      return;
-
-    }
-
-
-    uploadBtn.disabled =
-      true;
-
-
-    statusEl.textContent =
-      "Transmitting photograph…";
-
-
-    try{
-
-      const dataUrl =
-        await fileToBase64(
-          file
-        );
-
-
-      await push(
-        ref(
-          db,
-          "photos"
-        ),
-        {
-
-          url:dataUrl,
-
-          caption:
-            captionInput.value.trim(),
-
-          createdAt:
-            serverTimestamp()
-
-        }
-      );
-
-
-      photoInput.value =
-        "";
-
-      captionInput.value =
-        "";
-
-      fileLabelText.textContent =
-        "Choose photo";
-
-
-      statusEl.textContent =
-        "Photograph archived.";
-
-
-      setTimeout(
-        () => {
-
-          statusEl.textContent =
-            "";
-
-        },
-        2500
-      );
-
-
-    }catch(error){
-
-      console.error(
-        error
-      );
-
-
-      statusEl.textContent =
-        "Transmission failed — check Firebase configuration.";
-
-    }finally{
-
-      uploadBtn.disabled =
-        false;
-
-    }
-
-  }
-
-
-  /* ==========================================================
-     DELETE
-     ========================================================== */
-
-  async function deletePhoto(
-    photo
-  ){
-
-    if(
-      !confirm(
-        "Remove this photograph from the archive?"
-      )
-    ){
-
-      return;
-
-    }
-
-
-    try{
-
-      await remove(
-        ref(
-          db,
-          "photos/" +
-          photo.id
-        )
-      );
-
-
-    }catch(error){
-
-      console.error(
-        error
-      );
-
-
-      alert(
-        "Could not remove photograph."
-      );
-
-    }
-
-  }
-
-
-  uploadBtn.addEventListener(
-    "click",
-    uploadPhoto
-  );
-
-
-  /* ==========================================================
-     FIREBASE REALTIME LISTENER
-     ========================================================== */
-
-  if(firebaseReady){
-
-    const photosQuery =
-      query(
-        ref(
-          db,
-          "photos"
-        ),
-        orderByChild(
-          "createdAt"
-        )
-      );
-
-
-    onValue(
-      photosQuery,
-      snapshot => {
-
-        const photos =
-          [];
-
-
-        snapshot.forEach(
-          child => {
-
-            photos.push({
-
-              id:
-                child.key,
-
-              ...child.val()
-
-            });
-
-          }
-        );
-
-
-        photos.reverse();
-
-
-        renderPhotos(
-          photos
-        );
-
-      },
-      error => {
-
-        console.error(
-          error
-        );
-
-
-        statusEl.textContent =
-          "Couldn't load the archive — check Firebase rules.";
-
-      }
-    );
-
-
-  }else{
-
-    emptyState.style.display =
-      "block";
-
-
-    emptyState.textContent =
-      "Firebase configuration required to activate the photograph archive.";
-
-  }
-
-
-  /* ==========================================================
-     CELESTIAL ENGINE
-     ========================================================== */
-
-  const celestialCanvas =
-    document.getElementById(
-      "celestialCanvas"
-    );
-
-
-  const celestialContext =
-    celestialCanvas.getContext(
-      "2d"
-    );
-
-
-  let celestialWidth = 0;
-  let celestialHeight = 0;
-  let celestialDpr = 1;
-
-  let stars = [];
-  let shootingStars = [];
-  let constellationLines = [];
-
-  let mouseX = 0;
-  let mouseY = 0;
-
-  let targetMouseX = 0;
-  let targetMouseY = 0;
-
-
-  const celestialSettings = {
-
-    desktopStars:190,
-
-    mobileStars:95,
-
-    shootingStarChance:.0018,
-
-    maxShootingStars:2,
-
-    constellationDistance:125,
-
-    constellationOpacity:.11
-
-  };
-
-
-  /* ----------------------------------------------------------
-     RESIZE
-     ---------------------------------------------------------- */
-
-  function resizeCelestialCanvas(){
-
-    celestialDpr =
-      Math.min(
-        window.devicePixelRatio || 1,
-        2
-      );
-
-
-    celestialWidth =
-      window.innerWidth;
-
-
-    celestialHeight =
-      window.innerHeight;
-
-
-    celestialCanvas.width =
-      celestialWidth *
-      celestialDpr;
-
-
-    celestialCanvas.height =
-      celestialHeight *
-      celestialDpr;
-
-
-    celestialCanvas.style.width =
-      celestialWidth +
-      "px";
-
-
-    celestialCanvas.style.height =
-      celestialHeight +
-      "px";
-
-
-    celestialContext.setTransform(
-      celestialDpr,
-      0,
-      0,
-      celestialDpr,
-      0,
-      0
-    );
-
-
-    createStars();
-
-  }
-
-
-  window.addEventListener(
-    "resize",
-    resizeCelestialCanvas
-  );
-
-
-  /* ----------------------------------------------------------
-     RANDOM
-     ---------------------------------------------------------- */
-
-  function randomBetween(
-    min,
-    max
-  ){
-
-    return (
-      Math.random() *
-      (max-min)
-    ) + min;
-
-  }
-
-
-  /* ----------------------------------------------------------
-     CREATE STARS
-     ---------------------------------------------------------- */
-
-  function createStars(){
-
-    stars = [];
-
-
-    const mobile =
-      window.innerWidth <
-      700;
-
-
-    const count =
-      mobile
-        ? celestialSettings.mobileStars
-        : celestialSettings.desktopStars;
-
-
-    for(
-      let i=0;
-      i<count;
-      i++
-    ){
-
-      const depth =
-        randomBetween(
-          .15,
-          1
-        );
-
-
-      stars.push({
-
-        x:
-          Math.random() *
-          celestialWidth,
-
-        y:
-          Math.random() *
-          celestialHeight,
-
-        radius:
-          randomBetween(
-            .35,
-            1.45
-          ) *
-          depth,
-
-        depth,
-
-        alpha:
-          randomBetween(
-            .15,
-            .7
-          ),
-
-        twinkle:
-          randomBetween(
-            .0008,
-            .0025
-          ),
-
-        phase:
-          Math.random() *
-          Math.PI *
-          2,
-
-        color:
-          Math.random() <
-          .82
-
-            ? "white"
-
-            :
-
-            (
-              Math.random() <
-              .5
-
-                ? "brass"
-
-                : "blue"
-            )
-
-      });
-
-    }
-
-
-    buildConstellations();
-
-  }
-
-
-  /* ----------------------------------------------------------
-     CONSTELLATIONS
-     ---------------------------------------------------------- */
-
-  function buildConstellations(){
-
-    constellationLines =
-      [];
-
-
-    const candidates =
-      stars.filter(
-        star =>
-          star.depth >
-          .45
-      );
-
-
-    for(
-      let i=0;
-      i<candidates.length;
-      i++
-    ){
-
-      const a =
-        candidates[i];
-
-
-      for(
-        let j=i+1;
-        j<candidates.length;
-        j++
-      ){
-
-        const b =
-          candidates[j];
-
-
-        const dx =
-          a.x-b.x;
-
-
-        const dy =
-          a.y-b.y;
-
-
-        const distance =
-          Math.sqrt(
-            dx*dx +
-            dy*dy
-          );
-
-
-        if(
-          distance <
-          celestialSettings.constellationDistance
-        ){
-
-          if(
-            Math.random() <
-            .055
-          ){
-
-            constellationLines.push({
-              a,
-              b
-            });
-
-          }
-
-        }
-
-      }
-
-    }
-
-  }
-
-
-  /* ----------------------------------------------------------
-     STAR POSITION
-     ---------------------------------------------------------- */
-
-  function getStarPosition(
-    star
-  ){
-
-    const parallaxX =
-      mouseX *
-      star.depth *
-      10;
-
-
-    const parallaxY =
-      mouseY *
-      star.depth *
-      6;
-
-
-    return {
+    constellationStars.push({
 
       x:
-        star.x +
-        parallaxX,
+        width * .65 +
+        Math.random() * width * .25,
 
       y:
-        star.y +
-        parallaxY
+        height * .15 +
+        Math.random() * height * .35,
 
-    };
+      r:
+        Math.random() * 1.4 + .6
+
+    });
 
   }
 
-
-  /* ----------------------------------------------------------
-     DRAW STAR
-     ---------------------------------------------------------- */
-
-  function drawStar(
-    star,
-    time
-  ){
-
-    const position =
-      getStarPosition(
-        star
-      );
+}
 
 
-    const twinkle =
-      Math.sin(
-        time *
-        star.twinkle +
-        star.phase
-      );
+/* ---------------------------------------------------------
+   SHOOTING STAR
+--------------------------------------------------------- */
+
+function spawnShootingStar() {
+
+  const startX =
+    Math.random() * width * 1.2;
+
+  const startY =
+    Math.random() * height * .55;
+
+  shootingStars.push({
+
+    x: startX,
+
+    y: startY,
+
+    length:
+      80 +
+      Math.random() * 160,
+
+    speed:
+      9 +
+      Math.random() * 8,
+
+    angle:
+      Math.PI / 4 +
+      (Math.random() * .18 - .09),
+
+    life: 1
+
+  });
+
+}
 
 
-    const alpha =
-      Math.max(
-        .05,
-        star.alpha +
-        twinkle*.14
-      );
+/* randomly create shooting stars */
+
+setInterval(() => {
+
+  if (Math.random() < .75) {
+
+    spawnShootingStar();
+
+  }
+
+}, 3200);
 
 
-    let color;
+/* ---------------------------------------------------------
+   DRAW
+--------------------------------------------------------- */
+
+function drawSpace(time) {
+
+  ctx.clearRect(
+    0,
+    0,
+    width,
+    height
+  );
 
 
-    if(
-      star.color ===
-      "brass"
-    ){
+  /* subtle nebula */
 
-      color =
-        `rgba(183,149,88,${alpha})`;
-
-    }else if(
-      star.color ===
-      "blue"
-    ){
-
-      color =
-        `rgba(142,165,178,${alpha})`;
-
-    }else{
-
-      color =
-        `rgba(220,226,225,${alpha})`;
-
-    }
-
-
-    celestialContext.beginPath();
-
-
-    celestialContext.arc(
-      position.x,
-      position.y,
-      star.radius,
+  const nebula =
+    ctx.createRadialGradient(
+      width * .55,
+      height * .2,
       0,
-      Math.PI*2
+      width * .55,
+      height * .2,
+      width * .7
     );
 
+  nebula.addColorStop(
+    0,
+    "rgba(91,82,210,.08)"
+  );
 
-    celestialContext.fillStyle =
-      color;
+  nebula.addColorStop(
+    .45,
+    "rgba(55,55,130,.025)"
+  );
+
+  nebula.addColorStop(
+    1,
+    "rgba(0,0,0,0)"
+  );
+
+  ctx.fillStyle = nebula;
+
+  ctx.fillRect(
+    0,
+    0,
+    width,
+    height
+  );
 
 
-    celestialContext.fill();
+  /* stars */
+
+  stars.forEach(star => {
+
+    const alpha =
+      star.alpha +
+      Math.sin(
+        time * star.twinkle +
+        star.phase
+      ) * .16;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      star.x,
+      star.y,
+      star.radius,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fillStyle =
+      `rgba(225,232,245,${Math.max(
+        .04,
+        alpha
+      )})`;
+
+    ctx.fill();
+
+  });
 
 
-    if(
-      star.radius >
-      1
-    ){
+  /* constellation */
 
-      celestialContext.beginPath();
+  ctx.lineWidth = .5;
 
+  for (
+    let i = 0;
+    i < constellationStars.length;
+    i++
+  ) {
 
-      celestialContext.arc(
-        position.x,
-        position.y,
-        star.radius*4,
-        0,
-        Math.PI*2
-      );
+    const a =
+      constellationStars[i];
 
+    for (
+      let j = i + 1;
+      j < constellationStars.length;
+      j++
+    ) {
 
-      const glow =
-        celestialContext.createRadialGradient(
-          position.x,
-          position.y,
-          0,
-          position.x,
-          position.y,
-          star.radius*4
+      const b =
+        constellationStars[j];
+
+      const dx = a.x - b.x;
+      const dy = a.y - b.y;
+
+      const distance =
+        Math.sqrt(
+          dx * dx +
+          dy * dy
         );
 
+      if (distance < 170) {
 
-      glow.addColorStop(
-        0,
-        `rgba(
-          220,
-          226,
-          225,
-          ${alpha*.15}
-        )`
-      );
+        ctx.beginPath();
 
-
-      glow.addColorStop(
-        1,
-        "rgba(220,226,225,0)"
-      );
-
-
-      celestialContext.fillStyle =
-        glow;
-
-
-      celestialContext.fill();
-
-    }
-
-  }
-
-
-  /* ----------------------------------------------------------
-     DRAW CONSTELLATIONS
-     ---------------------------------------------------------- */
-
-  function drawConstellations(){
-
-    constellationLines.forEach(
-      line => {
-
-        const a =
-          getStarPosition(
-            line.a
-          );
-
-
-        const b =
-          getStarPosition(
-            line.b
-          );
-
-
-        celestialContext.beginPath();
-
-
-        celestialContext.moveTo(
+        ctx.moveTo(
           a.x,
           a.y
         );
 
-
-        celestialContext.lineTo(
+        ctx.lineTo(
           b.x,
           b.y
         );
 
+        ctx.strokeStyle =
+          `rgba(130,118,255,${
+            .10 *
+            (1 - distance / 170)
+          })`;
 
-        celestialContext.strokeStyle =
-          `rgba(
-            183,
-            149,
-            88,
-            ${celestialSettings.constellationOpacity}
-          )`;
-
-
-        celestialContext.lineWidth =
-          .45;
-
-
-        celestialContext.stroke();
+        ctx.stroke();
 
       }
-    );
-
-  }
-
-
-  /* ==========================================================
-     SHOOTING STARS
-     ========================================================== */
-
-  function createShootingStar(){
-
-    if(
-      shootingStars.length >=
-      celestialSettings.maxShootingStars
-    ){
-
-      return;
 
     }
 
-
-    const startX =
-      randomBetween(
-        celestialWidth*.35,
-        celestialWidth*1.05
-      );
-
-
-    const startY =
-      randomBetween(
-        -100,
-        celestialHeight*.42
-      );
-
-
-    const angle =
-      randomBetween(
-        Math.PI*.62,
-        Math.PI*.82
-      );
-
-
-    const speed =
-      randomBetween(
-        8,
-        15
-      );
-
-
-    shootingStars.push({
-
-      x:startX,
-
-      y:startY,
-
-      vx:
-        Math.cos(angle) *
-        speed,
-
-      vy:
-        Math.sin(angle) *
-        speed,
-
-      length:
-        randomBetween(
-          80,
-          190
-        ),
-
-      life:0,
-
-      maxLife:
-        randomBetween(
-          45,
-          90
-        ),
-
-      brightness:
-        randomBetween(
-          .45,
-          .9
-        )
-
-    });
-
   }
 
 
-  /* ----------------------------------------------------------
-     DRAW SHOOTING STAR
-     ---------------------------------------------------------- */
+  constellationStars.forEach(star => {
 
-  function drawShootingStar(
-    star
-  ){
+    ctx.beginPath();
 
-    const length =
-      star.length;
+    ctx.arc(
+      star.x,
+      star.y,
+      star.r,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fillStyle =
+      "rgba(174,166,255,.55)";
+
+    ctx.shadowBlur = 8;
+
+    ctx.shadowColor =
+      "rgba(130,118,255,.7)";
+
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+
+  });
 
 
-    const velocity =
-      Math.sqrt(
-        star.vx*star.vx +
-        star.vy*star.vy
+  /* shooting stars */
+
+  shootingStars.forEach(
+    star => {
+
+      const tailX =
+        star.x -
+        Math.cos(star.angle) *
+        star.length;
+
+      const tailY =
+        star.y -
+        Math.sin(star.angle) *
+        star.length;
+
+
+      const gradient =
+        ctx.createLinearGradient(
+          star.x,
+          star.y,
+          tailX,
+          tailY
+        );
+
+      gradient.addColorStop(
+        0,
+        `rgba(255,255,255,${star.life})`
+      );
+
+      gradient.addColorStop(
+        1,
+        "rgba(130,118,255,0)"
       );
 
 
-    const tailX =
-      star.x -
-      (
-        star.vx /
-        velocity
-      ) *
-      length;
+      ctx.beginPath();
 
-
-    const tailY =
-      star.y -
-      (
-        star.vy /
-        velocity
-      ) *
-      length;
-
-
-    const gradient =
-      celestialContext.createLinearGradient(
-        tailX,
-        tailY,
+      ctx.moveTo(
         star.x,
         star.y
       );
 
-
-    gradient.addColorStop(
-      0,
-      "rgba(183,149,88,0)"
-    );
-
-
-    gradient.addColorStop(
-      .7,
-      `rgba(
-        183,
-        149,
-        88,
-        ${star.brightness*.25}
-      )`
-    );
-
-
-    gradient.addColorStop(
-      1,
-      `rgba(
-        225,
-        230,
-        225,
-        ${star.brightness}
-      )`
-    );
-
-
-    celestialContext.beginPath();
-
-
-    celestialContext.moveTo(
-      tailX,
-      tailY
-    );
-
-
-    celestialContext.lineTo(
-      star.x,
-      star.y
-    );
-
-
-    celestialContext.strokeStyle =
-      gradient;
-
-
-    celestialContext.lineWidth =
-      randomBetween(
-        1,
-        1.8
+      ctx.lineTo(
+        tailX,
+        tailY
       );
 
+      ctx.strokeStyle =
+        gradient;
 
-    celestialContext.stroke();
+      ctx.lineWidth = 1.4;
+
+      ctx.stroke();
 
 
-    celestialContext.beginPath();
+      star.x +=
+        Math.cos(star.angle) *
+        star.speed;
+
+      star.y +=
+        Math.sin(star.angle) *
+        star.speed;
+
+      star.life -= .018;
+
+    }
+  );
 
 
-    celestialContext.arc(
-      star.x,
-      star.y,
-      1.4,
-      0,
-      Math.PI*2
+  shootingStars =
+    shootingStars.filter(
+      star =>
+        star.life > 0 &&
+        star.x < width + 300 &&
+        star.y < height + 300
     );
 
 
-    celestialContext.fillStyle =
-      `rgba(
-        240,
-        243,
-        237,
-        ${star.brightness}
-      )`;
+  requestAnimationFrame(drawSpace);
+
+}
+
+resizeCanvas();
+
+requestAnimationFrame(drawSpace);
+
+</script>
 
 
-    celestialContext.fill();
+
+<!-- =========================================================
+     SCROLL REVEALS
+========================================================= -->
+
+<script>
+
+const revealElements =
+  document.querySelectorAll(".reveal");
+
+const observer =
+  new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if (entry.isIntersecting) {
+
+          entry.target.classList.add(
+            "visible"
+          );
+
+        }
+
+      });
+
+    },
+    {
+      threshold: .12
+    }
+  );
+
+
+revealElements.forEach(
+  element =>
+    observer.observe(element)
+);
+
+
+/* ---------------------------------------------------------
+   ACTIVE NAVIGATION
+--------------------------------------------------------- */
+
+const sections =
+  document.querySelectorAll(
+    "main section[id]"
+  );
+
+const navItems =
+  document.querySelectorAll(
+    ".nav-links a"
+  );
+
+
+const navObserver =
+  new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if (
+          entry.isIntersecting
+        ) {
+
+          navItems.forEach(
+            link =>
+              link.classList.remove(
+                "active"
+              )
+          );
+
+
+          const active =
+            document.querySelector(
+              `.nav-links a[href="#${entry.target.id}"]`
+            );
+
+
+          if (active) {
+
+            active.classList.add(
+              "active"
+            );
+
+          }
+
+        }
+
+      });
+
+    },
+    {
+      rootMargin:
+        "-40% 0px -50% 0px"
+    }
+  );
+
+
+sections.forEach(
+  section =>
+    navObserver.observe(section)
+);
+
+
+/* ---------------------------------------------------------
+   MOBILE NAV
+--------------------------------------------------------- */
+
+const mobileToggle =
+  document.getElementById(
+    "mobileToggle"
+  );
+
+const navLinks =
+  document.getElementById(
+    "navLinks"
+  );
+
+
+mobileToggle.addEventListener(
+  "click",
+  () => {
+
+    navLinks.classList.toggle(
+      "open"
+    );
 
   }
+);
 
 
-  /* ----------------------------------------------------------
-     UPDATE SHOOTING STARS
-     ---------------------------------------------------------- */
+navLinks
+  .querySelectorAll("a")
+  .forEach(link => {
 
-  function updateShootingStars(){
+    link.addEventListener(
+      "click",
+      () => {
 
-    shootingStars.forEach(
-      star => {
-
-        star.x +=
-          star.vx;
-
-
-        star.y +=
-          star.vy;
-
-
-        star.life++;
+        navLinks.classList.remove(
+          "open"
+        );
 
       }
     );
 
+  });
 
-    shootingStars =
-      shootingStars.filter(
-        star => {
 
-          return (
+</script>
 
-            star.life <
-              star.maxLife &&
 
-            star.x >
-              -300 &&
 
-            star.x <
-              celestialWidth+300 &&
+<!-- =========================================================
+     FIREBASE GALLERY
+========================================================= -->
 
-            star.y >
-              -300 &&
+<script type="module">
 
-            star.y <
-              celestialHeight+300
+import {
+  initializeApp
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
+
+import {
+  getDatabase,
+  ref,
+  push,
+  remove,
+  onValue,
+  query,
+  orderByChild,
+  serverTimestamp
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+/* ---------------------------------------------------------
+   FIREBASE CONFIG
+--------------------------------------------------------- */
+
+const firebaseConfig = {
+
+  apiKey:
+    "YOUR_API_KEY",
+
+  authDomain:
+    "thegaze-d8e86.firebaseapp.com",
+
+  databaseURL:
+    "https://thegaze-d8e86-default-rtdb.europe-west1.firebasedatabase.app",
+
+  projectId:
+    "thegaze-d8e86",
+
+  messagingSenderId:
+    "YOUR_SENDER_ID",
+
+  appId:
+    "YOUR_APP_ID"
+
+};
+
+
+let db;
+let firebaseReady = false;
+
+
+try {
+
+  const app =
+    initializeApp(
+      firebaseConfig
+    );
+
+  db =
+    getDatabase(app);
+
+  firebaseReady =
+    firebaseConfig.apiKey !==
+    "YOUR_API_KEY";
+
+} catch (error) {
+
+  console.error(
+    "Firebase failed:",
+    error
+  );
+
+}
+
+
+/* ---------------------------------------------------------
+   ELEMENTS
+--------------------------------------------------------- */
+
+const grid =
+  document.getElementById(
+    "galleryGrid"
+  );
+
+const emptyState =
+  document.getElementById(
+    "emptyState"
+  );
+
+const photoInput =
+  document.getElementById(
+    "photoInput"
+  );
+
+const captionInput =
+  document.getElementById(
+    "captionInput"
+  );
+
+const uploadBtn =
+  document.getElementById(
+    "uploadBtn"
+  );
+
+const statusEl =
+  document.getElementById(
+    "upload-status"
+  );
+
+
+/* ---------------------------------------------------------
+   FILE → BASE64
+--------------------------------------------------------- */
+
+function fileToBase64(file) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        () =>
+          resolve(
+            reader.result
+          );
+
+      reader.onerror =
+        reject;
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+/* ---------------------------------------------------------
+   ESCAPE
+--------------------------------------------------------- */
+
+function escapeHtml(str) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.textContent = str;
+
+  return div.innerHTML;
+
+}
+
+
+/* ---------------------------------------------------------
+   RENDER
+--------------------------------------------------------- */
+
+function renderPhotos(photos) {
+
+  grid.innerHTML = "";
+
+  emptyState.style.display =
+    photos.length
+      ? "none"
+      : "block";
+
+
+  photos.forEach(
+    (photo, index) => {
+
+      const card =
+        document.createElement(
+          "article"
+        );
+
+      card.className =
+        "photo-card";
+
+
+      card.innerHTML = `
+
+        <img
+          src="${photo.url}"
+          alt="${
+            photo.caption
+              ? escapeHtml(
+                  photo.caption
+                )
+              : "Photograph"
+          }"
+          loading="lazy"
+        >
+
+        <div
+          class="photo-overlay"
+        ></div>
+
+        <div
+          class="photo-label"
+        >
+          ${
+            photo.caption
+              ? escapeHtml(
+                  photo.caption
+                )
+              : `ARCHIVE / ${
+                  String(index + 1)
+                    .padStart(3, "0")
+                }`
+          }
+        </div>
+
+        <button
+          class="delete-photo"
+          title="Delete"
+          style="
+            position:absolute;
+            top:12px;
+            right:12px;
+            background:rgba(5,6,9,.7);
+            color:white;
+            border:1px solid rgba(255,255,255,.2);
+            width:28px;
+            height:28px;
+            cursor:pointer;
+            opacity:0;
+            transition:.2s;
+          "
+        >
+          ×
+        </button>
+
+      `;
+
+
+      const deleteButton =
+        card.querySelector(
+          ".delete-photo"
+        );
+
+
+      card.addEventListener(
+        "mouseenter",
+        () => {
+          deleteButton.style.opacity =
+            "1";
+        }
+      );
+
+
+      card.addEventListener(
+        "mouseleave",
+        () => {
+          deleteButton.style.opacity =
+            "0";
+        }
+      );
+
+
+      deleteButton.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+          deletePhoto(
+            photo
           );
 
         }
       );
 
-  }
 
-
-  /* ==========================================================
-     CELESTIAL LOOP
-     ========================================================== */
-
-  function animateCelestial(
-    time
-  ){
-
-    celestialContext.clearRect(
-      0,
-      0,
-      celestialWidth,
-      celestialHeight
-    );
-
-
-    mouseX +=
-      (
-        targetMouseX -
-        mouseX
-      )*.025;
-
-
-    mouseY +=
-      (
-        targetMouseY -
-        mouseY
-      )*.025;
-
-
-    drawConstellations();
-
-
-    stars.forEach(
-      star =>
-        drawStar(
-          star,
-          time
-        )
-    );
-
-
-    if(
-      Math.random() <
-      celestialSettings.shootingStarChance
-    ){
-
-      createShootingStar();
+      grid.appendChild(
+        card
+      );
 
     }
+  );
+
+}
 
 
-    updateShootingStars();
+/* ---------------------------------------------------------
+   UPLOAD
+--------------------------------------------------------- */
+
+const MAX_BYTES =
+  4 * 1024 * 1024;
 
 
-    shootingStars.forEach(
-      drawShootingStar
-    );
+async function uploadPhoto() {
+
+  const file =
+    photoInput.files[0];
 
 
-    requestAnimationFrame(
-      animateCelestial
-    );
+  if (!file) {
+
+    statusEl.textContent =
+      "Choose a photograph first.";
+
+    return;
 
   }
 
 
-  /* ==========================================================
-     PARALLAX
-     ========================================================== */
+  if (!firebaseReady) {
 
-  window.addEventListener(
-    "pointermove",
-    event => {
+    statusEl.textContent =
+      "Firebase is not configured yet.";
 
-      targetMouseX =
-        (
-          event.clientX /
-          window.innerWidth -
-          .5
-        );
+    return;
+
+  }
 
 
-      targetMouseY =
-        (
-          event.clientY /
-          window.innerHeight -
-          .5
-        );
+  if (
+    file.size >
+    MAX_BYTES
+  ) {
+
+    statusEl.textContent =
+      "Photograph is too large. Maximum is about 4MB.";
+
+    return;
+
+  }
 
 
-      const zodiac =
-        document.querySelector(
-          ".zodiac-orbit"
-        );
+  uploadBtn.disabled =
+    true;
 
 
-      if(zodiac){
-
-        zodiac.style.setProperty(
-          "--zodiac-x",
-          `${targetMouseX*-18}px`
-        );
+  statusEl.textContent =
+    "Archiving…";
 
 
-        zodiac.style.setProperty(
-          "--zodiac-y",
-          `${targetMouseY*-12}px`
-        );
+  try {
 
-      }
-
-
-      const crossOne =
-        document.querySelector(
-          ".celestial-cross-one"
-        );
+    const dataUrl =
+      await fileToBase64(
+        file
+      );
 
 
-      const crossTwo =
-        document.querySelector(
-          ".celestial-cross-two"
-        );
+    await push(
+      ref(
+        db,
+        "photos"
+      ),
+      {
 
+        url:
+          dataUrl,
 
-      if(crossOne){
+        caption:
+          captionInput.value.trim(),
 
-        crossOne.style.setProperty(
-          "--cross-x",
-          `${targetMouseX*-28}px`
-        );
-
-
-        crossOne.style.setProperty(
-          "--cross-y",
-          `${targetMouseY*-20}px`
-        );
+        createdAt:
+          serverTimestamp()
 
       }
+    );
 
 
-      if(crossTwo){
+    photoInput.value =
+      "";
 
-        crossTwo.style.setProperty(
-          "--cross-x",
-          `${targetMouseX*18}px`
-        );
+    captionInput.value =
+      "";
 
 
-        crossTwo.style.setProperty(
-          "--cross-y",
-          `${targetMouseY*14}px`
-        );
+    statusEl.textContent =
+      "Archived.";
 
-      }
+
+    setTimeout(
+      () => {
+        statusEl.textContent =
+          "";
+      },
+      1800
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    statusEl.textContent =
+      "Archive failed. Check Firebase configuration.";
+
+  }
+
+
+  uploadBtn.disabled =
+    false;
+
+}
+
+
+uploadBtn.addEventListener(
+  "click",
+  uploadPhoto
+);
+
+
+/* ---------------------------------------------------------
+   DELETE
+--------------------------------------------------------- */
+
+async function deletePhoto(
+  photo
+) {
+
+  if (
+    !confirm(
+      "Remove this photograph from the archive?"
+    )
+  ) {
+    return;
+  }
+
+
+  try {
+
+    await remove(
+      ref(
+        db,
+        "photos/" +
+        photo.id
+      )
+    );
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    alert(
+      "Could not remove photograph."
+    );
+
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   REALTIME LISTENER
+--------------------------------------------------------- */
+
+if (firebaseReady) {
+
+  const photosQuery =
+    query(
+      ref(
+        db,
+        "photos"
+      ),
+      orderByChild(
+        "createdAt"
+      )
+    );
+
+
+  onValue(
+    photosQuery,
+    snapshot => {
+
+      const photos = [];
+
+
+      snapshot.forEach(
+        child => {
+
+          photos.push({
+
+            id:
+              child.key,
+
+            ...child.val()
+
+          });
+
+        }
+      );
+
+
+      photos.reverse();
+
+
+      renderPhotos(
+        photos
+      );
 
     },
-    {
-      passive:true
+    error => {
+
+      console.error(
+        error
+      );
+
+      statusEl.textContent =
+        "Could not load the archive.";
+
     }
   );
 
 
-  /* ==========================================================
-     START CELESTIAL SYSTEM
-     ========================================================== */
+} else {
 
-  resizeCelestialCanvas();
+  emptyState.style.display =
+    "block";
+
+  emptyState.textContent =
+    "Configure Firebase to activate the photograph archive.";
+
+}
+
+</script>
 
 
-  requestAnimationFrame(
-    animateCelestial
-  );
 
+<!-- =========================================================
+     MUSIC BUTTON PLACEHOLDER
+========================================================= -->
+
+<script>
+
+let currentAudio = null;
+
+document
+  .querySelectorAll(
+    ".play-button"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const source =
+          button.dataset.audio;
+
+
+        /*
+          Add an MP3 URL to data-audio
+          when you have a track.
+
+          Example:
+
+          data-audio="music/track.mp3"
+        */
+
+
+        if (!source) {
+
+          button.textContent =
+            "·";
+
+          setTimeout(
+            () => {
+              button.textContent =
+                "▶";
+            },
+            700
+          );
+
+          return;
+
+        }
+
+
+        if (
+          currentAudio &&
+          !currentAudio.paused
+        ) {
+
+          currentAudio.pause();
+
+          currentAudio = null;
+
+        }
+
+
+        currentAudio =
+          new Audio(
+            source
+          );
+
+
+        currentAudio.play();
+
+        button.textContent =
+          "Ⅱ";
+
+
+        currentAudio.addEventListener(
+          "ended",
+          () => {
+
+            button.textContent =
+              "▶";
+
+          }
+        );
+
+      }
+    );
+
+  });
 
 </script>
 
