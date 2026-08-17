@@ -4,1729 +4,2807 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>Tim — test</title>
+<title>Tim — The Observer</title>
+
 <meta
   name="description"
-  content="Photographs, sounds, fragments and things found after dark."
+  content="An underground archive of photographs, graffiti, music, writing and things found between the visible lines."
 />
 
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link
-  href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+  href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
   rel="stylesheet"
 >
 
 <style>
-/* ============================================================
-   TIM / AFTER DARK
-   A continuous underground archive.
-   ============================================================ */
-
-:root{
-  --black: #05070a;
-  --black-2: #080c11;
-  --surface: #0d1218;
-  --surface-2: #111820;
-
-  --white: #d9ddd9;
-  --muted: #737d82;
-  --muted-2: #4b555b;
-
-  --brass: #b79558;
-  --brass-soft: #806a43;
-
-  --red: #75413c;
-  --blue: #526b78;
-
-  --line: rgba(217,221,217,.12);
-
-  --serif: "Fraunces", Georgia, serif;
-  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "DM Mono", "IBM Plex Mono", ui-monospace, monospace;
-
-  --max: 1180px;
-}
-
-/* ---------- RESET ---------- */
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-  background:var(--black);
-}
-
-body{
-  margin:0;
-  background:var(--black);
-  color:var(--white);
-  font-family:var(--sans);
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:100;
-  pointer-events:none;
-  opacity:.045;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
-  mix-blend-mode:screen;
-}
-
-::selection{
-  background:var(--brass);
-  color:var(--black);
-}
-
-img{
-  max-width:100%;
-}
-
-button,
-input,
-textarea{
-  font:inherit;
-}
-
-button{
-  color:inherit;
-}
-
-a{
-  color:inherit;
-}
-
-main{
-  position:relative;
-  z-index:2;
-}
-
-.container{
-  width:min(var(--max), calc(100% - 48px));
-  margin:0 auto;
-}
-
-/* ---------- CURSOR / ATMOSPHERE ---------- */
-
-.cursor-orbit{
-  position:fixed;
-  right:28px;
-  bottom:28px;
-  width:34px;
-  height:34px;
-  z-index:60;
-  pointer-events:none;
-  opacity:.7;
-}
-
-.cursor-orbit::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  border:1px solid var(--line);
-  border-radius:50%;
-}
-
-.cursor-orbit::after{
-  content:"";
-  position:absolute;
-  width:5px;
-  height:5px;
-  background:var(--brass);
-  border-radius:50%;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  box-shadow:0 0 18px rgba(183,149,88,.35);
-}
-
-.page-progress{
-  position:fixed;
-  left:0;
-  top:0;
-  width:0;
-  height:2px;
-  background:var(--brass);
-  z-index:200;
-  box-shadow:0 0 12px rgba(183,149,88,.35);
-}
-
-/* ---------- HEADER ---------- */
-
-.site-header{
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  z-index:50;
-  padding:18px 0;
-  background:linear-gradient(
-    to bottom,
-    rgba(5,7,10,.92),
-    rgba(5,7,10,.55),
-    transparent
-  );
-  transition:background .3s ease, padding .3s ease;
-}
-
-.site-header.scrolled{
-  background:rgba(5,7,10,.82);
-  backdrop-filter:blur(14px);
-  padding:12px 0;
-}
-
-.header-inner{
-  width:min(var(--max), calc(100% - 48px));
-  margin:0 auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.identity{
-  text-decoration:none;
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.identity-name{
-  font-family:var(--serif);
-  font-size:1.35rem;
-  font-weight:500;
-  letter-spacing:.01em;
-}
-
-.identity-signal{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  font-family:var(--mono);
-  font-size:.6rem;
-  letter-spacing:.13em;
-  color:var(--muted);
-  text-transform:uppercase;
-}
-
-.identity-signal::before{
-  content:"";
-  width:5px;
-  height:5px;
-  border-radius:50%;
-  background:var(--brass);
-  box-shadow:0 0 10px rgba(183,149,88,.5);
-}
-
-.main-nav{
-  display:flex;
-  align-items:center;
-  gap:4px;
-}
-
-.main-nav a{
-  padding:8px 12px;
-  text-decoration:none;
-  color:var(--muted);
-  font-family:var(--mono);
-  font-size:.66rem;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  transition:color .2s ease;
-}
-
-.main-nav a:hover{
-  color:var(--white);
-}
-
-.menu-button{
-  display:none;
-  border:1px solid var(--line);
-  background:rgba(8,12,17,.8);
-  padding:8px 10px;
-  cursor:pointer;
-  font-family:var(--mono);
-  font-size:.7rem;
-}
-
-/* ---------- HERO / VOID ---------- */
-
-.hero{
-  min-height:100svh;
-  position:relative;
-  display:flex;
-  align-items:center;
-  overflow:hidden;
-}
-
-.hero::before{
-  content:"";
-  position:absolute;
-  width:60vw;
-  height:60vw;
-  max-width:900px;
-  max-height:900px;
-  right:-25vw;
-  top:10vh;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      circle,
-      rgba(70,88,100,.08) 0%,
-      rgba(30,42,50,.035) 35%,
-      transparent 68%
-    );
-}
-
-.hero::after{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:42%;
-  width:1px;
-  height:35vh;
-  background:linear-gradient(
-    to bottom,
-    transparent,
-    var(--line),
-    transparent
-  );
-}
-
-.hero-content{
-  position:relative;
-  z-index:2;
-  width:min(var(--max), calc(100% - 48px));
-  margin:0 auto;
-}
-
-.hero-meta{
-  font-family:var(--mono);
-  color:var(--muted);
-  font-size:.65rem;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-  margin-bottom:32px;
-}
-
-.hero-title{
-  margin:0;
-  max-width:850px;
-  font-family:var(--serif);
-  font-size:clamp(4rem, 11vw, 9.5rem);
-  line-height:.84;
-  font-weight:500;
-  letter-spacing:-.045em;
-}
-
-.hero-title em{
-  color:var(--brass);
-  font-style:normal;
-}
-
-.hero-subtitle{
-  margin:42px 0 0;
-  max-width:410px;
-  color:var(--muted);
-  font-size:.95rem;
-  line-height:1.8;
-}
-
-.hero-scroll{
-  position:absolute;
-  left:50%;
-  bottom:35px;
-  transform:translateX(-50%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
-  color:var(--muted);
-  font-family:var(--mono);
-  font-size:.58rem;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-}
-
-.hero-scroll-line{
-  width:1px;
-  height:42px;
-  background:linear-gradient(var(--brass), transparent);
-}
-
-/* ---------- GENERAL SECTION ---------- */
-
-.archive-section{
-  position:relative;
-  padding:150px 0;
-}
-
-.section-marker{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  color:var(--muted);
-  font-family:var(--mono);
-  font-size:.62rem;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-}
-
-.section-marker::before{
-  content:"";
-  width:7px;
-  height:7px;
-  border:1px solid var(--brass);
-  border-radius:50%;
-  flex:none;
-}
-
-.section-marker .line{
-  width:42px;
-  height:1px;
-  background:var(--line);
-}
-
-.section-title{
-  margin:28px 0 0;
-  max-width:760px;
-  font-family:var(--serif);
-  font-size:clamp(2.8rem, 6vw, 6rem);
-  line-height:.95;
-  font-weight:500;
-  letter-spacing:-.035em;
-}
-
-.section-intro{
-  max-width:530px;
-  margin:30px 0 0 15%;
-  color:var(--muted);
-  font-size:.95rem;
-  line-height:1.9;
-}
-
-/* ---------- OBSERVATION ---------- */
-
-.observation{
-  min-height:110vh;
-  display:flex;
-  align-items:center;
-}
-
-.observation-layout{
-  display:grid;
-  grid-template-columns:1fr 1.4fr;
-  gap:10vw;
-  align-items:center;
-}
-
-.observation-copy{
-  position:relative;
-}
-
-.observation-copy h2{
-  margin:26px 0;
-  font-family:var(--serif);
-  font-weight:400;
-  font-size:clamp(2.4rem, 5vw, 5rem);
-  line-height:.98;
-}
-
-.observation-copy p{
-  color:var(--muted);
-  max-width:420px;
-  line-height:1.9;
-}
-
-.observation-coordinate{
-  margin-top:55px;
-  font-family:var(--mono);
-  font-size:.62rem;
-  color:var(--muted-2);
-  line-height:2;
-}
-
-.observation-coordinate strong{
-  color:var(--brass);
-  font-weight:400;
-}
-
-.observation-photo{
-  position:relative;
-  margin-right:-10vw;
-}
-
-.observation-photo img{
-  width:100%;
-  height:min(75vh,760px);
-  object-fit:cover;
-  display:block;
-  filter:saturate(.75) contrast(1.05);
-}
-
-.photo-number{
-  position:absolute;
-  top:-28px;
-  right:0;
-  font-family:var(--mono);
-  font-size:.58rem;
-  color:var(--muted);
-  letter-spacing:.12em;
-}
-
-.photo-caption{
-  margin-top:12px;
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  font-family:var(--mono);
-  font-size:.59rem;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.08em;
-}
-
-/* ---------- PHOTO CONSTELLATION ---------- */
-
-.constellation{
-  position:relative;
-}
-
-.constellation-intro{
-  margin-bottom:100px;
-}
-
-.photo-grid{
-  position:relative;
-  display:grid;
-  grid-template-columns:repeat(12,1fr);
-  gap:20px;
-  align-items:start;
-}
-
-.photo-card{
-  position:relative;
-  margin:0;
-  overflow:visible;
-}
-
-.photo-card img{
-  width:100%;
-  display:block;
-  object-fit:cover;
-  background:var(--surface);
-  filter:saturate(.72) contrast(1.06);
-  transition:
-    filter .5s ease,
-    transform .7s cubic-bezier(.2,.7,.2,1);
-}
-
-.photo-card:hover img{
-  filter:saturate(.95) contrast(1.05);
-  transform:scale(1.015);
-}
-
-.photo-card:nth-child(1){
-  grid-column:1 / span 7;
-}
-
-.photo-card:nth-child(1) img{
-  aspect-ratio:1.2;
-}
-
-.photo-card:nth-child(2){
-  grid-column:9 / span 4;
-  margin-top:140px;
-}
-
-.photo-card:nth-child(2) img{
-  aspect-ratio:.76;
-}
-
-.photo-card:nth-child(3){
-  grid-column:3 / span 5;
-  margin-top:120px;
-}
-
-.photo-card:nth-child(3) img{
-  aspect-ratio:.9;
-}
-
-.photo-card:nth-child(4){
-  grid-column:9 / span 4;
-  margin-top:80px;
-}
-
-.photo-card:nth-child(4) img{
-  aspect-ratio:1.1;
-}
-
-.photo-card:nth-child(n+5){
-  grid-column:span 4;
-}
-
-.photo-card:nth-child(n+5) img{
-  aspect-ratio:1;
-}
-
-.photo-info{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  margin-top:10px;
-  font-family:var(--mono);
-  font-size:.56rem;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.08em;
-}
-
-.photo-index{
-  color:var(--brass);
-}
-
-/* ---------- UPLOAD ---------- */
-
-.upload-wrap{
-  margin-top:90px;
-  padding:25px;
-  border:1px solid var(--line);
-  background:rgba(13,18,24,.55);
-}
-
-.upload-header{
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  align-items:flex-start;
-  margin-bottom:24px;
-}
-
-.upload-header h3{
-  margin:0;
-  font-family:var(--serif);
-  font-size:1.7rem;
-  font-weight:400;
-}
-
-.upload-header p{
-  margin:7px 0 0;
-  color:var(--muted);
-  font-size:.75rem;
-}
-
-.upload-form{
-  display:grid;
-  grid-template-columns:1fr 1fr auto;
-  gap:10px;
-}
-
-.upload-input{
-  width:100%;
-  background:var(--black);
-  color:var(--white);
-  border:1px solid var(--line);
-  border-radius:0;
-  padding:13px;
-  outline:none;
-}
-
-.upload-input:focus{
-  border-color:var(--brass-soft);
-}
-
-.file-button{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:45px;
-  padding:0 16px;
-  border:1px dashed var(--muted-2);
-  color:var(--muted);
-  cursor:pointer;
-  font-family:var(--mono);
-  font-size:.62rem;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  transition:.2s ease;
-}
-
-.file-button:hover{
-  border-color:var(--brass);
-  color:var(--brass);
-}
-
-.file-button input{
-  display:none;
-}
-
-.upload-action{
-  background:var(--brass);
-  color:var(--black);
-  border:0;
-  padding:0 24px;
-  cursor:pointer;
-  font-family:var(--mono);
-  font-size:.62rem;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-}
-
-.upload-action:disabled{
-  opacity:.4;
-  cursor:not-allowed;
-}
-
-.upload-status{
-  margin-top:12px;
-  min-height:17px;
-  font-family:var(--mono);
-  font-size:.58rem;
-  color:var(--muted);
-}
-
-.empty-state{
-  padding:100px 20px;
-  text-align:center;
-  border:1px dashed var(--line);
-  color:var(--muted);
-  font-family:var(--mono);
-  font-size:.65rem;
-}
-
-/* ---------- TRANSMISSION / MUSIC ---------- */
-
-.transmission{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  background:
-    radial-gradient(
-      circle at 75% 45%,
-      rgba(50,68,79,.10),
-      transparent 35%
-    );
-}
-
-.transmission-layout{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12vw;
-  align-items:center;
-}
-
-.transmission-title{
-  margin:25px 0;
-  font-family:var(--serif);
-  font-size:clamp(3rem, 6vw, 6rem);
-  line-height:.9;
-  font-weight:400;
-}
-
-.transmission-description{
-  max-width:400px;
-  color:var(--muted);
-  line-height:1.9;
-}
-
-.player{
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-  padding:30px 0;
-}
-
-.player-meta{
-  display:flex;
-  justify-content:space-between;
-  font-family:var(--mono);
-  font-size:.58rem;
-  color:var(--muted);
-  letter-spacing:.08em;
-  text-transform:uppercase;
-}
-
-.player-title{
-  margin:16px 0 28px;
-  font-family:var(--serif);
-  font-size:2rem;
-  font-weight:400;
-}
-
-.waveform{
-  display:flex;
-  align-items:center;
-  gap:3px;
-  height:55px;
-  margin-bottom:20px;
-}
-
-.waveform span{
-  flex:1;
-  max-width:4px;
-  background:var(--muted-2);
-  opacity:.7;
-  transition:background .2s ease, height .2s ease;
-}
-
-.waveform span:nth-child(3n){
-  height:60%;
-}
-
-.waveform span:nth-child(4n){
-  height:90%;
-}
-
-.waveform span:nth-child(5n){
-  height:35%;
-}
-
-.waveform span:nth-child(2n){
-  height:70%;
-}
-
-.waveform.playing span{
-  animation:pulse 1s ease-in-out infinite alternate;
-  background:var(--brass-soft);
-}
-
-@keyframes pulse{
-  from{ opacity:.35; }
-  to{ opacity:.9; }
-}
-
-.player-controls{
-  display:flex;
-  align-items:center;
-  gap:16px;
-}
-
-.play-button{
-  width:48px;
-  height:48px;
-  border:1px solid var(--brass-soft);
-  background:transparent;
-  color:var(--brass);
-  border-radius:50%;
-  cursor:pointer;
-  font-size:.75rem;
-}
-
-.play-button:hover{
-  background:var(--brass);
-  color:var(--black);
-}
-
-.progress-track{
-  flex:1;
-  height:1px;
-  background:var(--line);
-  position:relative;
-}
-
-.progress-fill{
-  position:absolute;
-  left:0;
-  top:0;
-  width:0;
-  height:100%;
-  background:var(--brass);
-}
-
-.player-time{
-  font-family:var(--mono);
-  font-size:.58rem;
-  color:var(--muted);
-}
-
-/* ---------- FIELD NOTES ---------- */
-
-.field-notes{
-  padding-top:200px;
-}
-
-.note{
-  display:grid;
-  grid-template-columns:170px 1fr;
-  gap:70px;
-  padding:70px 0;
-  border-top:1px solid var(--line);
-}
-
-.note:last-child{
-  border-bottom:1px solid var(--line);
-}
-
-.note-meta{
-  font-family:var(--mono);
-  font-size:.6rem;
-  color:var(--muted);
-  line-height:2;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-}
-
-.note-meta strong{
-  display:block;
-  color:var(--brass);
-  font-weight:400;
-  margin-bottom:12px;
-}
-
-.note-body{
-  max-width:700px;
-}
-
-.note-body h3{
-  margin:0 0 24px;
-  font-family:var(--serif);
-  font-size:clamp(2rem,4vw,4rem);
-  font-weight:400;
-  line-height:1;
-}
-
-.note-body p{
-  margin:0;
-  color:#9aa29f;
-  font-size:1rem;
-  line-height:1.95;
-}
-
-.note-body p + p{
-  margin-top:22px;
-}
-
-.read-more{
-  display:inline-block;
-  margin-top:28px;
-  color:var(--brass);
-  text-decoration:none;
-  font-family:var(--mono);
-  font-size:.62rem;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-}
-
-/* ---------- ABOUT / OBSERVER ---------- */
-
-.observer{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-}
-
-.observer-layout{
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:10vw;
-  align-items:end;
-}
-
-.observer h2{
-  margin:25px 0;
-  font-family:var(--serif);
-  font-size:clamp(3.5rem,8vw,8rem);
-  line-height:.82;
-  font-weight:400;
-  letter-spacing:-.04em;
-}
-
-.observer-copy{
-  max-width:530px;
-  color:var(--muted);
-  line-height:1.9;
-}
-
-.observer-facts{
-  border-top:1px solid var(--line);
-}
-
-.observer-fact{
-  display:flex;
-  justify-content:space-between;
-  gap:30px;
-  padding:14px 0;
-  border-bottom:1px solid var(--line);
-  font-family:var(--mono);
-  font-size:.62rem;
-}
-
-.observer-fact span:first-child{
-  color:var(--muted);
-}
-
-.observer-fact span:last-child{
-  color:var(--white);
-}
-
-/* ---------- END ---------- */
-
-.end{
-  min-height:80vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  position:relative;
-}
-
-.end::before{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:0;
-  bottom:0;
-  width:1px;
-  background:linear-gradient(
-    transparent,
-    var(--line),
-    transparent
-  );
-}
-
-.end-content{
-  position:relative;
-  z-index:2;
-}
-
-.end-dot{
-  width:8px;
-  height:8px;
-  margin:0 auto 35px;
-  background:var(--brass);
-  border-radius:50%;
-  box-shadow:0 0 30px rgba(183,149,88,.4);
-}
-
-.end h2{
-  margin:0;
-  font-family:var(--serif);
-  font-weight:400;
-  font-size:clamp(2.5rem,6vw,6rem);
-}
-
-.end p{
-  color:var(--muted);
-  font-family:var(--mono);
-  font-size:.62rem;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  margin-top:25px;
-}
-
-.site-footer{
-  position:relative;
-  z-index:2;
-  border-top:1px solid var(--line);
-  padding:30px 0;
-}
-
-.footer-inner{
-  width:min(var(--max), calc(100% - 48px));
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  color:var(--muted);
-  font-family:var(--mono);
-  font-size:.58rem;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-}
-
-/* ---------- REVEAL ANIMATION ---------- */
-
-.reveal{
-  opacity:0;
-  transform:translateY(25px);
-  transition:
-    opacity .8s ease,
-    transform .8s cubic-bezier(.2,.7,.2,1);
-}
-
-.reveal.visible{
-  opacity:1;
-  transform:none;
-}
-
-/* ---------- RESPONSIVE ---------- */
-
-@media(max-width:850px){
-
-  .main-nav{
-    display:none;
+
+  /* ============================================================
+     ROOT
+     ============================================================ */
+
+  :root{
+
+    --ink:#07090d;
+    --ink-2:#0d1117;
+    --ink-3:#121821;
+
+    --line:#202a35;
+    --line-soft:#17202a;
+
+    --paper:#e9edf0;
+    --paper-dim:#87939e;
+    --paper-faint:#56616b;
+
+    --brass:#c9a35e;
+    --brass-bright:#dfbd7b;
+    --brass-dim:#75603a;
+
+    --red:#9d554e;
+    --blue:#667f8d;
+
+    --serif:'Fraunces', Georgia, serif;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --maxw:1160px;
+
+  }
+
+
+  /* ============================================================
+     RESET
+     ============================================================ */
+
+  *{
+    box-sizing:border-box;
+  }
+
+  html{
+    scroll-behavior:smooth;
+    background:var(--ink);
+  }
+
+  body{
+    margin:0;
+
+    background:
+      radial-gradient(
+        ellipse at 50% -20%,
+        #141c25 0%,
+        var(--ink) 55%
+      );
+
+    color:var(--paper);
+
+    font-family:var(--sans);
+
+    -webkit-font-smoothing:antialiased;
+
+    overflow-x:hidden;
+  }
+
+  ::selection{
+    background:var(--brass);
+    color:var(--ink);
+  }
+
+  button,
+  input{
+    font:inherit;
+  }
+
+  button{
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  a{
+    color:inherit;
+  }
+
+
+  /* ============================================================
+     FILM GRAIN
+     ============================================================ */
+
+  body::before{
+
+    content:"";
+
+    position:fixed;
+    inset:0;
+
+    pointer-events:none;
+
+    z-index:100;
+
+    opacity:.035;
+
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+
+    mix-blend-mode:screen;
+
+  }
+
+
+  /* ============================================================
+     CELESTIAL BACKGROUND
+     ============================================================ */
+
+  .celestial-background{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:0;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+    background:
+      radial-gradient(
+        ellipse at 50% 40%,
+        rgba(35,48,61,.13) 0%,
+        rgba(5,7,10,0) 58%
+      );
+
+  }
+
+
+  #celestialCanvas{
+
     position:absolute;
-    top:100%;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    display:block;
+
+  }
+
+
+  /* ------------------------------------------------------------
+     NEBULA
+     ------------------------------------------------------------ */
+
+  .nebula{
+
+    position:absolute;
+
+    width:55vw;
+    height:55vw;
+
+    max-width:850px;
+    max-height:850px;
+
+    border-radius:50%;
+
+    filter:blur(80px);
+
+    opacity:.18;
+
+    mix-blend-mode:screen;
+
+  }
+
+  .nebula-one{
+
+    left:-20vw;
+    top:15vh;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(73,91,106,.22) 0%,
+        rgba(42,57,68,.12) 35%,
+        transparent 70%
+      );
+
+    animation:
+      nebulaDriftOne 35s ease-in-out infinite alternate;
+
+  }
+
+  .nebula-two{
+
+    right:-25vw;
+    bottom:-10vh;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(111,76,55,.13) 0%,
+        rgba(56,64,70,.08) 38%,
+        transparent 70%
+      );
+
+    animation:
+      nebulaDriftTwo 48s ease-in-out infinite alternate;
+
+  }
+
+  @keyframes nebulaDriftOne{
+
+    from{
+      transform:
+        translate3d(-2%,-2%,0)
+        scale(1);
+    }
+
+    to{
+      transform:
+        translate3d(8%,5%,0)
+        scale(1.12);
+    }
+
+  }
+
+  @keyframes nebulaDriftTwo{
+
+    from{
+      transform:
+        translate3d(2%,5%,0)
+        scale(1);
+    }
+
+    to{
+      transform:
+        translate3d(-8%,-3%,0)
+        scale(1.16);
+    }
+
+  }
+
+
+  /* ------------------------------------------------------------
+     ZODIAC
+     ------------------------------------------------------------ */
+
+  .zodiac-orbit{
+
+    position:absolute;
+
+    width:min(70vw,850px);
+    height:min(70vw,850px);
+
+    right:-18vw;
+    top:8vh;
+
+    opacity:.075;
+
+    transform:
+      translate3d(
+        var(--zodiac-x,0px),
+        var(--zodiac-y,0px),
+        0
+      );
+
+    transition:
+      transform 1.4s cubic-bezier(.2,.7,.2,1);
+
+    animation:
+      zodiacFloat 18s ease-in-out infinite alternate;
+
+  }
+
+  @keyframes zodiacFloat{
+
+    from{
+      margin-top:-8px;
+    }
+
+    to{
+      margin-top:8px;
+    }
+
+  }
+
+  .zodiac-ring{
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:50%;
+
+    border:1px solid rgba(183,149,88,.55);
+
+  }
+
+  .zodiac-ring-outer{
+    transform:rotate(3deg);
+  }
+
+  .zodiac-ring-inner{
+
+    inset:12%;
+
+    border-color:rgba(217,221,217,.2);
+
+  }
+
+  .zodiac-symbols{
+
+    position:absolute;
+
+    inset:0;
+
+    animation:
+      zodiacRotate 90s linear infinite;
+
+  }
+
+  .zodiac-symbols span{
+
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    width:40px;
+    height:40px;
+
+    margin:-20px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    color:var(--brass);
+
+    font-family:
+      Georgia,
+      "Times New Roman",
+      serif;
+
+    font-size:1.1rem;
+
+    transform:
+      rotate(calc(var(--angle) * 1deg))
+      translateY(calc(min(35vw,425px) * -1))
+      rotate(calc(var(--angle) * -1deg));
+
+  }
+
+  .zodiac-symbols span:nth-child(1){--angle:0;}
+  .zodiac-symbols span:nth-child(2){--angle:30;}
+  .zodiac-symbols span:nth-child(3){--angle:60;}
+  .zodiac-symbols span:nth-child(4){--angle:90;}
+  .zodiac-symbols span:nth-child(5){--angle:120;}
+  .zodiac-symbols span:nth-child(6){--angle:150;}
+  .zodiac-symbols span:nth-child(7){--angle:180;}
+  .zodiac-symbols span:nth-child(8){--angle:210;}
+  .zodiac-symbols span:nth-child(9){--angle:240;}
+  .zodiac-symbols span:nth-child(10){--angle:270;}
+  .zodiac-symbols span:nth-child(11){--angle:300;}
+  .zodiac-symbols span:nth-child(12){--angle:330;}
+
+  @keyframes zodiacRotate{
+
+    from{
+      transform:rotate(0deg);
+    }
+
+    to{
+      transform:rotate(360deg);
+    }
+
+  }
+
+
+  /* ------------------------------------------------------------
+     SMALL CELESTIAL CROSSES
+     ------------------------------------------------------------ */
+
+  .celestial-cross{
+
+    position:absolute;
+
+    width:14px;
+    height:14px;
+
+    opacity:.16;
+
+    transform:
+      translate3d(
+        var(--cross-x,0px),
+        var(--cross-y,0px),
+        0
+      );
+
+    transition:
+      transform 1.8s cubic-bezier(.2,.7,.2,1);
+
+  }
+
+  .celestial-cross::before,
+  .celestial-cross::after{
+
+    content:"";
+
+    position:absolute;
+
+    background:var(--brass);
+
+  }
+
+  .celestial-cross::before{
+
+    width:1px;
+    height:100%;
+
+    left:50%;
+    top:0;
+
+  }
+
+  .celestial-cross::after{
+
+    width:100%;
+    height:1px;
+
+    left:0;
+    top:50%;
+
+  }
+
+  .celestial-cross-one{
+
+    left:17%;
+    top:27%;
+
+  }
+
+  .celestial-cross-two{
+
+    right:28%;
+    top:67%;
+
+    transform:scale(.7);
+
+    opacity:.1;
+
+  }
+
+
+  /* ============================================================
+     HEADER
+     ============================================================ */
+
+  header{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:40;
+
+    background:
+      rgba(7,9,13,.78);
+
+    backdrop-filter:
+      blur(18px);
+
+    -webkit-backdrop-filter:
+      blur(18px);
+
+    border-bottom:
+      1px solid rgba(32,42,53,.8);
+
+  }
+
+  .nav-inner{
+
+    max-width:var(--maxw);
+
+    margin:0 auto;
+
+    padding:
+      17px 24px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+  }
+
+  .brand{
+
+    font-family:var(--serif);
+
+    font-weight:600;
+
+    font-size:1.3rem;
+
+    letter-spacing:.01em;
+
+    text-decoration:none;
+
+    display:flex;
+
+    align-items:baseline;
+
+    gap:9px;
+
+  }
+
+  .brand small{
+
+    font-family:var(--mono);
+
+    font-size:.58rem;
+
+    color:var(--brass);
+
+    letter-spacing:.14em;
+
+    text-transform:uppercase;
+
+  }
+
+
+  /* ------------------------------------------------------------
+     NAVIGATION
+     ------------------------------------------------------------ */
+
+  nav.menu{
+
+    display:flex;
+
+    gap:2px;
+
+    font-family:var(--mono);
+
+    font-size:.72rem;
+
+    letter-spacing:.08em;
+
+    text-transform:uppercase;
+
+  }
+
+  nav.menu button{
+
+    background:none;
+
+    border:none;
+
+    color:var(--paper-dim);
+
+    padding:
+      9px 13px;
+
+    cursor:pointer;
+
+    position:relative;
+
+    transition:
+      color .2s ease;
+
+  }
+
+  nav.menu button:hover{
+
+    color:var(--paper);
+
+  }
+
+  nav.menu button.active{
+
+    color:var(--brass);
+
+  }
+
+  nav.menu button.active::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:13px;
+    right:13px;
+    bottom:1px;
+
+    height:1px;
+
+    background:var(--brass);
+
+    box-shadow:
+      0 0 8px
+      rgba(201,163,94,.35);
+
+  }
+
+
+  .nav-toggle{
+
+    display:none;
+
+    background:none;
+
+    border:
+      1px solid var(--line);
+
+    color:var(--paper);
+
+    border-radius:5px;
+
+    padding:
+      8px 10px;
+
+    cursor:pointer;
+
+  }
+
+
+  /* ============================================================
+     MAIN
+     ============================================================ */
+
+  main{
+
+    position:relative;
+
+    z-index:2;
+
+    max-width:var(--maxw);
+
+    margin:0 auto;
+
+    padding:
+      0 24px;
+
+  }
+
+
+  /* ============================================================
+     VIEWS
+     ============================================================ */
+
+  section.view{
+
+    display:none;
+
+    min-height:
+      calc(100vh - 76px);
+
+    padding:
+      100px 0 120px;
+
+    animation:
+      fadeIn .55s ease;
+
+  }
+
+  section.view.active{
+    display:block;
+  }
+
+  @keyframes fadeIn{
+
+    from{
+      opacity:0;
+      transform:translateY(10px);
+    }
+
+    to{
+      opacity:1;
+      transform:none;
+    }
+
+  }
+
+
+  /* ============================================================
+     TYPOGRAPHY
+     ============================================================ */
+
+  .eyebrow{
+
+    font-family:var(--mono);
+
+    font-size:.67rem;
+
+    letter-spacing:.2em;
+
+    text-transform:uppercase;
+
+    color:var(--brass);
+
+    margin:
+      0 0 16px;
+
+  }
+
+  h1{
+
+    font-family:var(--serif);
+
+    font-weight:500;
+
+    font-size:
+      clamp(3rem,7vw,6.4rem);
+
+    line-height:.97;
+
+    letter-spacing:-.025em;
+
+    margin:
+      0 0 30px;
+
+    max-width:11ch;
+
+  }
+
+  h2{
+
+    font-family:var(--serif);
+
+    font-weight:500;
+
+    font-size:
+      clamp(2rem,4vw,3.5rem);
+
+    line-height:1;
+
+    letter-spacing:-.02em;
+
+    margin:
+      0 0 20px;
+
+  }
+
+  h3{
+
+    font-family:var(--serif);
+
+    font-weight:500;
+
+  }
+
+  p.lede{
+
+    font-size:
+      clamp(1rem,1.5vw,1.12rem);
+
+    line-height:1.8;
+
+    color:var(--paper-dim);
+
+    max-width:60ch;
+
+  }
+
+
+  /* ============================================================
+     HOME
+     ============================================================ */
+
+  .home-layout{
+
+    min-height:
+      calc(100vh - 200px);
+
+    display:grid;
+
+    grid-template-columns:
+      minmax(0,1.4fr)
+      minmax(260px,.6fr);
+
+    gap:80px;
+
+    align-items:center;
+
+  }
+
+  .home-copy{
+
+    position:relative;
+
+  }
+
+  .home-copy::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-35px;
+
+    top:8px;
+
+    width:1px;
+
+    height:190px;
+
+    background:
+      linear-gradient(
+        to bottom,
+        var(--brass),
+        transparent
+      );
+
+    opacity:.45;
+
+  }
+
+  .home-meta{
+
+    align-self:end;
+
+    padding-bottom:40px;
+
+  }
+
+  .home-meta-label{
+
+    font-family:var(--mono);
+
+    font-size:.64rem;
+
+    letter-spacing:.15em;
+
+    color:var(--paper-faint);
+
+    text-transform:uppercase;
+
+    margin-bottom:12px;
+
+  }
+
+  .home-meta p{
+
+    color:var(--paper-dim);
+
+    font-size:.86rem;
+
+    line-height:1.7;
+
+    margin:0;
+
+    max-width:30ch;
+
+  }
+
+  .home-index{
+
+    margin-top:38px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-family:var(--mono);
+
+    font-size:.68rem;
+
+    color:var(--paper-faint);
+
+    letter-spacing:.08em;
+
+  }
+
+  .home-index-line{
+
+    width:50px;
+
+    height:1px;
+
+    background:var(--brass-dim);
+
+  }
+
+
+  /* ============================================================
+     BUTTONS
+     ============================================================ */
+
+  .actions{
+
+    margin-top:36px;
+
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+  }
+
+  .btn{
+
+    font-family:var(--mono);
+
+    font-size:.7rem;
+
+    letter-spacing:.08em;
+
+    text-transform:uppercase;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:9px;
+
+    background:var(--brass);
+
+    color:var(--ink);
+
+    border:none;
+
+    padding:
+      13px 19px;
+
+    border-radius:3px;
+
+    cursor:pointer;
+
+    transition:
+      transform .15s ease,
+      background .2s ease,
+      box-shadow .2s ease;
+
+  }
+
+  .btn:hover{
+
+    background:var(--brass-bright);
+
+    transform:translateY(-1px);
+
+    box-shadow:
+      0 8px 25px
+      rgba(201,163,94,.12);
+
+  }
+
+  .btn.ghost{
+
+    background:transparent;
+
+    color:var(--paper);
+
+    border:
+      1px solid var(--line);
+
+  }
+
+  .btn.ghost:hover{
+
+    border-color:var(--brass);
+
+    color:var(--brass);
+
+    box-shadow:none;
+
+  }
+
+  .btn:disabled{
+
+    opacity:.45;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+    box-shadow:none;
+
+  }
+
+
+  /* ============================================================
+     SECTION HEADER
+     ============================================================ */
+
+  .section-head{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-end;
+
+    gap:30px;
+
+    margin-bottom:55px;
+
+    padding-bottom:22px;
+
+    border-bottom:
+      1px solid var(--line);
+
+  }
+
+  .section-number{
+
+    font-family:var(--mono);
+
+    color:var(--paper-faint);
+
+    font-size:.65rem;
+
+    letter-spacing:.1em;
+
+  }
+
+
+  /* ============================================================
+     CONTINUOUS CONTENT STRIP
+     ============================================================ */
+
+  .archive-intro{
+
+    display:grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap:40px;
+
+    margin-bottom:70px;
+
+  }
+
+  .archive-intro p{
+
+    margin:0;
+
+    color:var(--paper-dim);
+
+    line-height:1.8;
+
+    font-size:.9rem;
+
+  }
+
+  .archive-rule{
+
+    margin-top:22px;
+
+    width:100%;
+
+    height:1px;
+
+    background:
+      linear-gradient(
+        90deg,
+        var(--brass-dim),
+        transparent
+      );
+
+  }
+
+
+  /* ============================================================
+     GALLERY
+     ============================================================ */
+
+  .upload-panel{
+
+    border:
+      1px solid var(--line);
+
+    background:
+      rgba(13,17,23,.72);
+
+    border-radius:5px;
+
+    padding:17px;
+
+    margin-bottom:35px;
+
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+  }
+
+  .upload-panel input[type="text"]{
+
+    flex:1;
+
+    min-width:180px;
+
+    background:
+      rgba(7,9,13,.8);
+
+    border:
+      1px solid var(--line);
+
+    color:var(--paper);
+
+    padding:
+      11px 12px;
+
+    border-radius:3px;
+
+    font-family:var(--sans);
+
+    font-size:.86rem;
+
+    outline:none;
+
+  }
+
+  .upload-panel input[type="text"]:focus{
+
+    border-color:
+      var(--brass-dim);
+
+  }
+
+  .upload-panel input[type="text"]::placeholder{
+
+    color:var(--paper-faint);
+
+  }
+
+  .file-label{
+
+    font-family:var(--mono);
+
+    font-size:.68rem;
+
+    text-transform:uppercase;
+
+    letter-spacing:.06em;
+
+    border:
+      1px dashed var(--line);
+
+    padding:
+      11px 15px;
+
+    border-radius:3px;
+
+    cursor:pointer;
+
+    color:var(--paper-dim);
+
+    transition:
+      border-color .2s,
+      color .2s;
+
+  }
+
+  .file-label:hover{
+
+    border-color:var(--brass);
+
+    color:var(--brass);
+
+  }
+
+  .file-label input{
+    display:none;
+  }
+
+  .file-name{
+
+    font-family:var(--mono);
+
+    font-size:.7rem;
+
+    color:var(--brass);
+
+  }
+
+  #upload-status{
+
+    font-family:var(--mono);
+
+    font-size:.68rem;
+
+    color:var(--paper-dim);
+
+    width:100%;
+
+  }
+
+
+  /* ------------------------------------------------------------
+     GALLERY GRID
+     ------------------------------------------------------------ */
+
+  .grid{
+
+    display:grid;
+
+    grid-template-columns:
+      repeat(auto-fill,minmax(220px,1fr));
+
+    gap:13px;
+
+  }
+
+  figure.card{
+
+    margin:0;
+
+    position:relative;
+
+    border-radius:3px;
+
+    overflow:hidden;
+
+    border:
+      1px solid var(--line);
+
+    background:var(--ink-2);
+
+    aspect-ratio:4/5;
+
+  }
+
+  figure.card:nth-child(3n+1){
+
+    aspect-ratio:4/5;
+
+  }
+
+  figure.card:nth-child(3n+2){
+
+    aspect-ratio:1/1;
+
+  }
+
+  figure.card:nth-child(5n){
+
+    aspect-ratio:5/6;
+
+  }
+
+  figure.card img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+
+    filter:
+      saturate(.82)
+      contrast(1.05)
+      brightness(.88);
+
+    transition:
+      transform .7s cubic-bezier(.2,.7,.2,1),
+      filter .5s ease;
+
+  }
+
+  figure.card:hover img{
+
+    transform:scale(1.045);
+
+    filter:
+      saturate(.98)
+      contrast(1.04)
+      brightness(.98);
+
+  }
+
+  figcaption{
+
+    position:absolute;
+
     left:0;
     right:0;
-    padding:10px 24px 20px;
-    flex-direction:column;
-    align-items:stretch;
-    background:rgba(8,12,17,.96);
-    border-bottom:1px solid var(--line);
+    bottom:0;
+
+    padding:
+      42px 13px 13px;
+
+    background:
+      linear-gradient(
+        to top,
+        rgba(5,7,10,.94),
+        rgba(5,7,10,0)
+      );
+
+    font-family:var(--mono);
+
+    font-size:.68rem;
+
+    color:var(--paper);
+
+    opacity:0;
+
+    transform:
+      translateY(7px);
+
+    transition:
+      opacity .25s ease,
+      transform .25s ease;
+
   }
 
-  .main-nav.open{
+  figure.card:hover figcaption{
+
+    opacity:1;
+
+    transform:none;
+
+  }
+
+  .card-delete{
+
+    position:absolute;
+
+    top:8px;
+    right:8px;
+
+    background:
+      rgba(5,7,10,.78);
+
+    border:
+      1px solid var(--line);
+
+    color:var(--paper-dim);
+
+    width:27px;
+    height:27px;
+
+    border-radius:3px;
+
+    cursor:pointer;
+
+    font-size:.72rem;
+
+    line-height:1;
+
+    opacity:0;
+
+    transition:
+      opacity .2s ease,
+      color .2s ease,
+      border-color .2s ease;
+
+  }
+
+  figure.card:hover .card-delete{
+
+    opacity:1;
+
+  }
+
+  .card-delete:hover{
+
+    color:#d8796d;
+
+    border-color:#8d4c45;
+
+  }
+
+
+  .empty-state{
+
+    border:
+      1px dashed var(--line);
+
+    border-radius:4px;
+
+    padding:
+      60px 24px;
+
+    text-align:center;
+
+    color:var(--paper-faint);
+
+    font-family:var(--mono);
+
+    font-size:.72rem;
+
+  }
+
+
+  /* ============================================================
+     UNDERGROUND ARCHIVE CARDS
+     ============================================================ */
+
+  .archive-grid{
+
+    display:grid;
+
+    grid-template-columns:
+      repeat(3,1fr);
+
+    gap:13px;
+
+  }
+
+  .archive-card{
+
+    min-height:260px;
+
+    border:
+      1px solid var(--line);
+
+    background:
+      linear-gradient(
+        145deg,
+        rgba(18,24,33,.8),
+        rgba(8,11,15,.85)
+      );
+
+    padding:25px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:
+      border-color .3s ease,
+      transform .3s ease;
+
+  }
+
+  .archive-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:100px;
+    height:100px;
+
+    right:-45px;
+    top:-45px;
+
+    border:
+      1px solid
+      rgba(201,163,94,.15);
+
+    border-radius:50%;
+
+  }
+
+  .archive-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:2px;
+    height:0;
+
+    background:var(--brass);
+
+    transition:
+      height .35s ease;
+
+  }
+
+  .archive-card:hover{
+
+    border-color:
+      #34404d;
+
+    transform:
+      translateY(-3px);
+
+  }
+
+  .archive-card:hover::after{
+
+    height:100%;
+
+  }
+
+  .archive-index{
+
+    font-family:var(--mono);
+
+    color:var(--brass-dim);
+
+    font-size:.62rem;
+
+    letter-spacing:.12em;
+
+    margin-bottom:45px;
+
+  }
+
+  .archive-card h3{
+
+    font-size:1.55rem;
+
+    margin:
+      0 0 13px;
+
+  }
+
+  .archive-card p{
+
+    color:var(--paper-dim);
+
+    font-size:.8rem;
+
+    line-height:1.7;
+
+    margin:0;
+
+  }
+
+
+  /* ============================================================
+     ABOUT
+     ============================================================ */
+
+  .about-layout{
+
+    display:grid;
+
+    grid-template-columns:
+      minmax(0,1.2fr)
+      minmax(260px,.8fr);
+
+    gap:90px;
+
+  }
+
+  .about-statement{
+
+    font-family:var(--serif);
+
+    font-size:
+      clamp(1.6rem,3vw,2.4rem);
+
+    line-height:1.3;
+
+    color:var(--paper);
+
+    margin:
+      0 0 35px;
+
+  }
+
+  .about-copy{
+
+    color:var(--paper-dim);
+
+    line-height:1.85;
+
+    font-size:.9rem;
+
+    max-width:60ch;
+
+  }
+
+  .kv-list{
+
+    list-style:none;
+
+    padding:0;
+
+    margin:0;
+
+    display:grid;
+
+    gap:0;
+
+  }
+
+  .kv-list li{
+
     display:flex;
+
+    gap:14px;
+
+    font-family:var(--mono);
+
+    font-size:.72rem;
+
+    color:var(--paper-dim);
+
+    border-top:
+      1px solid var(--line);
+
+    padding:
+      14px 0;
+
   }
 
-  .main-nav a{
-    padding:13px 4px;
+  .kv-list li:last-child{
+
+    border-bottom:
+      1px solid var(--line);
+
   }
 
-  .menu-button{
+  .kv-list li b{
+
+    color:var(--paper);
+
+    min-width:85px;
+
+    font-weight:400;
+
+  }
+
+
+  /* ============================================================
+     CONTACT
+     ============================================================ */
+
+  .contact-layout{
+
+    display:grid;
+
+    grid-template-columns:
+      1.2fr .8fr;
+
+    gap:90px;
+
+  }
+
+  .contact-big{
+
+    font-family:var(--serif);
+
+    font-size:
+      clamp(2.4rem,5vw,5rem);
+
+    line-height:1;
+
+    margin:0;
+
+    max-width:10ch;
+
+  }
+
+  .contact-list{
+
+    display:grid;
+
+    align-content:start;
+
+    gap:0;
+
+  }
+
+  .contact-item{
+
+    border-top:
+      1px solid var(--line);
+
+    padding:
+      17px 0;
+
+  }
+
+  .contact-item:last-child{
+
+    border-bottom:
+      1px solid var(--line);
+
+  }
+
+  .contact-label{
+
     display:block;
+
+    font-family:var(--mono);
+
+    font-size:.62rem;
+
+    text-transform:uppercase;
+
+    letter-spacing:.12em;
+
+    color:var(--paper-faint);
+
+    margin-bottom:7px;
+
   }
 
-  .hero-title{
-    font-size:clamp(4rem,17vw,7rem);
+  .contact-value{
+
+    font-size:.9rem;
+
+    color:var(--paper);
+
+    text-decoration:none;
+
   }
 
-  .observation-layout,
-  .transmission-layout,
-  .observer-layout{
-    grid-template-columns:1fr;
-    gap:70px;
+  .contact-value:hover{
+
+    color:var(--brass);
+
   }
 
-  .observation-photo{
-    margin-right:0;
+
+  /* ============================================================
+     SPROCKET DIVIDER
+     ============================================================ */
+
+  .sprockets{
+
+    position:relative;
+
+    z-index:2;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:
+      28px 0;
+
+    opacity:.5;
+
   }
 
-  .observation-photo img{
-    height:65vh;
+  .sprockets span{
+
+    width:5px;
+    height:5px;
+
+    border-radius:1px;
+
+    background:var(--line);
+
   }
 
-  .section-intro{
-    margin-left:0;
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+
+  footer{
+
+    position:relative;
+
+    z-index:2;
+
+    border-top:
+      1px solid var(--line);
+
+    padding:
+      25px 24px;
+
+    text-align:center;
+
+    font-family:var(--mono);
+
+    font-size:.62rem;
+
+    color:var(--paper-faint);
+
+    letter-spacing:.07em;
+
   }
 
-  .photo-grid{
-    grid-template-columns:1fr 1fr;
+  .footer-mark{
+
+    color:var(--brass-dim);
+
   }
 
-  .photo-card:nth-child(n){
-    grid-column:auto;
-    margin-top:0;
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+
+  @media(max-width:850px){
+
+    nav.menu{
+
+      display:none;
+
+      position:absolute;
+
+      top:100%;
+      left:0;
+      right:0;
+
+      flex-direction:column;
+
+      background:
+        rgba(13,17,23,.97);
+
+      border-bottom:
+        1px solid var(--line);
+
+      padding:
+        8px 24px 15px;
+
+    }
+
+    nav.menu.open{
+      display:flex;
+    }
+
+    nav.menu button{
+
+      text-align:left;
+
+      padding:
+        12px 6px;
+
+    }
+
+    nav.menu button.active::after{
+
+      left:6px;
+      right:auto;
+
+      width:30px;
+
+    }
+
+    .nav-toggle{
+      display:inline-block;
+    }
+
+
+    .home-layout{
+
+      grid-template-columns:1fr;
+
+      gap:55px;
+
+      align-items:start;
+
+      padding-top:50px;
+
+    }
+
+    .home-meta{
+
+      align-self:auto;
+
+      padding-bottom:0;
+
+    }
+
+
+    .archive-intro{
+
+      grid-template-columns:1fr;
+
+      gap:20px;
+
+    }
+
+
+    .archive-grid{
+
+      grid-template-columns:1fr;
+
+    }
+
+
+    .about-layout,
+    .contact-layout{
+
+      grid-template-columns:1fr;
+
+      gap:55px;
+
+    }
+
+
+    .zodiac-orbit{
+
+      width:100vw;
+      height:100vw;
+
+      right:-45vw;
+      top:10vh;
+
+      opacity:.045;
+
+    }
+
+    .zodiac-symbols span{
+
+      transform:
+        rotate(calc(var(--angle) * 1deg))
+        translateY(-47vw)
+        rotate(calc(var(--angle) * -1deg));
+
+    }
+
+
+    .nebula{
+
+      filter:blur(55px);
+
+      opacity:.1;
+
+    }
+
   }
 
-  .photo-card:nth-child(1){
-    grid-column:1 / -1;
+
+  @media(max-width:560px){
+
+    main{
+
+      padding:
+        0 18px;
+
+    }
+
+    .nav-inner{
+
+      padding:
+        15px 18px;
+
+    }
+
+    section.view{
+
+      padding:
+        75px 0 90px;
+
+    }
+
+    h1{
+
+      font-size:
+        clamp(2.8rem,14vw,4.2rem);
+
+    }
+
+    .home-copy::before{
+
+      left:-15px;
+
+      height:130px;
+
+    }
+
+    .grid{
+
+      grid-template-columns:
+        repeat(2,1fr);
+
+      gap:7px;
+
+    }
+
+    figure.card,
+    figure.card:nth-child(3n+2),
+    figure.card:nth-child(5n){
+
+      aspect-ratio:4/5;
+
+    }
+
+    .upload-panel{
+
+      align-items:stretch;
+
+    }
+
+    .upload-panel .btn{
+
+      width:100%;
+
+    }
+
+    .file-label{
+
+      width:100%;
+
+      text-align:center;
+
+    }
+
   }
 
-  .upload-form{
-    grid-template-columns:1fr;
+
+  /* ============================================================
+     REDUCED MOTION
+     ============================================================ */
+
+  @media(prefers-reduced-motion:reduce){
+
+    html{
+      scroll-behavior:auto;
+    }
+
+    .nebula,
+    .zodiac-symbols,
+    .zodiac-orbit{
+
+      animation:none !important;
+
+    }
+
+    section.view{
+
+      animation:none;
+
+    }
+
   }
 
-  .upload-action{
-    min-height:45px;
-  }
-
-  .note{
-    grid-template-columns:1fr;
-    gap:25px;
-  }
-}
-
-@media(max-width:560px){
-
-  .container,
-  .header-inner,
-  .hero-content,
-  .footer-inner{
-    width:min(100% - 30px, var(--max));
-  }
-
-  .archive-section{
-    padding:100px 0;
-  }
-
-  .hero{
-    min-height:92svh;
-  }
-
-  .hero-subtitle{
-    margin-top:30px;
-  }
-
-  .observation{
-    min-height:auto;
-  }
-
-  .observation-photo img{
-    height:55vh;
-  }
-
-  .photo-grid{
-    display:block;
-  }
-
-  .photo-card{
-    margin:0 0 60px !important;
-  }
-
-  .photo-card img{
-    aspect-ratio:1 / 1 !important;
-  }
-
-  .photo-card:nth-child(2){
-    width:75%;
-    margin-left:auto !important;
-  }
-
-  .photo-card:nth-child(3){
-    width:82%;
-  }
-
-  .photo-card:nth-child(4){
-    width:70%;
-    margin-left:auto !important;
-  }
-
-  .upload-wrap{
-    padding:18px;
-  }
-
-  .footer-inner{
-    flex-direction:column;
-  }
-
-  .cursor-orbit{
-    display:none;
-  }
-}
 </style>
 </head>
 
+
 <body>
 
-<div class="page-progress" id="pageProgress"></div>
-<div class="cursor-orbit"></div>
+
+<!-- ============================================================
+     CELESTIAL BACKGROUND
+     ============================================================ -->
+
+<div class="celestial-background" aria-hidden="true">
+
+  <canvas id="celestialCanvas"></canvas>
+
+  <div class="nebula nebula-one"></div>
+  <div class="nebula nebula-two"></div>
+
+  <div class="zodiac-orbit">
+
+    <div class="zodiac-ring zodiac-ring-outer"></div>
+    <div class="zodiac-ring zodiac-ring-inner"></div>
+
+    <div class="zodiac-symbols">
+
+      <span>♈</span>
+      <span>♉</span>
+      <span>♊</span>
+      <span>♋</span>
+      <span>♌</span>
+      <span>♍</span>
+      <span>♎</span>
+      <span>♏</span>
+      <span>♐</span>
+      <span>♑</span>
+      <span>♒</span>
+      <span>♓</span>
+
+    </div>
+
+  </div>
+
+  <div class="celestial-cross celestial-cross-one"></div>
+  <div class="celestial-cross celestial-cross-two"></div>
+
+</div>
+
 
 <!-- ============================================================
      HEADER
      ============================================================ -->
 
-<header class="site-header" id="siteHeader">
-  <div class="header-inner">
+<header class="site-header">
 
-    <a href="#top" class="identity">
-      <span class="identity-name">Tim</span>
-      <span class="identity-signal">After Dark</span>
+  <div class="nav-inner">
+
+    <a href="#home" class="brand">
+
+      Tim
+
+      <small>
+        The Observer
+      </small>
+
     </a>
 
+
     <button
-      class="menu-button"
-      id="menuButton"
-      aria-label="Open navigation"
+      class="nav-toggle"
+      id="navToggle"
+      aria-label="Toggle menu"
       aria-expanded="false"
     >
-      MENU
+      ☰
     </button>
 
-    <nav class="main-nav" id="mainNav">
-      <a href="#observations">Observe</a>
-      <a href="#archive">Archive</a>
-      <a href="#transmissions">Sound</a>
-      <a href="#notes">Notes</a>
-      <a href="#observer">Observer</a>
+
+    <nav class="menu" id="navMenu">
+
+      <button
+        data-view="home"
+        class="active"
+      >
+        Home
+      </button>
+
+      <button data-view="gallery">
+        Photographs
+      </button>
+
+      <button data-view="archive">
+        Archive
+      </button>
+
+      <button data-view="about">
+        About
+      </button>
+
+      <button data-view="contact">
+        Contact
+      </button>
+
     </nav>
 
   </div>
+
 </header>
 
 
-<main id="top">
+<!-- ============================================================
+     MAIN
+     ============================================================ -->
 
-  <!-- ==========================================================
-       00 — VOID / ENTRY
-       ========================================================== -->
-
-  <section class="hero">
-
-    <div class="hero-content">
-
-      <div class="hero-meta">
-        41°00′ N / 28°58′ E &nbsp; — &nbsp; Somewhere after dark
-      </div>
-
-      <h1 class="hero-title">
-        Look<br>
-        a little<br>
-        <em>closer.</em>
-      </h1>
-
-      <p class="hero-subtitle">
-        Photographs, sounds, fragments and things found
-        in the city when most people have stopped looking.
-      </p>
-
-    </div>
-
-    <div class="hero-scroll">
-      <span>Enter the archive</span>
-      <span class="hero-scroll-line"></span>
-    </div>
-
-  </section>
+<main>
 
 
   <!-- ==========================================================
-       01 — OBSERVATION
+       HOME
        ========================================================== -->
 
-  <section class="archive-section observation" id="observations">
+  <section
+    class="view active"
+    id="view-home"
+  >
 
-    <div class="container observation-layout">
+    <div class="home-layout">
 
-      <div class="observation-copy reveal">
 
-        <div class="section-marker">
-          <span>01</span>
-          <span class="line"></span>
-          Observation
-        </div>
+      <div class="home-copy">
 
-        <h2>
-          The city<br>
-          leaves traces.
-        </h2>
-
-        <p>
-          Walls, stickers, broken signs, empty streets, light leaking
-          through apartment windows. Things that disappear in daylight
-          become visible when the city gets quiet.
+        <p class="eyebrow">
+          Transmission / 001
         </p>
 
-        <div class="observation-coordinate">
-          <div>LOCATION / <strong>ISTANBUL</strong></div>
-          <div>TIME / <strong>01:43</strong></div>
-          <div>STATUS / <strong>LOOKING</strong></div>
-        </div>
 
-      </div>
-
-      <figure class="observation-photo reveal">
-
-        <div class="photo-number">OBS / 001</div>
-
-        <!-- Replace this with your own image if desired -->
-        <img
-          src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1400&q=85"
-          alt="Night city observation"
-        >
-
-        <figcaption class="photo-caption">
-          <span>Somewhere in the city</span>
-          <span>01:43</span>
-        </figcaption>
-
-      </figure>
-
-    </div>
-
-  </section>
+        <h1>
+          Things are
+          hiding in
+          plain sight.
+        </h1>
 
 
-  <!-- ==========================================================
-       02 — PHOTO ARCHIVE
-       ========================================================== -->
+        <p class="lede">
 
-  <section class="archive-section constellation" id="archive">
+          Photographs, graffiti, records, fragments and
+          thoughts collected from the darker side of the
+          visible world.
 
-    <div class="container">
+          <br><br>
 
-      <div class="constellation-intro reveal">
+          This isn't a portfolio.
 
-        <div class="section-marker">
-          <span>02</span>
-          <span class="line"></span>
-          Photographic archive
-        </div>
+          It's an archive.
 
-        <h2 class="section-title">
-          Things<br>
-          <em>found.</em>
-        </h2>
-
-        <p class="section-intro">
-          Not a collection of perfect photographs.
-          A collection of things worth remembering.
-          Walls, faces, places, mistakes, nights.
         </p>
 
-      </div>
 
-      <!-- Firebase photos appear here -->
-      <div class="photo-grid" id="galleryGrid"></div>
-
-      <div class="empty-state" id="emptyState">
-        The archive is quiet.
-      </div>
-
-
-      <!-- ========================================================
-           PHOTO UPLOAD
-           ======================================================== -->
-
-      <div class="upload-wrap reveal">
-
-        <div class="upload-header">
-
-          <div>
-            <h3>Add to the archive</h3>
-            <p>
-              Upload a photograph and it will become part of the constellation.
-            </p>
-          </div>
-
-          <div class="section-marker">
-            Private tool
-          </div>
-
-        </div>
-
-        <div class="upload-form">
-
-          <label class="file-button">
-            <span id="fileLabelText">Choose photograph</span>
-            <input
-              type="file"
-              id="photoInput"
-              accept="image/*"
-            >
-          </label>
-
-          <input
-            class="upload-input"
-            type="text"
-            id="captionInput"
-            placeholder="Location / caption / fragment"
-            maxlength="120"
-          >
+        <div class="actions">
 
           <button
-            class="upload-action"
-            id="uploadBtn"
+            class="btn"
+            data-view="gallery"
           >
-            Add to archive
+            Enter the archive
+            →
+          </button>
+
+
+          <button
+            class="btn ghost"
+            data-view="about"
+          >
+            About the observer
           </button>
 
         </div>
 
-        <div class="upload-status" id="uploadStatus"></div>
 
-      </div>
+        <div class="home-index">
 
-    </div>
+          <span>
+            CURRENT POSITION
+          </span>
 
-  </section>
+          <span class="home-index-line"></span>
 
-
-  <!-- ==========================================================
-       03 — TRANSMISSION / MUSIC
-       ========================================================== -->
-
-  <section class="archive-section transmission" id="transmissions">
-
-    <div class="container transmission-layout">
-
-      <div class="reveal">
-
-        <div class="section-marker">
-          <span>03</span>
-          <span class="line"></span>
-          Transmission
-        </div>
-
-        <h2 class="transmission-title">
-          Listen<br>
-          after dark.
-        </h2>
-
-        <p class="transmission-description">
-          Music shouldn't feel like another page.
-          It should arrive unexpectedly while you're moving
-          through the archive.
-        </p>
-
-      </div>
-
-
-      <div class="player reveal">
-
-        <div class="player-meta">
-          <span>Transmission / 001</span>
-          <span id="playerStatus">Offline</span>
-        </div>
-
-        <div class="player-title">
-          Night / 01
-        </div>
-
-        <div class="waveform" id="waveform">
-          <!-- generated by JS -->
-        </div>
-
-        <div class="player-controls">
-
-          <button
-            class="play-button"
-            id="playButton"
-            aria-label="Play transmission"
-          >
-            ▶
-          </button>
-
-          <div class="progress-track">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-
-          <span class="player-time" id="playerTime">
-            00:00
+          <span>
+            IST / 41°N
           </span>
 
         </div>
 
-        <!--
-          Put your own audio file here.
-
-          Example:
-          <audio id="audioPlayer" src="music/night-01.mp3"></audio>
-
-          For now the player is a visual placeholder.
-        -->
-
-        <audio id="audioPlayer" preload="metadata"></audio>
-
       </div>
 
-    </div>
 
-  </section>
+      <div class="home-meta">
 
-
-  <!-- ==========================================================
-       04 — FIELD NOTES
-       ========================================================== -->
-
-  <section class="archive-section field-notes" id="notes">
-
-    <div class="container">
-
-      <div class="reveal">
-
-        <div class="section-marker">
-          <span>04</span>
-          <span class="line"></span>
-          Field notes
+        <div class="home-meta-label">
+          FIELD NOTE
         </div>
 
-        <h2 class="section-title">
-          Fragments<br>
-          from the <em>night.</em>
-        </h2>
+        <p>
 
-        <p class="section-intro">
-          Small observations. Half-finished thoughts.
-          Stories that don't need to become polished articles.
+          Somewhere between a street corner,
+          a basement speaker, a forgotten wall
+          and a photograph nobody else stopped
+          to take.
+
+        </p>
+
+        <div class="archive-rule"></div>
+
+        <div
+          class="home-meta-label"
+          style="margin-top:22px;"
+        >
+          STATUS
+        </div>
+
+        <p>
+          Observing.
+          Collecting.
+          Still looking.
         </p>
 
       </div>
 
-
-      <div style="margin-top:120px;">
-
-        <article class="note reveal">
-
-          <div class="note-meta">
-            <strong>Note / 009</strong>
-            06.08.2026<br>
-            Istanbul<br>
-            02:18
-          </div>
-
-          <div class="note-body">
-
-            <h3>
-              The city keeps<br>
-              its secrets in layers.
-            </h3>
-
-            <p>
-              There are walls I've walked past hundreds of times without
-              really seeing them. Then one night the light changes,
-              someone has painted over something, and suddenly the entire
-              history of the place is visible for a second.
-            </p>
-
-            <p>
-              Most of it disappears again by morning.
-            </p>
-
-            <a href="#" class="read-more">
-              Continue fragment →
-            </a>
-
-          </div>
-
-        </article>
-
-
-        <article class="note reveal">
-
-          <div class="note-meta">
-            <strong>Note / 008</strong>
-            29.07.2026<br>
-            Kadıköy<br>
-            00:47
-          </div>
-
-          <div class="note-body">
-
-            <h3>
-              Nothing interesting<br>
-              happens at noon.
-            </h3>
-
-            <p>
-              The streets are too loud. Every surface is occupied by
-              advertisements, traffic, people trying to get somewhere.
-              At night the same city becomes almost anonymous.
-            </p>
-
-            <a href="#" class="read-more">
-              Continue fragment →
-            </a>
-
-          </div>
-
-        </article>
-
-
-        <article class="note reveal">
-
-          <div class="note-meta">
-            <strong>Note / 007</strong>
-            14.07.2026<br>
-            Unknown<br>
-            03:11
-          </div>
-
-          <div class="note-body">
-
-            <h3>
-              Found something<br>
-              worth keeping.
-            </h3>
-
-            <p>
-              A photograph, a piece of music, a sentence written on a
-              wall. Sometimes that's enough reason to stop walking.
-            </p>
-
-            <a href="#" class="read-more">
-              Continue fragment →
-            </a>
-
-          </div>
-
-        </article>
-
-      </div>
-
     </div>
 
   </section>
 
 
   <!-- ==========================================================
-       05 — OBSERVER / ABOUT
+       PHOTOGRAPHS
        ========================================================== -->
 
-  <section class="archive-section observer" id="observer">
+  <section
+    class="view"
+    id="view-gallery"
+  >
 
-    <div class="container observer-layout">
+    <div class="section-head">
 
-      <div class="reveal">
+      <div>
 
-        <div class="section-marker">
-          <span>05</span>
-          <span class="line"></span>
-          The observer
-        </div>
+        <p class="eyebrow">
+          Visual Archive
+        </p>
 
         <h2>
-          Tim.
+          Photographs
         </h2>
 
-        <p class="observer-copy">
-          Photography, sound, software and whatever else becomes
-          interesting after midnight.
-          <br><br>
-          This isn't meant to be a portfolio.
-          It's an archive of things I don't want to forget.
-        </p>
-
       </div>
 
-
-      <div class="observer-facts reveal">
-
-        <div class="observer-fact">
-          <span>Based</span>
-          <span>Istanbul</span>
-        </div>
-
-        <div class="observer-fact">
-          <span>Interested in</span>
-          <span>Images / Sound / Cities</span>
-        </div>
-
-        <div class="observer-fact">
-          <span>Currently</span>
-          <span>Looking around</span>
-        </div>
-
-        <div class="observer-fact">
-          <span>Signal</span>
-          <span>Active</span>
-        </div>
-
-      </div>
+      <span class="section-number">
+        IMG / 001—∞
+      </span>
 
     </div>
 
-  </section>
 
-
-  <!-- ==========================================================
-       06 — END / RETURN TO VOID
-       ========================================================== -->
-
-  <section class="end">
-
-    <div class="end-content reveal">
-
-      <div class="end-dot"></div>
-
-      <h2>
-        Keep looking.
-      </h2>
+    <div class="archive-intro">
 
       <p>
-        There is always something underneath.
+
+        Walls, faces, shadows, accidental compositions,
+        pieces of cities and things that disappear
+        when nobody is looking.
+
+      </p>
+
+      <p>
+
+        The archive grows slowly.
+        There is no algorithm here.
+        Just things worth keeping.
+
       </p>
 
     </div>
 
+
+    <!-- Firebase upload -->
+
+    <div class="upload-panel">
+
+      <label class="file-label">
+
+        <span id="fileLabelText">
+          Choose photo
+        </span>
+
+        <input
+          type="file"
+          id="photoInput"
+          accept="image/*"
+        >
+
+      </label>
+
+
+      <input
+        type="text"
+        id="captionInput"
+        placeholder="Caption / location / fragment..."
+      >
+
+
+      <button
+        class="btn"
+        id="uploadBtn"
+      >
+        Add to archive
+      </button>
+
+
+      <div id="upload-status"></div>
+
+    </div>
+
+
+    <div
+      class="grid"
+      id="galleryGrid"
+    >
+      <!-- Firebase photos injected here -->
+    </div>
+
+
+    <div
+      class="empty-state"
+      id="emptyState"
+      style="display:none; margin-top:16px;"
+    >
+      No photographs have been archived yet.
+    </div>
+
   </section>
 
+
+  <!-- ==========================================================
+       ARCHIVE
+       ========================================================== -->
+
+  <section
+    class="view"
+    id="view-archive"
+  >
+
+    <div class="section-head">
+
+      <div>
+
+        <p class="eyebrow">
+          Underground / 002
+        </p>
+
+        <h2>
+          The Archive
+        </h2>
+
+      </div>
+
+      <span class="section-number">
+        SIGNAL / FOUND
+      </span>
+
+    </div>
+
+
+    <div class="archive-intro">
+
+      <p>
+
+        Not everything needs to become a category.
+        Some things are better left slightly undefined.
+
+      </p>
+
+      <p>
+
+        Music, graffiti, writing, photographs,
+        references and whatever else survives
+        long enough to become interesting.
+
+      </p>
+
+    </div>
+
+
+    <div class="archive-grid">
+
+
+      <article class="archive-card">
+
+        <div class="archive-index">
+          001 / WALLS
+        </div>
+
+        <h3>
+          Graffiti
+        </h3>
+
+        <p>
+
+          Paint on concrete.
+          Names without biographies.
+          Messages that weren't meant
+          for everyone.
+
+        </p>
+
+      </article>
+
+
+      <article class="archive-card">
+
+        <div class="archive-index">
+          002 / SOUND
+        </div>
+
+        <h3>
+          Music
+        </h3>
+
+        <p>
+
+          Records, mixes, artists,
+          strange sounds and the music
+          that belongs to certain nights.
+
+        </p>
+
+      </article>
+
+
+      <article class="archive-card">
+
+        <div class="archive-index">
+          003 / NOTES
+        </div>
+
+        <h3>
+          Field Notes
+        </h3>
+
+        <p>
+
+          Observations from streets,
+          rooms, trains, photographs
+          and places that don't need
+          to be named.
+
+        </p>
+
+      </article>
+
+
+      <article class="archive-card">
+
+        <div class="archive-index">
+          004 / TEXT
+        </div>
+
+        <h3>
+          Writing
+        </h3>
+
+        <p>
+
+          Short essays, unfinished
+          thoughts, fragments and
+          things that refuse to become
+          conventional blog posts.
+
+        </p>
+
+      </article>
+
+
+      <article class="archive-card">
+
+        <div class="archive-index">
+          005 / SIGNAL
+        </div>
+
+        <h3>
+          References
+        </h3>
+
+        <p>
+
+          Films, books, images, artists,
+          places and other pieces of
+          culture worth following.
+
+        </p>
+
+      </article>
+
+
+      <article class="archive-card">
+
+        <div class="archive-index">
+          006 / UNKNOWN
+        </div>
+
+        <h3>
+          Unclassified
+        </h3>
+
+        <p>
+
+          Things found without a
+          category yet.
+
+          <br><br>
+
+          Maybe that's the point.
+
+        </p>
+
+      </article>
+
+
+    </div>
+
+  </section>
+
+
+  <!-- ==========================================================
+       ABOUT
+       ========================================================== -->
+
+  <section
+    class="view"
+    id="view-about"
+  >
+
+    <div class="section-head">
+
+      <div>
+
+        <p class="eyebrow">
+          The Observer
+        </p>
+
+        <h2>
+          About
+        </h2>
+
+      </div>
+
+      <span class="section-number">
+        PERSON / 001
+      </span>
+
+    </div>
+
+
+    <div class="about-layout">
+
+
+      <div>
+
+        <p class="about-statement">
+
+          I like looking at the things most people
+          walk past.
+
+        </p>
+
+
+        <p class="about-copy">
+
+          This site is a personal space for collecting
+          the things that catch my attention.
+
+          <br><br>
+
+          Photography, graffiti, music, underground
+          culture, places, people and ideas.
+
+          <br><br>
+
+          There is no particular order to it.
+
+          The archive is supposed to feel like walking
+          through a city at night — you turn a corner
+          without knowing what you'll find.
+
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <ul class="kv-list">
+
+          <li>
+            <b>Based in</b>
+            Istanbul
+          </li>
+
+          <li>
+            <b>Focus</b>
+            Photography / Software
+          </li>
+
+          <li>
+            <b>Interest</b>
+            Underground culture
+          </li>
+
+          <li>
+            <b>Currently</b>
+            Looking around
+          </li>
+
+          <li>
+            <b>Status</b>
+            Unclassified
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ==========================================================
+       CONTACT
+       ========================================================== -->
+
+  <section
+    class="view"
+    id="view-contact"
+  >
+
+    <div class="section-head">
+
+      <div>
+
+        <p class="eyebrow">
+          Open Channel
+        </p>
+
+        <h2>
+          Contact
+        </h2>
+
+      </div>
+
+      <span class="section-number">
+        SIGNAL / OPEN
+      </span>
+
+    </div>
+
+
+    <div class="contact-layout">
+
+
+      <div>
+
+        <p class="contact-big">
+
+          Send something
+          into the dark.
+
+        </p>
+
+      </div>
+
+
+      <div class="contact-list">
+
+
+        <div class="contact-item">
+
+          <span class="contact-label">
+            Email
+          </span>
+
+          <a
+            class="contact-value"
+            href="mailto:you@example.com"
+          >
+            you@example.com
+          </a>
+
+        </div>
+
+
+        <div class="contact-item">
+
+          <span class="contact-label">
+            GitHub
+          </span>
+
+          <a
+            class="contact-value"
+            href="https://github.com/yourhandle"
+            target="_blank"
+            rel="noopener"
+          >
+            github.com/yourhandle
+          </a>
+
+        </div>
+
+
+        <div class="contact-item">
+
+          <span class="contact-label">
+            Instagram
+          </span>
+
+          <a
+            class="contact-value"
+            href="#"
+          >
+            @yourhandle
+          </a>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </section>
+
+
 </main>
+
+
+<!-- ============================================================
+     DIVIDER
+     ============================================================ -->
+
+<div class="sprockets">
+
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+
+</div>
 
 
 <!-- ============================================================
@@ -1735,926 +2813,1719 @@ main{
 
 <footer class="site-footer">
 
-  <div class="footer-inner">
+  <span class="footer-mark">
+    ◌
+  </span>
 
-    <span>Tim / After Dark</span>
+  &nbsp;
 
-    <span>
-      © <span id="year"></span>
-    </span>
+  THE OBSERVER / ARCHIVE ACTIVE
 
-    <span>
-      Istanbul / TR
-    </span>
+  &nbsp;
 
-  </div>
+  <span class="footer-mark">
+    ◌
+  </span>
 
 </footer>
 
 
+<!-- ============================================================
+     FIREBASE + SITE LOGIC
+     ============================================================ -->
+
 <script type="module">
 
-/* ============================================================
-   FIREBASE
-   ============================================================ */
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  /* ==========================================================
+     FIREBASE SETUP
+     ========================================================== */
 
-import {
-  getDatabase,
-  ref,
-  push,
-  remove,
-  onValue,
-  query,
-  orderByChild,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import {
+    initializeApp
+  }
+  from
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 
-/*
-  Replace the placeholder values with the Firebase Web App
-  configuration from:
+  import {
 
-  Firebase Console
-  → Project Settings
-  → General
-  → Your Apps
-*/
+    getDatabase,
+    ref,
+    push,
+    remove,
+    onValue,
+    query,
+    orderByChild,
+    serverTimestamp
 
-const firebaseConfig = {
-
-  apiKey: "YOUR_API_KEY",
-
-  authDomain:
-    "thegaze-d8e86.firebaseapp.com",
-
-  databaseURL:
-    "https://thegaze-d8e86-default-rtdb.europe-west1.firebasedatabase.app",
-
-  projectId:
-    "thegaze-d8e86",
-
-  messagingSenderId:
-    "YOUR_SENDER_ID",
-
-  appId:
-    "YOUR_APP_ID"
-
-};
+  }
+  from
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
-let db = null;
+  const firebaseConfig = {
 
-const firebaseReady =
-  firebaseConfig.apiKey !== "YOUR_API_KEY";
+    apiKey:
+      "YOUR_API_KEY",
+
+    authDomain:
+      "thegaze-d8e86.firebaseapp.com",
+
+    databaseURL:
+      "https://thegaze-d8e86-default-rtdb.europe-west1.firebasedatabase.app",
+
+    projectId:
+      "thegaze-d8e86",
+
+    messagingSenderId:
+      "YOUR_SENDER_ID",
+
+    appId:
+      "YOUR_APP_ID"
+
+  };
 
 
-if(firebaseReady){
+  let db;
+
+  let firebaseReady =
+    false;
+
 
   try{
 
-    const app = initializeApp(firebaseConfig);
+    const app =
+      initializeApp(
+        firebaseConfig
+      );
 
-    db = getDatabase(app);
+
+    db =
+      getDatabase(app);
+
+
+    firebaseReady =
+      firebaseConfig.apiKey !==
+      "YOUR_API_KEY";
+
 
   }catch(error){
 
     console.error(
-      "Firebase initialization failed:",
+      "Firebase failed to initialize:",
       error
     );
 
   }
 
-}
+
+  /* ==========================================================
+     FILE -> BASE64
+     ========================================================== */
+
+  function fileToBase64(file){
+
+    return new Promise(
+      (resolve,reject)=>{
+
+        const reader =
+          new FileReader();
 
 
-/* ============================================================
-   BASIC UI
-   ============================================================ */
-
-const header =
-  document.getElementById("siteHeader");
-
-const progress =
-  document.getElementById("pageProgress");
-
-const menuButton =
-  document.getElementById("menuButton");
-
-const mainNav =
-  document.getElementById("mainNav");
-
-const year =
-  document.getElementById("year");
-
-year.textContent =
-  new Date().getFullYear();
+        reader.onload =
+          () =>
+            resolve(
+              reader.result
+            );
 
 
-/* Header */
-
-window.addEventListener("scroll", () => {
-
-  const scroll =
-    window.scrollY;
-
-  const height =
-    document.documentElement.scrollHeight -
-    window.innerHeight;
-
-  const percentage =
-    height > 0
-      ? (scroll / height) * 100
-      : 0;
-
-  progress.style.width =
-    percentage + "%";
-
-  header.classList.toggle(
-    "scrolled",
-    scroll > 50
-  );
-
-});
+        reader.onerror =
+          reject;
 
 
-/* Mobile menu */
-
-menuButton.addEventListener(
-  "click",
-  () => {
-
-    const open =
-      mainNav.classList.toggle("open");
-
-    menuButton.setAttribute(
-      "aria-expanded",
-      open
-    );
-
-  }
-);
-
-
-/* Close mobile menu after navigation */
-
-mainNav
-  .querySelectorAll("a")
-  .forEach(link => {
-
-    link.addEventListener(
-      "click",
-      () => {
-
-        mainNav.classList.remove("open");
-
-        menuButton.setAttribute(
-          "aria-expanded",
-          "false"
+        reader.readAsDataURL(
+          file
         );
 
       }
     );
 
-  });
+  }
 
 
-/* ============================================================
-   SCROLL REVEALS
-   ============================================================ */
+  /* ==========================================================
+     NAVIGATION
+     ========================================================== */
 
-const revealObserver =
-  new IntersectionObserver(
-    entries => {
+  const views =
+    document.querySelectorAll(
+      ".view"
+    );
 
-      entries.forEach(entry => {
 
-        if(entry.isIntersecting){
+  const navMenu =
+    document.getElementById(
+      "navMenu"
+    );
 
-          entry.target.classList.add("visible");
 
-          revealObserver.unobserve(
-            entry.target
+  const navToggle =
+    document.getElementById(
+      "navToggle"
+    );
+
+
+  function showView(name){
+
+    views.forEach(
+      view => {
+
+        view.classList.toggle(
+          "active",
+          view.id ===
+            "view-" + name
+        );
+
+      }
+    );
+
+
+    document
+      .querySelectorAll(
+        "[data-view]"
+      )
+      .forEach(
+        button => {
+
+          if(
+            button.tagName ===
+              "BUTTON" &&
+            button.closest("nav")
+          ){
+
+            button.classList.toggle(
+              "active",
+              button.dataset.view ===
+                name
+            );
+
+          }
+
+        }
+      );
+
+
+    navMenu.classList.remove(
+      "open"
+    );
+
+
+    navToggle.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+
+    history.replaceState(
+      null,
+      "",
+      "#" + name
+    );
+
+  }
+
+
+  document
+    .querySelectorAll(
+      "[data-view]"
+    )
+    .forEach(
+      element => {
+
+        element.addEventListener(
+          "click",
+          () => {
+
+            showView(
+              element.dataset.view
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  navToggle.addEventListener(
+    "click",
+    () => {
+
+      const open =
+        navMenu.classList.toggle(
+          "open"
+        );
+
+
+      navToggle.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
+
+    }
+  );
+
+
+  const initialView =
+    location.hash
+      .replace("#","") ||
+      "home";
+
+
+  if(
+    [
+      "home",
+      "gallery",
+      "archive",
+      "about",
+      "contact"
+    ].includes(initialView)
+  ){
+
+    showView(
+      initialView
+    );
+
+  }
+
+
+  /* ==========================================================
+     GALLERY
+     ========================================================== */
+
+  const grid =
+    document.getElementById(
+      "galleryGrid"
+    );
+
+
+  const emptyState =
+    document.getElementById(
+      "emptyState"
+    );
+
+
+  const photoInput =
+    document.getElementById(
+      "photoInput"
+    );
+
+
+  const fileLabelText =
+    document.getElementById(
+      "fileLabelText"
+    );
+
+
+  const captionInput =
+    document.getElementById(
+      "captionInput"
+    );
+
+
+  const uploadBtn =
+    document.getElementById(
+      "uploadBtn"
+    );
+
+
+  const statusEl =
+    document.getElementById(
+      "upload-status"
+    );
+
+
+  photoInput.addEventListener(
+    "change",
+    () => {
+
+      fileLabelText.textContent =
+        photoInput.files[0]?.name ||
+        "Choose photo";
+
+    }
+  );
+
+
+  /* ==========================================================
+     HTML ESCAPE
+     ========================================================== */
+
+  function escapeHtml(str){
+
+    const div =
+      document.createElement(
+        "div"
+      );
+
+
+    div.textContent =
+      str;
+
+
+    return div.innerHTML;
+
+  }
+
+
+  /* ==========================================================
+     RENDER PHOTOS
+     ========================================================== */
+
+  function renderPhotos(
+    photos
+  ){
+
+    grid.innerHTML = "";
+
+
+    emptyState.style.display =
+      photos.length
+        ? "none"
+        : "block";
+
+
+    photos.forEach(
+      photo => {
+
+        const figure =
+          document.createElement(
+            "figure"
+          );
+
+
+        figure.className =
+          "card";
+
+
+        const image =
+          document.createElement(
+            "img"
+          );
+
+
+        image.src =
+          photo.url;
+
+
+        image.alt =
+          photo.caption
+            ? photo.caption
+            : "Archived photograph";
+
+
+        image.loading =
+          "lazy";
+
+
+        figure.appendChild(
+          image
+        );
+
+
+        if(photo.caption){
+
+          const caption =
+            document.createElement(
+              "figcaption"
+            );
+
+
+          caption.textContent =
+            photo.caption;
+
+
+          figure.appendChild(
+            caption
           );
 
         }
 
-      });
 
-    },
-    {
-      threshold:.12
-    }
-  );
+        const deleteButton =
+          document.createElement(
+            "button"
+          );
 
 
-document
-  .querySelectorAll(".reveal")
-  .forEach(element => {
-
-    revealObserver.observe(element);
-
-  });
+        deleteButton.className =
+          "card-delete";
 
 
-/* ============================================================
-   WAVEFORM
-   ============================================================ */
-
-const waveform =
-  document.getElementById("waveform");
+        deleteButton.title =
+          "Delete photograph";
 
 
-for(let i = 0; i < 55; i++){
-
-  const bar =
-    document.createElement("span");
-
-  const height =
-    15 + Math.random() * 75;
-
-  bar.style.height =
-    height + "%";
-
-  waveform.appendChild(bar);
-
-}
+        deleteButton.textContent =
+          "✕";
 
 
-/* ============================================================
-   AUDIO PLAYER
-   ============================================================ */
+        deleteButton.addEventListener(
+          "click",
+          event => {
 
-const audioPlayer =
-  document.getElementById("audioPlayer");
+            event.stopPropagation();
 
-const playButton =
-  document.getElementById("playButton");
+            deletePhoto(
+              photo
+            );
 
-const progressFill =
-  document.getElementById("progressFill");
-
-const playerTime =
-  document.getElementById("playerTime");
-
-const playerStatus =
-  document.getElementById("playerStatus");
-
-
-/*
-  ADD YOUR AUDIO FILE HERE.
-
-  Example:
-
-  audioPlayer.src = "music/night-01.mp3";
-
-  If you don't add a source, the player remains
-  a visual element rather than producing an error.
-*/
-
-const AUDIO_SOURCE = "";
-
-
-if(AUDIO_SOURCE){
-
-  audioPlayer.src =
-    AUDIO_SOURCE;
-
-  playerStatus.textContent =
-    "Ready";
-
-}
-
-
-playButton.addEventListener(
-  "click",
-  async () => {
-
-    if(!AUDIO_SOURCE){
-
-      playerStatus.textContent =
-        "Add an audio source";
-
-      return;
-
-    }
-
-    if(audioPlayer.paused){
-
-      try{
-
-        await audioPlayer.play();
-
-        playButton.textContent =
-          "Ⅱ";
-
-        waveform.classList.add(
-          "playing"
+          }
         );
 
-        playerStatus.textContent =
-          "Playing";
 
-      }catch(error){
+        figure.appendChild(
+          deleteButton
+        );
 
-        console.error(error);
+
+        grid.appendChild(
+          figure
+        );
 
       }
-
-    }else{
-
-      audioPlayer.pause();
-
-      playButton.textContent =
-        "▶";
-
-      waveform.classList.remove(
-        "playing"
-      );
-
-      playerStatus.textContent =
-        "Paused";
-
-    }
-
-  }
-);
-
-
-audioPlayer.addEventListener(
-  "timeupdate",
-  () => {
-
-    if(!audioPlayer.duration)
-      return;
-
-    const percentage =
-      (
-        audioPlayer.currentTime /
-        audioPlayer.duration
-      ) * 100;
-
-    progressFill.style.width =
-      percentage + "%";
-
-    const seconds =
-      Math.floor(
-        audioPlayer.currentTime
-      );
-
-    const minutes =
-      Math.floor(seconds / 60);
-
-    const remaining =
-      seconds % 60;
-
-    playerTime.textContent =
-      String(minutes).padStart(2,"0") +
-      ":" +
-      String(remaining).padStart(2,"0");
-
-  }
-);
-
-
-audioPlayer.addEventListener(
-  "ended",
-  () => {
-
-    playButton.textContent =
-      "▶";
-
-    waveform.classList.remove(
-      "playing"
     );
 
-    playerStatus.textContent =
-      "Finished";
-
-    progressFill.style.width =
-      "0%";
-
   }
-);
 
 
-/* ============================================================
-   PHOTO UPLOAD
-   ============================================================ */
+  /* ==========================================================
+     UPLOAD
+     ========================================================== */
 
-const galleryGrid =
-  document.getElementById("galleryGrid");
-
-const emptyState =
-  document.getElementById("emptyState");
-
-const photoInput =
-  document.getElementById("photoInput");
-
-const captionInput =
-  document.getElementById("captionInput");
-
-const fileLabelText =
-  document.getElementById("fileLabelText");
-
-const uploadBtn =
-  document.getElementById("uploadBtn");
-
-const uploadStatus =
-  document.getElementById("uploadStatus");
+  const MAX_BYTES =
+    4 * 1024 * 1024;
 
 
-photoInput.addEventListener(
-  "change",
-  () => {
+  async function uploadPhoto(){
 
-    fileLabelText.textContent =
-      photoInput.files[0]?.name ||
-      "Choose photograph";
-
-  }
-);
+    const file =
+      photoInput.files[0];
 
 
-/* Convert image to base64 */
+    if(!file){
 
-function fileToBase64(file){
+      statusEl.textContent =
+        "Choose a photograph first.";
 
-  return new Promise(
-    (resolve, reject) => {
-
-      const reader =
-        new FileReader();
-
-      reader.onload =
-        () => resolve(reader.result);
-
-      reader.onerror =
-        reject;
-
-      reader.readAsDataURL(file);
+      return;
 
     }
+
+
+    if(!firebaseReady){
+
+      statusEl.textContent =
+        "Firebase isn't configured yet — add your project keys.";
+
+      return;
+
+    }
+
+
+    if(
+      file.size >
+      MAX_BYTES
+    ){
+
+      statusEl.textContent =
+        "That photograph is too large. Maximum size is about 4MB.";
+
+      return;
+
+    }
+
+
+    uploadBtn.disabled =
+      true;
+
+
+    statusEl.textContent =
+      "Transmitting photograph…";
+
+
+    try{
+
+      const dataUrl =
+        await fileToBase64(
+          file
+        );
+
+
+      await push(
+        ref(
+          db,
+          "photos"
+        ),
+        {
+
+          url:dataUrl,
+
+          caption:
+            captionInput.value.trim(),
+
+          createdAt:
+            serverTimestamp()
+
+        }
+      );
+
+
+      photoInput.value =
+        "";
+
+      captionInput.value =
+        "";
+
+      fileLabelText.textContent =
+        "Choose photo";
+
+
+      statusEl.textContent =
+        "Photograph archived.";
+
+
+      setTimeout(
+        () => {
+
+          statusEl.textContent =
+            "";
+
+        },
+        2500
+      );
+
+
+    }catch(error){
+
+      console.error(
+        error
+      );
+
+
+      statusEl.textContent =
+        "Transmission failed — check Firebase configuration.";
+
+    }finally{
+
+      uploadBtn.disabled =
+        false;
+
+    }
+
+  }
+
+
+  /* ==========================================================
+     DELETE
+     ========================================================== */
+
+  async function deletePhoto(
+    photo
+  ){
+
+    if(
+      !confirm(
+        "Remove this photograph from the archive?"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    try{
+
+      await remove(
+        ref(
+          db,
+          "photos/" +
+          photo.id
+        )
+      );
+
+
+    }catch(error){
+
+      console.error(
+        error
+      );
+
+
+      alert(
+        "Could not remove photograph."
+      );
+
+    }
+
+  }
+
+
+  uploadBtn.addEventListener(
+    "click",
+    uploadPhoto
   );
 
-}
+
+  /* ==========================================================
+     FIREBASE REALTIME LISTENER
+     ========================================================== */
+
+  if(firebaseReady){
+
+    const photosQuery =
+      query(
+        ref(
+          db,
+          "photos"
+        ),
+        orderByChild(
+          "createdAt"
+        )
+      );
 
 
-/* ============================================================
-   PHOTO RENDERING
-   ============================================================ */
+    onValue(
+      photosQuery,
+      snapshot => {
 
-function renderPhotos(photos){
+        const photos =
+          [];
 
-  galleryGrid.innerHTML = "";
 
-  if(!photos.length){
+        snapshot.forEach(
+          child => {
+
+            photos.push({
+
+              id:
+                child.key,
+
+              ...child.val()
+
+            });
+
+          }
+        );
+
+
+        photos.reverse();
+
+
+        renderPhotos(
+          photos
+        );
+
+      },
+      error => {
+
+        console.error(
+          error
+        );
+
+
+        statusEl.textContent =
+          "Couldn't load the archive — check Firebase rules.";
+
+      }
+    );
+
+
+  }else{
 
     emptyState.style.display =
       "block";
 
-    return;
+
+    emptyState.textContent =
+      "Firebase configuration required to activate the photograph archive.";
 
   }
 
-  emptyState.style.display =
-    "none";
+
+  /* ==========================================================
+     CELESTIAL ENGINE
+     ========================================================== */
+
+  const celestialCanvas =
+    document.getElementById(
+      "celestialCanvas"
+    );
 
 
-  photos.forEach(
-    (photo, index) => {
-
-      const figure =
-        document.createElement("figure");
-
-      figure.className =
-        "photo-card reveal";
+  const celestialContext =
+    celestialCanvas.getContext(
+      "2d"
+    );
 
 
-      const image =
-        document.createElement("img");
+  let celestialWidth = 0;
+  let celestialHeight = 0;
+  let celestialDpr = 1;
 
-      image.src =
-        photo.url;
+  let stars = [];
+  let shootingStars = [];
+  let constellationLines = [];
 
-      image.alt =
-        photo.caption ||
-        "Photograph from the archive";
+  let mouseX = 0;
+  let mouseY = 0;
 
-      image.loading =
-        "lazy";
-
-
-      const info =
-        document.createElement("figcaption");
-
-      info.className =
-        "photo-info";
+  let targetMouseX = 0;
+  let targetMouseY = 0;
 
 
-      const left =
-        document.createElement("span");
+  const celestialSettings = {
 
-      left.className =
-        "photo-index";
+    desktopStars:190,
 
-      left.textContent =
-        String(index + 1)
-          .padStart(3,"0");
+    mobileStars:95,
 
+    shootingStarChance:.0018,
 
-      const right =
-        document.createElement("span");
+    maxShootingStars:2,
 
-      right.textContent =
-        photo.caption ||
-        "Untitled / found";
+    constellationDistance:125,
+
+    constellationOpacity:.11
+
+  };
 
 
-      const deleteButton =
-        document.createElement("button");
+  /* ----------------------------------------------------------
+     RESIZE
+     ---------------------------------------------------------- */
 
-      deleteButton.type =
-        "button";
+  function resizeCelestialCanvas(){
 
-      deleteButton.textContent =
-        "×";
-
-      deleteButton.title =
-        "Delete photograph";
-
-      deleteButton.setAttribute(
-        "aria-label",
-        "Delete photograph"
+    celestialDpr =
+      Math.min(
+        window.devicePixelRatio || 1,
+        2
       );
 
-      deleteButton.style.cssText = `
-        position:absolute;
-        top:-12px;
-        right:-12px;
-        width:28px;
-        height:28px;
-        border:1px solid rgba(217,221,217,.2);
-        background:#080c11;
-        color:#737d82;
-        border-radius:50%;
-        cursor:pointer;
-        opacity:0;
-        transition:.2s ease;
-        z-index:5;
-      `;
+
+    celestialWidth =
+      window.innerWidth;
 
 
-      deleteButton.addEventListener(
-        "mouseenter",
-        () => {
+    celestialHeight =
+      window.innerHeight;
 
-          deleteButton.style.opacity =
-            "1";
 
-          deleteButton.style.color =
-            "#b79558";
+    celestialCanvas.width =
+      celestialWidth *
+      celestialDpr;
+
+
+    celestialCanvas.height =
+      celestialHeight *
+      celestialDpr;
+
+
+    celestialCanvas.style.width =
+      celestialWidth +
+      "px";
+
+
+    celestialCanvas.style.height =
+      celestialHeight +
+      "px";
+
+
+    celestialContext.setTransform(
+      celestialDpr,
+      0,
+      0,
+      celestialDpr,
+      0,
+      0
+    );
+
+
+    createStars();
+
+  }
+
+
+  window.addEventListener(
+    "resize",
+    resizeCelestialCanvas
+  );
+
+
+  /* ----------------------------------------------------------
+     RANDOM
+     ---------------------------------------------------------- */
+
+  function randomBetween(
+    min,
+    max
+  ){
+
+    return (
+      Math.random() *
+      (max-min)
+    ) + min;
+
+  }
+
+
+  /* ----------------------------------------------------------
+     CREATE STARS
+     ---------------------------------------------------------- */
+
+  function createStars(){
+
+    stars = [];
+
+
+    const mobile =
+      window.innerWidth <
+      700;
+
+
+    const count =
+      mobile
+        ? celestialSettings.mobileStars
+        : celestialSettings.desktopStars;
+
+
+    for(
+      let i=0;
+      i<count;
+      i++
+    ){
+
+      const depth =
+        randomBetween(
+          .15,
+          1
+        );
+
+
+      stars.push({
+
+        x:
+          Math.random() *
+          celestialWidth,
+
+        y:
+          Math.random() *
+          celestialHeight,
+
+        radius:
+          randomBetween(
+            .35,
+            1.45
+          ) *
+          depth,
+
+        depth,
+
+        alpha:
+          randomBetween(
+            .15,
+            .7
+          ),
+
+        twinkle:
+          randomBetween(
+            .0008,
+            .0025
+          ),
+
+        phase:
+          Math.random() *
+          Math.PI *
+          2,
+
+        color:
+          Math.random() <
+          .82
+
+            ? "white"
+
+            :
+
+            (
+              Math.random() <
+              .5
+
+                ? "brass"
+
+                : "blue"
+            )
+
+      });
+
+    }
+
+
+    buildConstellations();
+
+  }
+
+
+  /* ----------------------------------------------------------
+     CONSTELLATIONS
+     ---------------------------------------------------------- */
+
+  function buildConstellations(){
+
+    constellationLines =
+      [];
+
+
+    const candidates =
+      stars.filter(
+        star =>
+          star.depth >
+          .45
+      );
+
+
+    for(
+      let i=0;
+      i<candidates.length;
+      i++
+    ){
+
+      const a =
+        candidates[i];
+
+
+      for(
+        let j=i+1;
+        j<candidates.length;
+        j++
+      ){
+
+        const b =
+          candidates[j];
+
+
+        const dx =
+          a.x-b.x;
+
+
+        const dy =
+          a.y-b.y;
+
+
+        const distance =
+          Math.sqrt(
+            dx*dx +
+            dy*dy
+          );
+
+
+        if(
+          distance <
+          celestialSettings.constellationDistance
+        ){
+
+          if(
+            Math.random() <
+            .055
+          ){
+
+            constellationLines.push({
+              a,
+              b
+            });
+
+          }
 
         }
+
+      }
+
+    }
+
+  }
+
+
+  /* ----------------------------------------------------------
+     STAR POSITION
+     ---------------------------------------------------------- */
+
+  function getStarPosition(
+    star
+  ){
+
+    const parallaxX =
+      mouseX *
+      star.depth *
+      10;
+
+
+    const parallaxY =
+      mouseY *
+      star.depth *
+      6;
+
+
+    return {
+
+      x:
+        star.x +
+        parallaxX,
+
+      y:
+        star.y +
+        parallaxY
+
+    };
+
+  }
+
+
+  /* ----------------------------------------------------------
+     DRAW STAR
+     ---------------------------------------------------------- */
+
+  function drawStar(
+    star,
+    time
+  ){
+
+    const position =
+      getStarPosition(
+        star
       );
 
 
-      figure.addEventListener(
-        "mouseenter",
-        () => {
-
-          deleteButton.style.opacity =
-            "1";
-
-        }
+    const twinkle =
+      Math.sin(
+        time *
+        star.twinkle +
+        star.phase
       );
 
 
-      figure.addEventListener(
-        "mouseleave",
-        () => {
-
-          deleteButton.style.opacity =
-            "0";
-
-        }
+    const alpha =
+      Math.max(
+        .05,
+        star.alpha +
+        twinkle*.14
       );
 
 
-      deleteButton.addEventListener(
-        "click",
-        event => {
+    let color;
 
-          event.preventDefault();
 
-          deletePhoto(photo);
+    if(
+      star.color ===
+      "brass"
+    ){
 
-        }
+      color =
+        `rgba(183,149,88,${alpha})`;
+
+    }else if(
+      star.color ===
+      "blue"
+    ){
+
+      color =
+        `rgba(142,165,178,${alpha})`;
+
+    }else{
+
+      color =
+        `rgba(220,226,225,${alpha})`;
+
+    }
+
+
+    celestialContext.beginPath();
+
+
+    celestialContext.arc(
+      position.x,
+      position.y,
+      star.radius,
+      0,
+      Math.PI*2
+    );
+
+
+    celestialContext.fillStyle =
+      color;
+
+
+    celestialContext.fill();
+
+
+    if(
+      star.radius >
+      1
+    ){
+
+      celestialContext.beginPath();
+
+
+      celestialContext.arc(
+        position.x,
+        position.y,
+        star.radius*4,
+        0,
+        Math.PI*2
       );
 
 
-      info.appendChild(left);
-      info.appendChild(right);
+      const glow =
+        celestialContext.createRadialGradient(
+          position.x,
+          position.y,
+          0,
+          position.x,
+          position.y,
+          star.radius*4
+        );
 
-      figure.appendChild(image);
-      figure.appendChild(info);
-      figure.appendChild(deleteButton);
 
-      galleryGrid.appendChild(figure);
+      glow.addColorStop(
+        0,
+        `rgba(
+          220,
+          226,
+          225,
+          ${alpha*.15}
+        )`
+      );
 
-      requestAnimationFrame(
-        () => {
 
-          revealObserver.observe(
-            figure
+      glow.addColorStop(
+        1,
+        "rgba(220,226,225,0)"
+      );
+
+
+      celestialContext.fillStyle =
+        glow;
+
+
+      celestialContext.fill();
+
+    }
+
+  }
+
+
+  /* ----------------------------------------------------------
+     DRAW CONSTELLATIONS
+     ---------------------------------------------------------- */
+
+  function drawConstellations(){
+
+    constellationLines.forEach(
+      line => {
+
+        const a =
+          getStarPosition(
+            line.a
+          );
+
+
+        const b =
+          getStarPosition(
+            line.b
+          );
+
+
+        celestialContext.beginPath();
+
+
+        celestialContext.moveTo(
+          a.x,
+          a.y
+        );
+
+
+        celestialContext.lineTo(
+          b.x,
+          b.y
+        );
+
+
+        celestialContext.strokeStyle =
+          `rgba(
+            183,
+            149,
+            88,
+            ${celestialSettings.constellationOpacity}
+          )`;
+
+
+        celestialContext.lineWidth =
+          .45;
+
+
+        celestialContext.stroke();
+
+      }
+    );
+
+  }
+
+
+  /* ==========================================================
+     SHOOTING STARS
+     ========================================================== */
+
+  function createShootingStar(){
+
+    if(
+      shootingStars.length >=
+      celestialSettings.maxShootingStars
+    ){
+
+      return;
+
+    }
+
+
+    const startX =
+      randomBetween(
+        celestialWidth*.35,
+        celestialWidth*1.05
+      );
+
+
+    const startY =
+      randomBetween(
+        -100,
+        celestialHeight*.42
+      );
+
+
+    const angle =
+      randomBetween(
+        Math.PI*.62,
+        Math.PI*.82
+      );
+
+
+    const speed =
+      randomBetween(
+        8,
+        15
+      );
+
+
+    shootingStars.push({
+
+      x:startX,
+
+      y:startY,
+
+      vx:
+        Math.cos(angle) *
+        speed,
+
+      vy:
+        Math.sin(angle) *
+        speed,
+
+      length:
+        randomBetween(
+          80,
+          190
+        ),
+
+      life:0,
+
+      maxLife:
+        randomBetween(
+          45,
+          90
+        ),
+
+      brightness:
+        randomBetween(
+          .45,
+          .9
+        )
+
+    });
+
+  }
+
+
+  /* ----------------------------------------------------------
+     DRAW SHOOTING STAR
+     ---------------------------------------------------------- */
+
+  function drawShootingStar(
+    star
+  ){
+
+    const length =
+      star.length;
+
+
+    const velocity =
+      Math.sqrt(
+        star.vx*star.vx +
+        star.vy*star.vy
+      );
+
+
+    const tailX =
+      star.x -
+      (
+        star.vx /
+        velocity
+      ) *
+      length;
+
+
+    const tailY =
+      star.y -
+      (
+        star.vy /
+        velocity
+      ) *
+      length;
+
+
+    const gradient =
+      celestialContext.createLinearGradient(
+        tailX,
+        tailY,
+        star.x,
+        star.y
+      );
+
+
+    gradient.addColorStop(
+      0,
+      "rgba(183,149,88,0)"
+    );
+
+
+    gradient.addColorStop(
+      .7,
+      `rgba(
+        183,
+        149,
+        88,
+        ${star.brightness*.25}
+      )`
+    );
+
+
+    gradient.addColorStop(
+      1,
+      `rgba(
+        225,
+        230,
+        225,
+        ${star.brightness}
+      )`
+    );
+
+
+    celestialContext.beginPath();
+
+
+    celestialContext.moveTo(
+      tailX,
+      tailY
+    );
+
+
+    celestialContext.lineTo(
+      star.x,
+      star.y
+    );
+
+
+    celestialContext.strokeStyle =
+      gradient;
+
+
+    celestialContext.lineWidth =
+      randomBetween(
+        1,
+        1.8
+      );
+
+
+    celestialContext.stroke();
+
+
+    celestialContext.beginPath();
+
+
+    celestialContext.arc(
+      star.x,
+      star.y,
+      1.4,
+      0,
+      Math.PI*2
+    );
+
+
+    celestialContext.fillStyle =
+      `rgba(
+        240,
+        243,
+        237,
+        ${star.brightness}
+      )`;
+
+
+    celestialContext.fill();
+
+  }
+
+
+  /* ----------------------------------------------------------
+     UPDATE SHOOTING STARS
+     ---------------------------------------------------------- */
+
+  function updateShootingStars(){
+
+    shootingStars.forEach(
+      star => {
+
+        star.x +=
+          star.vx;
+
+
+        star.y +=
+          star.vy;
+
+
+        star.life++;
+
+      }
+    );
+
+
+    shootingStars =
+      shootingStars.filter(
+        star => {
+
+          return (
+
+            star.life <
+              star.maxLife &&
+
+            star.x >
+              -300 &&
+
+            star.x <
+              celestialWidth+300 &&
+
+            star.y >
+              -300 &&
+
+            star.y <
+              celestialHeight+300
+
           );
 
         }
       );
 
-    }
-  );
-
-}
-
-
-/* ============================================================
-   UPLOAD
-   ============================================================ */
-
-const MAX_BYTES =
-  4 * 1024 * 1024;
-
-
-async function uploadPhoto(){
-
-  const file =
-    photoInput.files[0];
-
-
-  if(!file){
-
-    uploadStatus.textContent =
-      "Choose a photograph first.";
-
-    return;
-
   }
 
 
-  if(!firebaseReady || !db){
+  /* ==========================================================
+     CELESTIAL LOOP
+     ========================================================== */
 
-    uploadStatus.textContent =
-      "Firebase is not configured yet.";
+  function animateCelestial(
+    time
+  ){
 
-    return;
-
-  }
-
-
-  if(file.size > MAX_BYTES){
-
-    uploadStatus.textContent =
-      "Photograph is too large. Maximum size is about 4MB.";
-
-    return;
-
-  }
-
-
-  if(!file.type.startsWith("image/")){
-
-    uploadStatus.textContent =
-      "Please choose an image file.";
-
-    return;
-
-  }
-
-
-  uploadBtn.disabled =
-    true;
-
-  uploadStatus.textContent =
-    "Developing photograph…";
-
-
-  try{
-
-    const dataUrl =
-      await fileToBase64(file);
-
-
-    await push(
-      ref(db,"photos"),
-      {
-        url:dataUrl,
-
-        caption:
-          captionInput.value.trim(),
-
-        createdAt:
-          serverTimestamp()
-      }
+    celestialContext.clearRect(
+      0,
+      0,
+      celestialWidth,
+      celestialHeight
     );
 
 
-    photoInput.value =
-      "";
-
-    captionInput.value =
-      "";
-
-    fileLabelText.textContent =
-      "Choose photograph";
-
-    uploadStatus.textContent =
-      "Added to the archive.";
+    mouseX +=
+      (
+        targetMouseX -
+        mouseX
+      )*.025;
 
 
-    setTimeout(
-      () => {
+    mouseY +=
+      (
+        targetMouseY -
+        mouseY
+      )*.025;
 
-        uploadStatus.textContent =
-          "";
 
-      },
-      2500
+    drawConstellations();
+
+
+    stars.forEach(
+      star =>
+        drawStar(
+          star,
+          time
+        )
     );
-
-
-  }catch(error){
-
-    console.error(error);
-
-    uploadStatus.textContent =
-      "Upload failed. Check Firebase configuration and rules.";
-
-  }finally{
-
-    uploadBtn.disabled =
-      false;
-
-  }
-
-}
-
-
-uploadBtn.addEventListener(
-  "click",
-  uploadPhoto
-);
-
-
-/* ============================================================
-   DELETE
-   ============================================================ */
-
-async function deletePhoto(photo){
-
-  const confirmed =
-    confirm(
-      "Remove this photograph from the archive?"
-    );
-
-
-  if(!confirmed)
-    return;
-
-
-  if(!db)
-    return;
-
-
-  try{
-
-    await remove(
-      ref(
-        db,
-        "photos/" + photo.id
-      )
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(
-      "Could not remove the photograph."
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   FIREBASE PHOTO LISTENER
-   ============================================================ */
-
-if(firebaseReady && db){
-
-  const photosQuery =
-    query(
-      ref(db,"photos"),
-      orderByChild("createdAt")
-    );
-
-
-  onValue(
-    photosQuery,
-    snapshot => {
-
-      const photos = [];
-
-
-      snapshot.forEach(
-        child => {
-
-          photos.push({
-            id:child.key,
-            ...child.val()
-          });
-
-        }
-      );
-
-
-      photos.reverse();
-
-      renderPhotos(photos);
-
-    },
-    error => {
-
-      console.error(error);
-
-      emptyState.textContent =
-        "The archive could not be reached.";
-
-    }
-  );
-
-
-}else{
-
-  emptyState.textContent =
-    "Connect Firebase to open the photographic archive.";
-
-}
-
-
-/* ============================================================
-   SUBTLE PARALLAX
-   ============================================================ */
-
-const observationImage =
-  document.querySelector(
-    ".observation-photo img"
-  );
-
-
-window.addEventListener(
-  "scroll",
-  () => {
-
-    if(!observationImage)
-      return;
-
-
-    const rect =
-      observationImage.getBoundingClientRect();
-
-
-    const viewport =
-      window.innerHeight;
 
 
     if(
-      rect.bottom > 0 &&
-      rect.top < viewport
+      Math.random() <
+      celestialSettings.shootingStarChance
     ){
 
-      const distance =
-        (viewport / 2 - (
-          rect.top +
-          rect.height / 2
-        )) * .025;
-
-      observationImage.style.transform =
-        `translateY(${distance}px)`;
+      createShootingStar();
 
     }
 
-  },
-  {
-    passive:true
+
+    updateShootingStars();
+
+
+    shootingStars.forEach(
+      drawShootingStar
+    );
+
+
+    requestAnimationFrame(
+      animateCelestial
+    );
+
   }
-);
+
+
+  /* ==========================================================
+     PARALLAX
+     ========================================================== */
+
+  window.addEventListener(
+    "pointermove",
+    event => {
+
+      targetMouseX =
+        (
+          event.clientX /
+          window.innerWidth -
+          .5
+        );
+
+
+      targetMouseY =
+        (
+          event.clientY /
+          window.innerHeight -
+          .5
+        );
+
+
+      const zodiac =
+        document.querySelector(
+          ".zodiac-orbit"
+        );
+
+
+      if(zodiac){
+
+        zodiac.style.setProperty(
+          "--zodiac-x",
+          `${targetMouseX*-18}px`
+        );
+
+
+        zodiac.style.setProperty(
+          "--zodiac-y",
+          `${targetMouseY*-12}px`
+        );
+
+      }
+
+
+      const crossOne =
+        document.querySelector(
+          ".celestial-cross-one"
+        );
+
+
+      const crossTwo =
+        document.querySelector(
+          ".celestial-cross-two"
+        );
+
+
+      if(crossOne){
+
+        crossOne.style.setProperty(
+          "--cross-x",
+          `${targetMouseX*-28}px`
+        );
+
+
+        crossOne.style.setProperty(
+          "--cross-y",
+          `${targetMouseY*-20}px`
+        );
+
+      }
+
+
+      if(crossTwo){
+
+        crossTwo.style.setProperty(
+          "--cross-x",
+          `${targetMouseX*18}px`
+        );
+
+
+        crossTwo.style.setProperty(
+          "--cross-y",
+          `${targetMouseY*14}px`
+        );
+
+      }
+
+    },
+    {
+      passive:true
+    }
+  );
+
+
+  /* ==========================================================
+     START CELESTIAL SYSTEM
+     ========================================================== */
+
+  resizeCelestialCanvas();
+
+
+  requestAnimationFrame(
+    animateCelestial
+  );
+
 
 </script>
 
