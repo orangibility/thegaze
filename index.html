@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tim — Home</title>
+<meta name="description" content="Personal site and photo gallery." />
+
+<!-- Fonts: Fraunces (display serif), Inter (body), IBM Plex Mono (labels/utility) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:        #10151c;   /* near-black navy, page background */
+    --ink-2:      #171f29;   /* card / panel surface */
+    --line:       #2a3542;   /* hairline borders on dark */
+    --paper:      #eef1f4;   /* primary text on dark */
+    --paper-dim:  #9aa7b4;   /* secondary text on dark */
+    --brass:      #c9a35e;   /* signature accent — warm brass, not terracotta/acid */
+    --brass-dim:  #8a713f;
+    --danger:     #c96a5e;
+
+    --serif: 'Fraunces', Georgia, serif;
+    --sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono:  'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --maxw: 1080px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection{ background: var(--brass); color: var(--ink); }
+
+  a{ color: inherit; }
+
+  /* ---------- sprocket-hole divider, the signature motif ---------- */
+  .sprockets{
+    display:flex;
+    justify-content:center;
+    gap: 10px;
+    padding: 28px 0;
+    opacity: .55;
+  }
+  .sprockets span{
+    width:6px; height:6px;
+    border-radius:1px;
+    background: var(--line);
+  }
+
+  /* ---------- header / nav ---------- */
+  header{
+    position: sticky;
+    top:0;
+    z-index: 40;
+    background: rgba(16,21,28,.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 18px 24px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+  }
+  .brand{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.25rem;
+    letter-spacing: .01em;
+    text-decoration:none;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .brand small{
+    font-family: var(--mono);
+    font-size: .62rem;
+    color: var(--brass);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  nav.menu{
+    display:flex;
+    gap: 4px;
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  nav.menu button{
+    background:none;
+    border:none;
+    color: var(--paper-dim);
+    padding: 8px 14px;
+    cursor:pointer;
+    position:relative;
+    transition: color .2s ease;
+  }
+  nav.menu button:hover{ color: var(--paper); }
+  nav.menu button.active{ color: var(--brass); }
+  nav.menu button.active::after{
+    content:"";
+    position:absolute;
+    left: 14px; right:14px; bottom:0;
+    height:2px;
+    background: var(--brass);
+  }
+  .nav-toggle{
+    display:none;
+    background:none; border:1px solid var(--line); color: var(--paper);
+    border-radius:6px; padding:8px 10px; cursor:pointer;
+  }
+
+  @media (max-width: 720px){
+    nav.menu{
+      display:none;
+      position:absolute;
+      top: 100%; left:0; right:0;
+      flex-direction:column;
+      background: var(--ink-2);
+      border-bottom: 1px solid var(--line);
+      padding: 8px 24px 16px;
+    }
+    nav.menu.open{ display:flex; }
+    nav.menu button{ text-align:left; padding: 12px 6px; }
+    .nav-toggle{ display:inline-block; }
+  }
+
+  main{ max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  section.view{ display:none; padding: 64px 0 96px; animation: fade .5s ease; }
+  section.view.active{ display:block; }
+  @keyframes fade{ from{ opacity:0; transform: translateY(6px); } to{ opacity:1; transform:none; } }
+
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin: 0 0 14px;
+  }
+  h1{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1.05;
+    margin: 0 0 20px;
+    max-width: 16ch;
+  }
+  h2{
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    margin: 0 0 16px;
+  }
+  p.lede{
+    font-size: 1.08rem;
+    line-height: 1.7;
+    color: var(--paper-dim);
+    max-width: 58ch;
+  }
+
+  .btn{
+    font-family: var(--mono);
+    font-size: .78rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background: var(--brass);
+    color: var(--ink);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 3px;
+    cursor:pointer;
+    transition: transform .15s ease, background .2s ease;
+  }
+  .btn:hover{ background:#dab876; transform: translateY(-1px); }
+  .btn.ghost{
+    background: transparent;
+    color: var(--paper);
+    border: 1px solid var(--line);
+  }
+  .btn.ghost:hover{ border-color: var(--brass); color: var(--brass); }
+  .btn.danger{ background: var(--danger); color: var(--ink); }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+
+  /* ---------- gallery ---------- */
+  .gallery-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+  .upload-panel{
+    border: 1px solid var(--line);
+    background: var(--ink-2);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 40px;
+    display:flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items:center;
+  }
+  .upload-panel input[type="text"]{
+    flex:1;
+    min-width: 180px;
+    background: var(--ink);
+    border: 1px solid var(--line);
+    color: var(--paper);
+    padding: 11px 12px;
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: .92rem;
+  }
+  .upload-panel input[type="text"]::placeholder{ color: var(--paper-dim); }
+  .file-label{
+    font-family: var(--mono);
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    border: 1px dashed var(--line);
+    padding: 11px 16px;
+    border-radius: 4px;
+    cursor:pointer;
+    color: var(--paper-dim);
+    transition: border-color .2s, color .2s;
+  }
+  .file-label:hover{ border-color: var(--brass); color: var(--brass); }
+  .file-label input{ display:none; }
+  .file-name{ font-family: var(--mono); font-size: .74rem; color: var(--brass); }
+
+  #upload-status{
+    font-family: var(--mono);
+    font-size: .76rem;
+    color: var(--paper-dim);
+    width:100%;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+    gap: 16px;
+  }
+  figure.card{
+    margin:0;
+    position:relative;
+    border-radius: 6px;
+    overflow:hidden;
+    border: 1px solid var(--line);
+    background: var(--ink-2);
+    aspect-ratio: 4/5;
+  }
+  figure.card img{
+    width:100%; height:100%;
+    object-fit: cover;
+    display:block;
+    transition: transform .5s ease;
+  }
+  figure.card:hover img{ transform: scale(1.04); }
+  figcaption{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    padding: 10px 12px 10px;
+    background: linear-gradient(to top, rgba(10,13,17,.92), rgba(10,13,17,0));
+    font-family: var(--mono);
+    font-size: .74rem;
+    color: var(--paper);
+    opacity:0;
+    transform: translateY(6px);
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  figure.card:hover figcaption{ opacity:1; transform:none; }
+  .card-delete{
+    position:absolute;
+    top:8px; right:8px;
+    background: rgba(10,13,17,.7);
+    border: 1px solid var(--line);
+    color: var(--paper-dim);
+    width:26px; height:26px;
+    border-radius: 4px;
+    cursor:pointer;
+    font-size: .8rem;
+    line-height:1;
+    opacity:0;
+    transition: opacity .2s ease, color .2s ease, border-color .2s ease;
+  }
+  figure.card:hover .card-delete{ opacity:1; }
+  .card-delete:hover{ color: var(--danger); border-color: var(--danger); }
+
+  .empty-state{
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    padding: 48px 24px;
+    text-align:center;
+    color: var(--paper-dim);
+    font-family: var(--mono);
+    font-size: .82rem;
+  }
+
+  /* ---------- about / contact ---------- */
+  .kv-list{ list-style:none; padding:0; margin: 28px 0 0; display:grid; gap:10px; }
+  .kv-list li{
+    display:flex; gap:14px;
+    font-family: var(--mono);
+    font-size: .84rem;
+    color: var(--paper-dim);
+    border-top: 1px solid var(--line);
+    padding-top: 10px;
+  }
+  .kv-list li b{ color: var(--paper); min-width: 90px; }
+
+  footer{
+    border-top: 1px solid var(--line);
+    padding: 28px 24px;
+    text-align:center;
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--paper-dim);
+    letter-spacing: .04em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="#home" class="brand">Tim<small>Personal&nbsp;Site</small></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    <nav class="menu" id="navMenu">
+      <button data-view="home" class="active">Home</button>
+      <button data-view="gallery">Gallery</button>
+      <button data-view="about">About</button>
+      <button data-view="contact">Contact</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HOME ============ -->
+  <section class="view active" id="view-home">
+    <p class="eyebrow">Welcome</p>
+    <h1>Hi, I'm Tim.<br>This is my corner of the web.</h1>
+    <p class="lede">
+      Replace this text with a short intro about yourself. Use the menu above
+      to browse the photo gallery, read more about you, or find contact details.
+    </p>
+    <div style="margin-top:28px; display:flex; gap:12px;">
+      <button class="btn" data-view="gallery">View gallery</button>
+      <button class="btn ghost" data-view="about">About me</button>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section class="view" id="view-gallery">
+    <div class="gallery-head">
+      <div>
+        <p class="eyebrow">Photos</p>
+        <h2>Gallery</h2>
+      </div>
+    </div>
+
+    <div class="upload-panel">
+      <label class="file-label">
+        <span id="fileLabelText">Choose photo</span>
+        <input type="file" id="photoInput" accept="image/*">
+      </label>
+      <input type="text" id="captionInput" placeholder="Caption (optional)">
+      <button class="btn" id="uploadBtn">Upload</button>
+      <div id="upload-status"></div>
+    </div>
+
+    <div class="grid" id="galleryGrid">
+      <!-- photo cards injected here -->
+    </div>
+    <div class="empty-state" id="emptyState" style="display:none; margin-top:16px;">
+      No photos yet — add the first one above.
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="view" id="view-about">
+    <p class="eyebrow">About</p>
+    <h2>A bit more about me</h2>
+    <p class="lede">
+      Swap in your own bio here — background, interests, what you're currently
+      working on. The list below is a good spot for quick facts.
+    </p>
+    <ul class="kv-list">
+      <li><b>Based in</b> Istanbul</li>
+      <li><b>Focus</b> Software engineering</li>
+      <li><b>Now</b> Building things, taking photos</li>
+    </ul>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="view" id="view-contact">
+    <p class="eyebrow">Contact</p>
+    <h2>Get in touch</h2>
+    <p class="lede">Swap these placeholders for your real details.</p>
+    <ul class="kv-list">
+      <li><b>Email</b> you@example.com</li>
+      <li><b>GitHub</b> github.com/yourhandle</li>
+    </ul>
+  </section>
+
+</main>
+
+<div class="sprockets"><span></span><span></span><span></span><span></span><span></span></div>
+<footer>Built with a static page + Firebase persistence</footer>
+
+<script type="module">
+  // ============================================================
+  // FIREBASE SETUP
+  // 1. Create a project at https://console.firebase.google.com
+  // 2. Add a Web App to it, copy the config object it gives you,
+  //    and paste it below in place of the placeholder values.
+  // 3. Enable "Firestore Database" and "Storage" in the Firebase
+  //    console (Build > Firestore Database / Build > Storage).
+  // 4. See the security-rules note in the accompanying message —
+  //    the default rules below are OPEN so this demo works out of
+  //    the box, but you should lock them down before sharing the
+  //    site widely.
+  // ============================================================
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, deleteDoc, doc,
+    onSnapshot, query, orderBy, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import {
+    getStorage, ref, uploadBytes, getDownloadURL, deleteObject
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  let db, storage, firebaseReady = false;
+  try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    storage = getStorage(app);
+    firebaseReady = firebaseConfig.apiKey !== "YOUR_API_KEY";
+  } catch (e) {
+    console.error("Firebase failed to initialize:", e);
+  }
+
+  // ---------------- NAV / VIEW SWITCHING ----------------
+  const views = document.querySelectorAll(".view");
+  const navButtons = document.querySelectorAll("nav.menu button");
+  const navMenu = document.getElementById("navMenu");
+  const navToggle = document.getElementById("navToggle");
+
+  function showView(name){
+    views.forEach(v => v.classList.toggle("active", v.id === "view-" + name));
+    document.querySelectorAll("[data-view]").forEach(btn => {
+      if (btn.tagName === "BUTTON" && btn.closest("nav")) {
+        btn.classList.toggle("active", btn.dataset.view === name);
+      }
+    });
+    navMenu.classList.remove("open");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    history.replaceState(null, "", "#" + name);
+  }
+
+  document.querySelectorAll("[data-view]").forEach(el => {
+    el.addEventListener("click", () => showView(el.dataset.view));
+  });
+  navToggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+
+  const initial = location.hash.replace("#", "") || "home";
+  if (["home","gallery","about","contact"].includes(initial)) showView(initial);
+
+  // ---------------- GALLERY ----------------
+  const grid = document.getElementById("galleryGrid");
+  const emptyState = document.getElementById("emptyState");
+  const photoInput = document.getElementById("photoInput");
+  const fileLabelText = document.getElementById("fileLabelText");
+  const captionInput = document.getElementById("captionInput");
+  const uploadBtn = document.getElementById("uploadBtn");
+  const statusEl = document.getElementById("upload-status");
+
+  photoInput.addEventListener("change", () => {
+    fileLabelText.textContent = photoInput.files[0]?.name || "Choose photo";
+  });
+
+  function renderPhotos(photos){
+    grid.innerHTML = "";
+    emptyState.style.display = photos.length ? "none" : "block";
+    photos.forEach(p => {
+      const fig = document.createElement("figure");
+      fig.className = "card";
+      fig.innerHTML = `
+        <img src="${p.url}" alt="${p.caption ? escapeHtml(p.caption) : "Gallery photo"}" loading="lazy">
+        <button class="card-delete" title="Delete">✕</button>
+        ${p.caption ? `<figcaption>${escapeHtml(p.caption)}</figcaption>` : ""}
+      `;
+      fig.querySelector(".card-delete").addEventListener("click", (e) => {
+        e.stopPropagation();
+        deletePhoto(p);
+      });
+      grid.appendChild(fig);
+    });
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  async function uploadPhoto(){
+    const file = photoInput.files[0];
+    if (!file) { statusEl.textContent = "Choose a photo first."; return; }
+    if (!firebaseReady) {
+      statusEl.textContent = "Firebase isn't configured yet — add your project keys in the script.";
+      return;
+    }
+    uploadBtn.disabled = true;
+    statusEl.textContent = "Uploading…";
+    try {
+      const path = `gallery/${Date.now()}_${file.name}`;
+      const storageRef = ref(storage, path);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+
+      await addDoc(collection(db, "photos"), {
+        url,
+        storagePath: path,
+        caption: captionInput.value.trim(),
+        createdAt: serverTimestamp()
+      });
+
+      photoInput.value = "";
+      captionInput.value = "";
+      fileLabelText.textContent = "Choose photo";
+      statusEl.textContent = "Uploaded.";
+      setTimeout(() => statusEl.textContent = "", 2000);
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "Upload failed — check console / Firebase config.";
+    } finally {
+      uploadBtn.disabled = false;
+    }
+  }
+
+  async function deletePhoto(p){
+    if (!confirm("Delete this photo?")) return;
+    try {
+      await deleteDoc(doc(db, "photos", p.id));
+      if (p.storagePath) {
+        await deleteObject(ref(storage, p.storagePath)).catch(() => {});
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Could not delete photo — check console.");
+    }
+  }
+
+  uploadBtn.addEventListener("click", uploadPhoto);
+
+  if (firebaseReady) {
+    const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
+    onSnapshot(q, snap => {
+      const photos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPhotos(photos);
+    }, err => {
+      console.error(err);
+      statusEl.textContent = "Couldn't load gallery — check Firestore rules/config.";
+    });
+  } else {
+    emptyState.style.display = "block";
+    emptyState.textContent = "Add your Firebase config in index.html to enable the gallery.";
+  }
+</script>
+
+</body>
+</html>
